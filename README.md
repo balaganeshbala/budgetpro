@@ -1,2 +1,3 @@
-# budgetpro
+# BudgetPro
+
 BudgetPro App in Flutter
