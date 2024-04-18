@@ -19,12 +19,14 @@ class DayWiseExpensesModel {
 
 class ExpenseModel {
   final int id;
+  final String? date;
   final String name;
   final String category;
   final double amount;
 
   ExpenseModel(
       {required this.id,
+      required this.date,
       required this.name,
       required this.category,
       required this.amount});
@@ -32,6 +34,7 @@ class ExpenseModel {
   factory ExpenseModel.fromJson(Map<String, dynamic> json) {
     return ExpenseModel(
         id: json['id'],
+        date: null,
         name: json['name'],
         category: json['category'],
         amount: json['amount'].toDouble());

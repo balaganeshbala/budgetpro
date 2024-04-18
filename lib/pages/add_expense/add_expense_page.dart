@@ -142,10 +142,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 },
               ),
               const SizedBox(height: 20),
-              Row(
+              const Row(
                 children: [
-                  const Text('Category'),
-                  const Spacer(),
+                  Text('Category'),
+                  Spacer(),
                   // DropdownWidget(
                   //   items: expenseCategories,
                   //   hintText: 'Select Category',
@@ -155,7 +155,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   //     });
                   //   },
                   // ),
-                  const Spacer()
+                  Spacer()
                 ],
               ),
               const SizedBox(height: 20),

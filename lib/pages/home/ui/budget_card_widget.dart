@@ -22,9 +22,9 @@ class BudgetCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(20))),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         child: SizedBox(
           width: double.infinity,
           child: Padding(

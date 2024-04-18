@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:budgetpro/models/expenses_model.dart';
+import 'package:budgetpro/pages/home/models/expenses_model.dart';
 import 'package:budgetpro/utits/network_services.dart';
 
 class ExpensesListPage extends StatefulWidget {

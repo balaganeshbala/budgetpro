@@ -1,6 +1,7 @@
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
 import 'package:budgetpro/pages/home/models/budget_model.dart';
+import 'package:budgetpro/pages/home/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/ui/budget_card_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_list_widget.dart';
 import 'package:budgetpro/pages/home/ui/section_header.dart';
@@ -23,12 +24,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _homeBloc = HomeBloc();
 
-  void goToDetailsPageForBudgetCategory(
-      BudgetModel budget, BuildContext context) {
+  void goToDetailsPageForBudgetCategory(BudgetModel budget,
+      List<ExpenseModel> transactions, BuildContext context) {
     Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => BudgetCategoryInfoPage()),
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) => BudgetCategoryInfoPage(
+                budget: budget, transactions: transactions)));
   }
 
   @override
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('BudgetPro',
             style: TextStyle(fontWeight: FontWeight.bold)),
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 66, 143, 125),
+        backgroundColor: const Color.fromARGB(255, 66, 143, 125),
       ),
       body: Container(
         color: Colors.grey.shade200,
@@ -114,7 +116,8 @@ class _HomePageState extends State<HomePage> {
                   listener: (context, state) {
                     switch (state) {
                       case HomeBudgetCategoryItemTappedState state:
-                        goToDetailsPageForBudgetCategory(state.budget, context);
+                        goToDetailsPageForBudgetCategory(
+                            state.budget, state.transactions, context);
                         break;
                       default:
                     }
