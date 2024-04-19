@@ -18,7 +18,7 @@ class AmountWithTitleWidget extends StatelessWidget {
         Text(UIUtils.formatRupees(amount),
             style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 82, 108, 91))),
+                color: Color.fromARGB(255, 66, 143, 125))),
         Text(title)
       ]),
     );

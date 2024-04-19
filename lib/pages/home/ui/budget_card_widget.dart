@@ -40,8 +40,8 @@ class BudgetCardWidget extends StatelessWidget {
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: remaining < 0
-                                    ? Colors.red
-                                    : const Color.fromARGB(255, 82, 108, 91))),
+                                    ? Colors.red.shade300
+                                    : const Color.fromARGB(255, 66, 143, 125))),
                         Text(remaining < 0 ? 'Overspent' : 'Remaining')
                       ]),
                   const SizedBox(height: 30),
