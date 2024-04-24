@@ -14,4 +14,18 @@ class BudgetRepo {
       return [];
     }
   }
+
+  static Future<List<MonthlyBudgetModel>> fetchMonthlyBudget() async {
+    const urlString =
+        'https://cloudpigeon.cyclic.app/budgetpro/totalbudget?limit=8';
+    try {
+      final List<dynamic> result =
+          await NetworkCallService.instance.makeAPICall(urlString);
+      final montlyBudget =
+          result.map((item) => MonthlyBudgetModel.fromJson(item)).toList();
+      return montlyBudget;
+    } catch (e) {
+      return [];
+    }
+  }
 }

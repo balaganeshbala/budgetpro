@@ -1,3 +1,4 @@
+import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/network_services.dart';
 import 'package:budgetpro/widgets/date_picker_widget.dart';
 import 'package:budgetpro/widgets/dropdown_widget.dart';
@@ -204,7 +205,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          _isInputValid() ? Colors.orange : Colors.grey,
+                          _isInputValid() ? AppColors.accentColor : Colors.grey,
                       padding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 20),
                     ),

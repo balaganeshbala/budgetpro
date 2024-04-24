@@ -1,3 +1,4 @@
+import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 
 class DropdownWidget extends StatelessWidget {
@@ -18,8 +19,8 @@ class DropdownWidget extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          style: const TextStyle(color: Colors.blue),
-          iconEnabledColor: Colors.blue,
+          style: const TextStyle(color: AppColors.linkColor),
+          iconEnabledColor: AppColors.linkColor,
           padding: const EdgeInsets.only(left: 20, right: 10),
           value: selectedItem,
           dropdownColor: Colors.white,
@@ -34,7 +35,7 @@ class DropdownWidget extends StatelessWidget {
             );
           }).toList(),
           hint: Text(selectedItem ?? items.first,
-              style: const TextStyle(color: Colors.blue)),
+              style: const TextStyle(color: AppColors.linkColor)),
         ),
       ),
     );

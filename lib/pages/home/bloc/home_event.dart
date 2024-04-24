@@ -11,10 +11,9 @@ class HomeYearChangedEvent extends HomeEvent {
 }
 
 class HomeMonthChangedEvent extends HomeEvent {
-  final String year;
   final String month;
 
-  HomeMonthChangedEvent({required this.year, required this.month});
+  HomeMonthChangedEvent({required this.month});
 }
 
 class HomeBudgetCategoryItemTappedEvent extends HomeEvent {

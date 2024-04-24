@@ -21,3 +21,22 @@ class BudgetModel {
         "spentAmount": spentAmount,
       };
 }
+
+class MonthlyBudgetModel {
+  String month;
+  int budgetAmount;
+  double spentAmount;
+
+  MonthlyBudgetModel({
+    required this.month,
+    required this.budgetAmount,
+    required this.spentAmount,
+  });
+
+  factory MonthlyBudgetModel.fromJson(Map<String, dynamic> json) =>
+      MonthlyBudgetModel(
+        month: json["month"],
+        budgetAmount: json["budgetAmount"],
+        spentAmount: json["spentAmount"]?.toDouble(),
+      );
+}

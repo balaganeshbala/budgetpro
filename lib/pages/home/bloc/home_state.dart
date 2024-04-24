@@ -4,6 +4,10 @@ sealed class HomeState {}
 
 sealed class HomeBudgetState extends HomeState {}
 
+sealed class HomeExpensesState extends HomeState {}
+
+sealed class HomeBudgetTrendState extends HomeState {}
+
 sealed class HomeActionState extends HomeState {}
 
 class HomeInitial extends HomeState {}
@@ -43,6 +47,16 @@ class HomeBudgetLoadingSuccessState extends HomeBudgetState {
 }
 
 class HomeBudgetLoadingErrorState extends HomeBudgetState {}
+
+class HomeBudgetTrendLoadingState extends HomeBudgetTrendState {}
+
+class HomeBudgetTrendSuccessState extends HomeBudgetTrendState {
+  final List<MonthlyBudgetModel> monthlyBudget;
+
+  HomeBudgetTrendSuccessState({required this.monthlyBudget});
+}
+
+class HomeBudgetTrendErrosState extends HomeBudgetTrendState {}
 
 class HomeMonthItemChangedState extends HomeActionState {
   final String year;

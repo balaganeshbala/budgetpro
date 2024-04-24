@@ -1,18 +1,16 @@
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
+import 'package:budgetpro/pages/budget_category_info/ui/transactions_table.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
 import 'package:budgetpro/pages/home/models/budget_model.dart';
 import 'package:budgetpro/pages/home/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/ui/budget_card_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_list_widget.dart';
+import 'package:budgetpro/pages/home/ui/budget_trend_line_chart.dart';
 import 'package:budgetpro/pages/home/ui/section_header.dart';
-import 'package:budgetpro/pages/home/ui/year_and_month_selector_widget.dart';
+import 'package:budgetpro/widgets/year_and_month_selector_widget.dart';
+import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-class HomePageModel {
-  List<String> gridItems = [];
-  bool networkError = false;
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,7 +19,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true; // Preserve state of the widget
+
   final _homeBloc = HomeBloc();
 
   void goToDetailsPageForBudgetCategory(BudgetModel budget,
@@ -46,9 +48,10 @@ class _HomePageState extends State<HomePage> {
         title: const Text('BudgetPro',
             style: TextStyle(fontWeight: FontWeight.bold)),
         foregroundColor: Colors.white,
-        backgroundColor: const Color.fromARGB(255, 66, 143, 125),
+        backgroundColor: AppColors.primaryColor,
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         color: Colors.grey.shade200,
         child: SafeArea(
           child: SingleChildScrollView(
@@ -67,9 +70,15 @@ class _HomePageState extends State<HomePage> {
                             monthsList: state.monthsList,
                             selectedYear: state.selectedYear,
                             selectedMonth: state.selectedMonth,
-                            homeBloc: _homeBloc);
+                            onYearChanged: (value) {
+                              _homeBloc.add(HomeYearChangedEvent(year: value));
+                            },
+                            onMonthChanged: (value) {
+                              _homeBloc
+                                  .add(HomeMonthChangedEvent(month: value));
+                            });
                       default:
-                        return const Text('Default View');
+                        return Container();
                     }
                   },
                   listener: (context, state) {}),
@@ -81,11 +90,11 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, state) {
                     switch (state) {
                       case HomeBudgetLoadingState _:
-                        return SizedBox(
-                            height: MediaQuery.of(context).size.height - 300,
-                            child: const Center(
+                        return const SizedBox(
+                            height: 100,
+                            child: Center(
                                 child: CircularProgressIndicator(
-                                    color: Colors.orange)));
+                                    color: AppColors.accentColor)));
                       case HomeBudgetLoadingSuccessState state:
                         final totalBudget = state.totalBudget;
                         final totalSpent = state.totalSpent;
@@ -110,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 20),
                             ]);
                       default:
-                        return const Text('Budget View');
+                        return Container();
                     }
                   },
                   listener: (context, state) {
@@ -120,6 +129,34 @@ class _HomePageState extends State<HomePage> {
                             state.budget, state.transactions, context);
                         break;
                       default:
+                    }
+                  }),
+              BlocBuilder(
+                  bloc: _homeBloc,
+                  buildWhen: (previous, current) =>
+                      current is HomeBudgetTrendState,
+                  builder: (context, state) {
+                    switch (state) {
+                      case HomeBudgetTrendLoadingState _:
+                        return const SizedBox(
+                            height: 100,
+                            child: Center(
+                                child: CircularProgressIndicator(
+                                    color: AppColors.accentColor)));
+                      case HomeBudgetTrendSuccessState state:
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              const SectionHeader(text: 'Bugdet Trend'),
+                              const SizedBox(height: 10),
+                              BudgetTrendLineChart(
+                                data: state.monthlyBudget.reversed.toList(),
+                              ),
+                              const SizedBox(height: 20),
+                            ]);
+                      default:
+                        return Container();
                     }
                   }),
             ]),

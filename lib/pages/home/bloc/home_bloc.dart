@@ -4,7 +4,7 @@ import 'package:budgetpro/pages/home/models/budget_model.dart';
 import 'package:budgetpro/pages/home/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/repos/budget_repo.dart';
 import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
-import 'package:intl/intl.dart';
+import 'package:budgetpro/utits/utils.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -14,7 +14,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<String> monthsList = [];
   String selectedYear = "";
   String selectedMonth = "";
-  List<DayWiseExpensesModel> expenses = [];
+  List<ExpenseModel> expenses = [];
 
   HomeBloc() : super(HomeInitial()) {
     on<HomeInitialEvent>(homeInitialEvent);
@@ -23,29 +23,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeBudgetCategoryItemTappedEvent>(homeBudgetCategoryItemTappedEvent);
   }
 
-  List<String> _getYearsList() {
-    final currentYear = DateTime.now().year;
-    List<String> years = [];
-    for (int year = currentYear; year >= 2023; year--) {
-      years.add('$year');
-    }
-    return years;
-  }
-
-  List<String> _getMonthsListForYear(int year) {
-    final currentYear = DateTime.now().year;
-    final currentMonth = DateTime.now().month;
-
-    List<String> monthNames = [];
-    for (int month = 12; month >= 1; month--) {
-      final dateTime = DateTime(year, month);
-      if (year == currentYear && month > currentMonth) {
-        continue;
-      }
-      final formatter = DateFormat('MMM');
-      monthNames.add(formatter.format(dateTime));
-    }
-    return monthNames;
+  void _startYearAndMonthFetching(Emitter<HomeState> emit) {
+    emit(HomeLoadingState());
+    yearsList = Utils.getYearsList();
+    selectedYear = yearsList.first;
+    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
+    selectedMonth = monthsList.first;
+    emit(HomeMonthLoadedSuccessState(
+        yearsList: yearsList,
+        monthsList: monthsList,
+        selectedYear: yearsList.first,
+        selectedMonth: monthsList.first));
   }
 
   FutureOr<void> _startBudgetFetchingForMonth(
@@ -67,31 +55,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         month: '$selectedMonth-$selectedYear'));
   }
 
-  FutureOr<void> _startExpenseFetchingForMonth(String month) async {
+  FutureOr<void> _startExpenseFetchingForMonth(
+      String month, Emitter<HomeState> emit) async {
     expenses = await ExpensesRepo.fetchExpensesForMonth(month);
+  }
+
+  FutureOr<void> _startMonthlyBudgetFetching(Emitter<HomeState> emit) async {
+    emit(HomeBudgetTrendLoadingState());
+    final monthlyBudget = await BudgetRepo.fetchMonthlyBudget();
+    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudget));
   }
 
   FutureOr<void> homeInitialEvent(
       HomeInitialEvent event, Emitter<HomeState> emit) async {
-    emit(HomeLoadingState());
-    yearsList = _getYearsList();
-    selectedYear = yearsList.first;
-    monthsList = _getMonthsListForYear(int.parse(selectedYear));
-    selectedMonth = monthsList.first;
-    emit(HomeMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: yearsList.first,
-        selectedMonth: monthsList.first));
-
+    _startYearAndMonthFetching(emit);
     await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
-    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear');
+    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
+    await _startMonthlyBudgetFetching(emit);
   }
 
   FutureOr<void> homeYearItemChangedEvent(
       HomeYearChangedEvent event, Emitter<HomeState> emit) {
     selectedYear = event.year;
-    monthsList = _getMonthsListForYear(int.parse(selectedYear));
+    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
     emit(HomeMonthLoadedSuccessState(
         yearsList: yearsList,
         monthsList: monthsList,
@@ -109,24 +95,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         selectedMonth: selectedMonth));
     emit(HomeMonthItemChangedState(year: selectedYear, month: selectedMonth));
     await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
-    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear');
+    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
   }
 
   FutureOr<void> homeBudgetCategoryItemTappedEvent(
       HomeBudgetCategoryItemTappedEvent event, Emitter<HomeState> emit) {
     String selectedCategory = event.budget.category;
     List<ExpenseModel> filteredTransactions = [];
-    for (var dayWiseExpenses in expenses) {
-      for (var expense in dayWiseExpenses.expenses) {
-        if (expense.category == selectedCategory) {
-          var updatedExpense = ExpenseModel(
-              id: expense.id,
-              date: dayWiseExpenses.date,
-              name: expense.name,
-              category: expense.category,
-              amount: expense.amount);
-          filteredTransactions.add(updatedExpense);
-        }
+    for (var expense in expenses) {
+      if (expense.category == selectedCategory) {
+        var updatedExpense = ExpenseModel(
+            id: expense.id,
+            date: expense.date,
+            name: expense.name,
+            category: expense.category,
+            amount: expense.amount);
+        filteredTransactions.add(updatedExpense);
       }
     }
     emit(HomeBudgetCategoryItemTappedState(

@@ -1,4 +1,5 @@
 import 'package:budgetpro/pages/home/ui/amount_with_title_widget.dart';
+import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -40,8 +41,8 @@ class BudgetCardWidget extends StatelessWidget {
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: remaining < 0
-                                    ? Colors.red.shade300
-                                    : const Color.fromARGB(255, 66, 143, 125))),
+                                    ? AppColors.dangerColor
+                                    : AppColors.primaryColor)),
                         Text(remaining < 0 ? 'Overspent' : 'Remaining')
                       ]),
                   const SizedBox(height: 30),
