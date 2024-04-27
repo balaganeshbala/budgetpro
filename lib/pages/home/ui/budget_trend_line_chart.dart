@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class BudgetTrendLineChart extends StatelessWidget {
   final List<MonthlyBudgetModel> data;
 
-  const BudgetTrendLineChart({Key? key, required this.data}) : super(key: key);
+  const BudgetTrendLineChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class BudgetTrendLineChart extends StatelessWidget {
           barWidth: 2,
           isStrokeCapRound: true,
           belowBarData: BarAreaData(show: false),
-          dotData: FlDotData(show: true),
+          dotData: const FlDotData(show: true),
           show: true,
         ),
         LineChartBarData(
@@ -51,7 +51,7 @@ class BudgetTrendLineChart extends StatelessWidget {
           barWidth: 2,
           isStrokeCapRound: true,
           belowBarData: BarAreaData(show: false),
-          dotData: FlDotData(show: true),
+          dotData: const FlDotData(show: true),
           show: true,
         ),
       ],

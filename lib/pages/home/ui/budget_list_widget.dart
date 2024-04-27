@@ -41,8 +41,7 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
                 : AppColors.primaryColor),
           ),
         ])),
-    trailing:
-        const Icon(Icons.keyboard_arrow_right, color: AppColors.iconColor),
+    trailing: Icon(Icons.keyboard_arrow_right, color: AppColors.iconColor),
   );
 }
 

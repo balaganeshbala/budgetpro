@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+enum ToastType { INFO, SUCCESS, ERROR, WARNING }
 
 class UIUtils {
   static String formatRupees(double amount) {
@@ -41,5 +44,33 @@ class UIUtils {
       default:
         return Icons.note_outlined;
     }
+  }
+
+  static void showToast(String message, ToastType type) {
+    Color backgroundColor;
+    switch (type) {
+      case ToastType.INFO:
+        backgroundColor = Colors.blue;
+        break;
+      case ToastType.SUCCESS:
+        backgroundColor = Colors.green;
+        break;
+      case ToastType.ERROR:
+        backgroundColor = Colors.red;
+        break;
+      case ToastType.WARNING:
+        backgroundColor = Colors.orange;
+        break;
+    }
+
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 }

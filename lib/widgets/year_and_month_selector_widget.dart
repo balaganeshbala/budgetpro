@@ -1,4 +1,3 @@
-import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
 import 'package:budgetpro/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -35,12 +34,11 @@ class _YearAndMonthSelectorWidgetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 85,
       padding: const EdgeInsets.all(20.0),
       child: Row(children: [
         DropdownWidget(
             items: widget.yearsList,
-            selectedItem: widget.selectedYear,
             onChanged: (value) {
               if (value != null) {
                 widget.onYearChanged(value);
@@ -49,7 +47,6 @@ class _YearAndMonthSelectorWidgetState
         const Spacer(),
         DropdownWidget(
             items: widget.monthsList,
-            selectedItem: widget.selectedMonth,
             onChanged: (value) {
               if (value != null) {
                 widget.onMonthChanged(value);

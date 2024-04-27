@@ -15,7 +15,7 @@ class BudgetRepo {
     }
   }
 
-  static Future<List<MonthlyBudgetModel>> fetchMonthlyBudget() async {
+  static Future<List<MonthlyBudgetModel>> fetchMonthlyBudgets() async {
     const urlString =
         'https://cloudpigeon.cyclic.app/budgetpro/totalbudget?limit=8';
     try {

@@ -15,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   String selectedYear = "";
   String selectedMonth = "";
   List<ExpenseModel> expenses = [];
+  List<MonthlyBudgetModel> monthlyBudgets = [];
 
   HomeBloc() : super(HomeInitial()) {
     on<HomeInitialEvent>(homeInitialEvent);
@@ -62,8 +63,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> _startMonthlyBudgetFetching(Emitter<HomeState> emit) async {
     emit(HomeBudgetTrendLoadingState());
-    final monthlyBudget = await BudgetRepo.fetchMonthlyBudget();
-    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudget));
+    monthlyBudgets = await BudgetRepo.fetchMonthlyBudgets();
+    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudgets));
   }
 
   FutureOr<void> homeInitialEvent(
@@ -94,8 +95,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         selectedYear: selectedYear,
         selectedMonth: selectedMonth));
     emit(HomeMonthItemChangedState(year: selectedYear, month: selectedMonth));
+    emit(HomeBudgetTrendHiddenState());
     await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
+    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudgets));
   }
 
   FutureOr<void> homeBudgetCategoryItemTappedEvent(

@@ -1,5 +1,4 @@
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
-import 'package:budgetpro/pages/budget_category_info/ui/transactions_table.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
 import 'package:budgetpro/pages/home/models/budget_model.dart';
 import 'package:budgetpro/pages/home/models/expenses_model.dart';
@@ -146,15 +145,18 @@ class _HomePageState extends State<HomePage>
                       case HomeBudgetTrendSuccessState state:
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10),
-                              const SectionHeader(text: 'Bugdet Trend'),
-                              const SizedBox(height: 10),
-                              BudgetTrendLineChart(
-                                data: state.monthlyBudget.reversed.toList(),
-                              ),
-                              const SizedBox(height: 20),
-                            ]);
+                            children: state.monthlyBudget.isNotEmpty
+                                ? [
+                                    const SizedBox(height: 10),
+                                    const SectionHeader(text: 'Bugdet Trend'),
+                                    const SizedBox(height: 10),
+                                    BudgetTrendLineChart(
+                                      data:
+                                          state.monthlyBudget.reversed.toList(),
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ]
+                                : []);
                       default:
                         return Container();
                     }

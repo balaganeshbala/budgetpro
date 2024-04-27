@@ -1,3 +1,4 @@
+import 'package:budgetpro/pages/new_expense/ui/new_expense_page.dart';
 import 'package:budgetpro/pages/budget_category_info/ui/transactions_table.dart';
 import 'package:budgetpro/pages/expenses/bloc/expenses_bloc.dart';
 import 'package:budgetpro/pages/home/ui/section_header.dart';
@@ -5,6 +6,7 @@ import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/widgets/year_and_month_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ExpensesPage extends StatefulWidget {
   const ExpensesPage({super.key});
@@ -24,6 +26,13 @@ class _ExpensesPageState extends State<ExpensesPage>
   void initState() {
     _expensesBloc.add(ExpensesInitialEvent());
     super.initState();
+  }
+
+  void _goToAddExpensePage(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddExpensePage(expensesBloc: _expensesBloc)));
   }
 
   @override
@@ -68,10 +77,17 @@ class _ExpensesPageState extends State<ExpensesPage>
                     }
                   },
                   listener: (context, state) {}),
-              BlocBuilder(
+              BlocConsumer(
                   bloc: _expensesBloc,
+                  listenWhen: (previous, current) =>
+                      current is ExpensesActionState,
                   buildWhen: (previous, current) =>
                       current is ExpensesFetchState,
+                  listener: (context, state) {
+                    if (state is ExpenesesAddExpenseClickedState) {
+                      _goToAddExpensePage(context);
+                    }
+                  },
                   builder: (context, state) {
                     switch (state) {
                       case ExpensesLoadingState _:
@@ -84,7 +100,26 @@ class _ExpensesPageState extends State<ExpensesPage>
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SectionHeader(text: 'Expenses'),
+                              Row(children: [
+                                const SectionHeader(text: 'Expenses'),
+                                const Spacer(),
+                                TextButton(
+                                  style: const ButtonStyle(
+                                      backgroundColor:
+                                          WidgetStatePropertyAll<Color>(
+                                              Colors.white)),
+                                  onPressed: () {
+                                    _expensesBloc
+                                        .add(ExpensesAddExpenseTappedEvent());
+                                  },
+                                  child: const Text(
+                                    '+ Add New',
+                                    style:
+                                        TextStyle(color: AppColors.accentColor),
+                                  ),
+                                ),
+                                const SizedBox(width: 20)
+                              ]),
                               Padding(
                                   padding: const EdgeInsets.only(
                                       top: 10, bottom: 20),

@@ -19,6 +19,7 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     on<ExpensesInitialEvent>(expensesInitialEvent);
     on<ExpensesYearChangedEvent>(expensesYearItemChangedEvent);
     on<ExpensesMonthChangedEvent>(expensesMonthItemChangedEvent);
+    on<ExpensesAddExpenseTappedEvent>(expensesAddExpenseTappedEvent);
   }
 
   void _startYearAndMonthFetching(Emitter<ExpensesState> emit) {
@@ -68,5 +69,10 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
     emit(ExpensesMonthItemChangedState(
         year: selectedYear, month: selectedMonth));
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
+  }
+
+  FutureOr<void> expensesAddExpenseTappedEvent(
+      ExpensesAddExpenseTappedEvent event, Emitter<ExpensesState> emit) {
+    emit(ExpenesesAddExpenseClickedState());
   }
 }

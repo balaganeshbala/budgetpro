@@ -56,6 +56,8 @@ class HomeBudgetTrendSuccessState extends HomeBudgetTrendState {
   HomeBudgetTrendSuccessState({required this.monthlyBudget});
 }
 
+class HomeBudgetTrendHiddenState extends HomeBudgetTrendState {}
+
 class HomeBudgetTrendErrosState extends HomeBudgetTrendState {}
 
 class HomeMonthItemChangedState extends HomeActionState {

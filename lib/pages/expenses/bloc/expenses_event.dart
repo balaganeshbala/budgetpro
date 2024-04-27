@@ -15,3 +15,5 @@ class ExpensesMonthChangedEvent extends ExpensesEvent {
 
   ExpensesMonthChangedEvent({required this.month});
 }
+
+class ExpensesAddExpenseTappedEvent extends ExpensesEvent {}

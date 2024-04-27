@@ -1,16 +1,29 @@
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 
-class DropdownWidget extends StatelessWidget {
+class DropdownWidget extends StatefulWidget {
+  const DropdownWidget(
+      {super.key, required this.items, required this.onChanged});
+
   final List<String> items;
-  final String? selectedItem;
   final ValueChanged<String?> onChanged;
 
-  const DropdownWidget(
-      {super.key,
-      required this.items,
-      required this.selectedItem,
-      required this.onChanged});
+  @override
+  State<DropdownWidget> createState() => _DropdownWidgetState();
+}
+
+class _DropdownWidgetState extends State<DropdownWidget> {
+  String? _selectedValue;
+
+  @override
+  void didUpdateWidget(covariant DropdownWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_selectedValue != null && !widget.items.contains(_selectedValue)) {
+      setState(() {
+        _selectedValue = widget.items.isNotEmpty ? widget.items.first : null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +32,26 @@ class DropdownWidget extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          style: const TextStyle(color: AppColors.linkColor),
+          value: _selectedValue ?? widget.items.first,
+          style: const TextStyle(
+              color: AppColors.linkColor, fontWeight: FontWeight.w500),
           iconEnabledColor: AppColors.linkColor,
           padding: const EdgeInsets.only(left: 20, right: 10),
-          value: selectedItem,
           dropdownColor: Colors.white,
           onChanged: (String? newValue) {
-            onChanged.call(newValue);
+            setState(() {
+              _selectedValue = newValue;
+            });
+            widget.onChanged.call(newValue);
           },
-          items: items.map<DropdownMenuItem<String>>((String value) {
+          items: widget.items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               alignment: Alignment.center,
               child: Text(value),
             );
           }).toList(),
-          hint: Text(selectedItem ?? items.first,
+          hint: Text(_selectedValue ?? widget.items.first,
               style: const TextStyle(color: AppColors.linkColor)),
         ),
       ),

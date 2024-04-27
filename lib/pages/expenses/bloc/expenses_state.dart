@@ -36,3 +36,5 @@ class ExpensesLoadingSuccessState extends ExpensesFetchState {
 }
 
 class ExpensesLoadingErrorState extends ExpensesFetchState {}
+
+class ExpenesesAddExpenseClickedState extends ExpensesActionState {}
