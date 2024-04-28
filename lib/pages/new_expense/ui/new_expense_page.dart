@@ -220,6 +220,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                           UIUtils.showSnackbar(
                               context, 'Expense added successfully!',
                               type: SnackbarType.SUCCESS);
+                          widget.expensesBloc.add(ExpensesRefreshEvent());
                           break;
                         case NewExpenseAddExpenseErrorState _:
                           UIUtils.showSnackbar(
