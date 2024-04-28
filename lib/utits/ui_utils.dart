@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-enum ToastType { INFO, SUCCESS, ERROR, WARNING }
+enum SnackbarType { INFO, SUCCESS, ERROR, WARNING }
 
 class UIUtils {
   static String formatRupees(double amount) {
@@ -46,31 +45,41 @@ class UIUtils {
     }
   }
 
-  static void showToast(String message, ToastType type) {
+  static void showSnackbar(BuildContext context, String message,
+      {SnackbarType type = SnackbarType.INFO}) {
     Color backgroundColor;
+    IconData iconData;
+
     switch (type) {
-      case ToastType.INFO:
+      case SnackbarType.INFO:
         backgroundColor = Colors.blue;
+        iconData = Icons.info;
         break;
-      case ToastType.SUCCESS:
+      case SnackbarType.SUCCESS:
         backgroundColor = Colors.green;
+        iconData = Icons.check_circle;
         break;
-      case ToastType.ERROR:
+      case SnackbarType.ERROR:
         backgroundColor = Colors.red;
+        iconData = Icons.error;
         break;
-      case ToastType.WARNING:
-        backgroundColor = Colors.orange;
+      case SnackbarType.WARNING:
+        backgroundColor = Colors.amber;
+        iconData = Icons.warning;
         break;
     }
 
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: backgroundColor,
-      textColor: Colors.white,
-      fontSize: 16.0,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(iconData, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(message, style: const TextStyle(color: Colors.white)),
+          ],
+        ),
+        backgroundColor: backgroundColor,
+      ),
     );
   }
 }

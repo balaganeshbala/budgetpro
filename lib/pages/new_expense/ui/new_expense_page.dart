@@ -212,8 +212,24 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                 ]))),
                       );
                     }),
-                BlocBuilder(
+                BlocConsumer(
                     bloc: _newExpenseBloc,
+                    listener: (context, state) {
+                      switch (state) {
+                        case NewExpenseAddExpenseSuccessState _:
+                          UIUtils.showSnackbar(
+                              context, 'Expense added successfully!',
+                              type: SnackbarType.SUCCESS);
+                          break;
+                        case NewExpenseAddExpenseErrorState _:
+                          UIUtils.showSnackbar(
+                              context, 'Error in adding expense!',
+                              type: SnackbarType.ERROR);
+                          break;
+                        default:
+                          break;
+                      }
+                    },
                     buildWhen: (previous, current) =>
                         current is NewExpenseActionState,
                     builder: (context, state) {
@@ -226,14 +242,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                   color: AppColors.accentColor),
                             ),
                           );
-                        case NewExpenseAddExpenseSuccessState _:
-                          UIUtils.showToast(
-                              'Expense added successfully!', ToastType.SUCCESS);
-                          return Container();
-                        case NewExpenseAddExpenseErrorState _:
-                          UIUtils.showToast(
-                              'Error in adding expense!', ToastType.ERROR);
-                          return Container();
                         default:
                           return Container();
                       }
