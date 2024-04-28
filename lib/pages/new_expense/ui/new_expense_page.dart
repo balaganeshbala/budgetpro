@@ -70,67 +70,76 @@ class _AddExpensePageState extends State<AddExpensePage> {
             color: Colors.grey.shade200,
             child: Stack(
               children: [
-                SafeArea(
-                    child: BlocListener<NewExpenseBloc, NewExpenseState>(
-                  bloc: _newExpenseBloc,
-                  listener: (context, state) {
-                    if (state.runtimeType == NewExpensePageLoadedState) {
-                      _nameTextEditingController.clear();
-                      _amountTextEditingController.clear();
-                    }
-                  },
-                  child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(children: [
-                        TextField(
-                          controller: _nameTextEditingController,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(25)
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: 'Expense Name',
-                            hintText: 'Enter expense name',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            _newExpenseBloc
-                                .add(NewExpenseNameValueChanged(value: value));
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _amountTextEditingController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}$'),
-                            ),
-                          ],
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          decoration: const InputDecoration(
-                            labelText: 'Amount',
-                            hintText: 'Enter amount',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            _newExpenseBloc.add(
-                                NewExpenseAmountValueChanged(value: value));
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            const Text('Category'),
-                            const Spacer(),
-                            BlocBuilder<NewExpenseBloc, NewExpenseState>(
-                                bloc: _newExpenseBloc,
-                                buildWhen: (previous, current) =>
-                                    current is NewExpensePageLoadedState,
-                                builder: (context, state) {
-                                  switch (state) {
-                                    case NewExpensePageLoadedState state:
-                                      return DropdownWidget(
-                                        items: state.categories,
+                BlocBuilder<NewExpenseBloc, NewExpenseState>(
+                    bloc: _newExpenseBloc,
+                    buildWhen: (previous, current) =>
+                        current is NewExpensePageLoadedState,
+                    builder: (context, state) {
+                      return SafeArea(
+                        child: BlocListener<NewExpenseBloc, NewExpenseState>(
+                            bloc: _newExpenseBloc,
+                            listener: (context, state) {
+                              if (state.runtimeType ==
+                                  NewExpensePageLoadedState) {
+                                _nameTextEditingController.clear();
+                                _amountTextEditingController.clear();
+                                _newExpenseBloc
+                                    .add(NewExpenseNameValueChanged(value: ''));
+                                _newExpenseBloc.add(
+                                    NewExpenseAmountValueChanged(value: ''));
+                              }
+                            },
+                            child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(children: [
+                                  TextField(
+                                    controller: _nameTextEditingController,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(25)
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'Expense Name',
+                                      hintText: 'Enter expense name',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      _newExpenseBloc.add(
+                                          NewExpenseNameValueChanged(
+                                              value: value));
+                                    },
+                                  ),
+                                  const SizedBox(height: 20),
+                                  TextField(
+                                    controller: _amountTextEditingController,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d*\.?\d{0,2}$'),
+                                      ),
+                                    ],
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    decoration: const InputDecoration(
+                                      labelText: 'Amount',
+                                      hintText: 'Enter amount',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      _newExpenseBloc.add(
+                                          NewExpenseAmountValueChanged(
+                                              value: value));
+                                    },
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      const Text('Category'),
+                                      const Spacer(),
+                                      DropdownWidget(
+                                        items:
+                                            state is NewExpensePageLoadedState
+                                                ? state.categories
+                                                : [],
                                         onChanged: (value) {
                                           if (value != null) {
                                             _newExpenseBloc.add(
@@ -138,71 +147,71 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                                     value: value));
                                           }
                                         },
-                                      );
-                                    default:
-                                      return Container();
-                                  }
-                                }),
-                            const Spacer()
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            const Text('Date'),
-                            const Spacer(),
-                            Container(
-                              margin: const EdgeInsets.only(left: 30),
-                              width: 150,
-                              child: DatePickerWidget(
-                                defaultDate: DateTime.now(),
-                                onChanged: (value) {
-                                  _newExpenseBloc.add(
-                                      NewExpenseDateValueChanged(value: value));
-                                },
-                              ),
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        BlocBuilder(
-                            buildWhen: (previous, current) =>
-                                current is NewExpenseInputValueChangedState,
-                            bloc: _newExpenseBloc,
-                            builder: (context, state) {
-                              bool isInputValid =
-                                  state is NewExpenseInputValueChangedState
-                                      ? state.isInputValid
-                                      : false;
-                              return SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (isInputValid) {
-                                      _newExpenseBloc.add(
-                                          NewExpenseAddExpenseTappedEvent());
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isInputValid
-                                        ? AppColors.accentColor
-                                        : Colors.grey,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15, horizontal: 20),
+                                      ),
+                                      const Spacer()
+                                    ],
                                   ),
-                                  child: const Text(
-                                    'Add',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      const Text('Date'),
+                                      const Spacer(),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 30),
+                                        width: 150,
+                                        child: DatePickerWidget(
+                                          defaultDate: DateTime.now(),
+                                          onChanged: (value) {
+                                            _newExpenseBloc.add(
+                                                NewExpenseDateValueChanged(
+                                                    value: value));
+                                          },
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                    ],
                                   ),
-                                ),
-                              );
-                            }),
-                        const SizedBox(height: 20),
-                      ])),
-                )),
+                                  const SizedBox(height: 20),
+                                  BlocBuilder(
+                                      buildWhen: (previous, current) => current
+                                          is NewExpenseInputValueChangedState,
+                                      bloc: _newExpenseBloc,
+                                      builder: (context, state) {
+                                        bool isInputValid = state
+                                                is NewExpenseInputValueChangedState
+                                            ? state.isInputValid
+                                            : false;
+                                        return SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              if (isInputValid) {
+                                                _newExpenseBloc.add(
+                                                    NewExpenseAddExpenseTappedEvent());
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: isInputValid
+                                                  ? AppColors.accentColor
+                                                  : Colors.grey,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                      horizontal: 20),
+                                            ),
+                                            child: const Text(
+                                              'Add',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                  const SizedBox(height: 20),
+                                ]))),
+                      );
+                    }),
                 BlocBuilder(
                     bloc: _newExpenseBloc,
                     buildWhen: (previous, current) =>
