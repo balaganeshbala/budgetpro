@@ -6,15 +6,27 @@ import 'package:flutter/material.dart';
 
 Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
   final percentageSpent = (budget.spentAmount / budget.budgetAmount);
+  final isEnabled = budget.budgetAmount > 0 || budget.spentAmount > 0;
   return ListTile(
+    enabled: isEnabled,
     contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
     onTap: () {
       onTap();
     },
     dense: true,
-    leading: Icon(
-      UIUtils.iconForCategory(budget.category),
-      color: AppColors.iconColor,
+    leading: Container(
+      decoration: BoxDecoration(
+          color: isEnabled
+              ? AppColors.primaryColor.withAlpha(50)
+              : AppColors.iconColor.withAlpha(10),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      padding: EdgeInsets.all(5),
+      child: Icon(
+        UIUtils.iconForCategory(budget.category),
+        color: isEnabled
+            ? AppColors.primaryColor
+            : AppColors.iconColor.withAlpha(50),
+      ),
     ),
     title: Container(
         alignment: Alignment.centerLeft,
@@ -38,10 +50,12 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
             backgroundColor: Colors.grey.shade300,
             valueColor: AlwaysStoppedAnimation<Color>(percentageSpent > 1
                 ? AppColors.dangerColor
-                : AppColors.primaryColor),
+                : isEnabled
+                    ? AppColors.primaryColor
+                    : Colors.transparent),
           ),
         ])),
-    trailing: Icon(Icons.keyboard_arrow_right, color: AppColors.iconColor),
+    trailing: const Icon(Icons.keyboard_arrow_right),
   );
 }
 
