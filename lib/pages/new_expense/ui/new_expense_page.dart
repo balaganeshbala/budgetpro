@@ -47,6 +47,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final _newExpenseBloc = NewExpenseBloc();
   final _nameTextEditingController = TextEditingController();
   final _amountTextEditingController = TextEditingController();
+  final _nameFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -80,6 +81,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                               if (state.runtimeType ==
                                   NewExpensePageLoadedState) {
                                 _nameTextEditingController.clear();
+                                _nameFocusNode.requestFocus();
                                 _amountTextEditingController.clear();
                                 _newExpenseBloc
                                     .add(NewExpenseNameValueChanged(value: ''));
@@ -93,6 +95,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                   ExpenseNameField(
                                       nameTextEditingController:
                                           _nameTextEditingController,
+                                      focusNode: _nameFocusNode,
                                       newExpenseBloc: _newExpenseBloc),
                                   const SizedBox(height: 20),
                                   ExpenseAmountField(
@@ -327,18 +330,23 @@ class ExpenseNameField extends StatelessWidget {
   const ExpenseNameField({
     super.key,
     required TextEditingController nameTextEditingController,
+    required FocusNode focusNode,
     required NewExpenseBloc newExpenseBloc,
   })  : _nameTextEditingController = nameTextEditingController,
+        _focusNode = focusNode,
         _newExpenseBloc = newExpenseBloc;
 
   final TextEditingController _nameTextEditingController;
+  final FocusNode _focusNode;
   final NewExpenseBloc _newExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: _focusNode,
       controller: _nameTextEditingController,
       inputFormatters: [LengthLimitingTextInputFormatter(25)],
+      textCapitalization: TextCapitalization.words,
       decoration: const InputDecoration(
         labelText: 'Expense Name',
         hintText: 'Enter expense name',

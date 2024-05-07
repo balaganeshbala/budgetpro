@@ -19,8 +19,8 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
           color: isEnabled
               ? AppColors.primaryColor.withAlpha(50)
               : AppColors.iconColor.withAlpha(10),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      padding: EdgeInsets.all(5),
+          borderRadius: const BorderRadius.all(Radius.circular(5))),
+      padding: const EdgeInsets.all(5),
       child: Icon(
         UIUtils.iconForCategory(budget.category),
         color: isEnabled
