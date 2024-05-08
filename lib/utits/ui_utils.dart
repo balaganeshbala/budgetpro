@@ -45,6 +45,41 @@ class UIUtils {
     }
   }
 
+  static Color colorForCategory(String category) {
+    switch (category) {
+      case "Loan":
+        return Colors.blueAccent;
+      case "Holiday/Trip":
+        return Colors.orange;
+      case "Housing":
+        return Colors.purple;
+      case "Shopping":
+        return Colors.green;
+      case "Travel":
+        return Colors.red;
+      case "Vehicle":
+        return Colors.blueGrey;
+      case "Food":
+        return Colors.deepOrange;
+      case "Home":
+        return Colors.indigo;
+      case "Charges/Fees":
+        return Colors.teal;
+      case "Groceries":
+        return Colors.brown;
+      case "Health/Beauty":
+        return Colors.pink;
+      case "Entertainment":
+        return Colors.lightBlue;
+      case "Charity/Gift":
+        return Colors.deepPurple;
+      case "Education":
+        return Colors.amber;
+      default:
+        return Colors.grey;
+    }
+  }
+
   static void showSnackbar(BuildContext context, String message,
       {SnackbarType type = SnackbarType.INFO}) {
     Color backgroundColor;

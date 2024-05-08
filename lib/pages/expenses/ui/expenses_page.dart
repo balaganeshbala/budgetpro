@@ -37,11 +37,23 @@ class _ExpensesPageState extends State<ExpensesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BudgetPro',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        foregroundColor: Colors.white,
-        backgroundColor: AppColors.primaryColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          title: const Text('Expenses',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: AppColors.primaryColor, // Adjust the text color here
+          bottom: PreferredSize(
+            preferredSize:
+                Size.fromHeight(1), // Adjust the border thickness here
+            child: Container(
+              color: Colors.grey.shade300, // Set the color of the border here
+              height: 1, // Adjust the height of the border here
+            ),
+          ),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -120,11 +132,9 @@ class _ExpensesPageState extends State<ExpensesPage>
                                 const SizedBox(width: 20)
                               ]),
                               Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 20),
+                                  padding: const EdgeInsets.only(top: 10),
                                   child: TransactionsTable(
                                       transactions: state.expenses)),
-                              const SizedBox(height: 20),
                             ]);
                       default:
                         return Container();

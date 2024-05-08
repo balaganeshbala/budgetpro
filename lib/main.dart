@@ -51,6 +51,10 @@ class _BudgetProAppState extends State<BudgetProApp> {
             }),
             accentColor: AppColors.accentColor,
           ),
+          dividerTheme: DividerThemeData(
+            color: Colors.grey.shade300,
+            thickness: 1,
+          ),
           inputDecorationTheme: InputDecorationTheme(
               floatingLabelStyle:
                   const TextStyle(color: AppColors.primaryColor),
@@ -73,23 +77,33 @@ class _BudgetProAppState extends State<BudgetProApp> {
               HomePage(key: PageStorageKey('Tab1')),
               ExpensesPage(key: PageStorageKey('Tab2')),
             ]),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calculate),
-              label: 'Budget',
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey.shade300,
+                width: 1,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt),
-              label: 'Expenses',
-            ),
-          ],
-          currentIndex: _currentIndex,
-          selectedItemColor: AppColors.linkColor, // Selected tab color
-          onTap: (index) {
-            _pageController.jumpToPage(index);
-          },
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calculate),
+                label: 'Budget',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.receipt),
+                label: 'Expenses',
+              ),
+            ],
+            currentIndex: _currentIndex,
+            selectedItemColor: AppColors.linkColor, // Selected tab color
+            onTap: (index) {
+              _pageController.jumpToPage(index);
+            },
+          ),
         ),
       ),
     );

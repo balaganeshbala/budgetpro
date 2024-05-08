@@ -17,14 +17,14 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
     leading: Container(
       decoration: BoxDecoration(
           color: isEnabled
-              ? AppColors.primaryColor.withAlpha(50)
+              ? UIUtils.colorForCategory(budget.category).withAlpha(40)
               : AppColors.iconColor.withAlpha(10),
           borderRadius: const BorderRadius.all(Radius.circular(5))),
       padding: const EdgeInsets.all(5),
       child: Icon(
         UIUtils.iconForCategory(budget.category),
         color: isEnabled
-            ? AppColors.primaryColor
+            ? UIUtils.colorForCategory(budget.category)
             : AppColors.iconColor.withAlpha(50),
       ),
     ),

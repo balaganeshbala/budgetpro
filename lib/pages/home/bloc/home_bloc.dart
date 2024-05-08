@@ -117,6 +117,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     }
     emit(HomeBudgetCategoryItemTappedState(
-        budget: event.budget, transactions: filteredTransactions));
+        budget: event.budget,
+        transactions: filteredTransactions,
+        month: '$selectedMonth-$selectedYear'));
   }
 }

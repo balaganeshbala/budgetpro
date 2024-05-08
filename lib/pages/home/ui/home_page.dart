@@ -26,12 +26,12 @@ class _HomePageState extends State<HomePage>
   final _homeBloc = HomeBloc();
 
   void goToDetailsPageForBudgetCategory(BudgetModel budget,
-      List<ExpenseModel> transactions, BuildContext context) {
+      List<ExpenseModel> transactions, String month, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => BudgetCategoryInfoPage(
-                budget: budget, transactions: transactions)));
+                budget: budget, transactions: transactions, month: month)));
   }
 
   @override
@@ -43,11 +43,23 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BudgetPro',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        foregroundColor: Colors.white,
-        backgroundColor: AppColors.primaryColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          title: const Text('Budget',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: AppColors.primaryColor, // Adjust the text color here
+          bottom: PreferredSize(
+            preferredSize:
+                Size.fromHeight(1), // Adjust the border thickness here
+            child: Container(
+              color: Colors.grey.shade300, // Set the color of the border here
+              height: 1, // Adjust the height of the border here
+            ),
+          ),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -102,6 +114,7 @@ class _HomePageState extends State<HomePage>
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(height: 10),
                               SectionHeader(text: 'Bugdet for $month'),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -111,7 +124,7 @@ class _HomePageState extends State<HomePage>
                                     totalSpent: totalSpent,
                                     remaining: remaining),
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 10),
                               const SectionHeader(text: 'Categories'),
                               BudgetListWidget(
                                   budget: state.budget, homeBloc: _homeBloc),
@@ -124,8 +137,8 @@ class _HomePageState extends State<HomePage>
                   listener: (context, state) {
                     switch (state) {
                       case HomeBudgetCategoryItemTappedState state:
-                        goToDetailsPageForBudgetCategory(
-                            state.budget, state.transactions, context);
+                        goToDetailsPageForBudgetCategory(state.budget,
+                            state.transactions, state.month, context);
                         break;
                       default:
                     }

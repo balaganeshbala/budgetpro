@@ -17,7 +17,8 @@ class _TransactionsTableState extends State<TransactionsTable> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: Colors.white,
       width: double.infinity,
       child: DataTable(
         columnSpacing: 10,

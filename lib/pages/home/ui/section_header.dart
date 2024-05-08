@@ -12,7 +12,10 @@ class SectionHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
       child: Text(text,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          style: const TextStyle(
+              color: Colors.black45,
+              fontSize: 22,
+              fontWeight: FontWeight.bold)),
     );
   }
 }

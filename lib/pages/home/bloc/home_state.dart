@@ -69,6 +69,7 @@ class HomeMonthItemChangedState extends HomeActionState {
 class HomeBudgetCategoryItemTappedState extends HomeActionState {
   final BudgetModel budget;
   final List<ExpenseModel> transactions;
+  final String month;
   HomeBudgetCategoryItemTappedState(
-      {required this.budget, required this.transactions});
+      {required this.budget, required this.transactions, required this.month});
 }
