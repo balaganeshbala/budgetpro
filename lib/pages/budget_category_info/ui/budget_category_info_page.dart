@@ -33,28 +33,26 @@ class BudgetCategoryInfoPage extends StatelessWidget {
         child: SafeArea(
           child: Stack(
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 80),
-                        const SectionHeader(text: 'Budget'),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 10, right: 20, bottom: 20),
-                          child: BudgetCardWidget(
-                              totalBudget: budget.budgetAmount.toDouble(),
-                              totalSpent: budget.spentAmount,
-                              remaining:
-                                  budget.budgetAmount - budget.spentAmount),
-                        ),
-                        const SizedBox(height: 10),
-                        const SectionHeader(text: 'Transactions'),
-                        const SizedBox(height: 10),
-                        TransactionsTable(transactions: transactions)
-                      ]),
-                ),
+              SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 80),
+                      const SectionHeader(text: 'Budget'),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, top: 10, right: 20, bottom: 20),
+                        child: BudgetCardWidget(
+                            totalBudget: budget.budgetAmount.toDouble(),
+                            totalSpent: budget.spentAmount,
+                            remaining:
+                                budget.budgetAmount - budget.spentAmount),
+                      ),
+                      const SizedBox(height: 10),
+                      const SectionHeader(text: 'Transactions'),
+                      const SizedBox(height: 10),
+                      TransactionsTable(transactions: transactions)
+                    ]),
               ),
               CategoryHeader(category: budget.category),
             ],
