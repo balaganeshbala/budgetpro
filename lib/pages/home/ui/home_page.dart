@@ -79,8 +79,6 @@ class _HomePageState extends State<HomePage>
                         return YearAndMonthSelectorWidget(
                             yearsList: state.yearsList,
                             monthsList: state.monthsList,
-                            selectedYear: state.selectedYear,
-                            selectedMonth: state.selectedMonth,
                             onYearChanged: (value) {
                               _homeBloc.add(HomeYearChangedEvent(year: value));
                             },

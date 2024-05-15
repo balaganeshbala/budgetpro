@@ -6,16 +6,12 @@ class YearAndMonthSelectorWidget extends StatefulWidget {
     super.key,
     required this.yearsList,
     required this.monthsList,
-    required this.selectedYear,
-    required this.selectedMonth,
     required this.onYearChanged,
     required this.onMonthChanged,
   });
 
   final List<String> yearsList;
   final List<String> monthsList;
-  final String selectedYear;
-  final String selectedMonth;
   final ValueChanged<String> onYearChanged;
   final ValueChanged<String> onMonthChanged;
 

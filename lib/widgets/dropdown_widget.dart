@@ -32,7 +32,9 @@ class _DropdownWidgetState extends State<DropdownWidget> {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: _selectedValue,
+          value: widget.items.contains(_selectedValue)
+              ? _selectedValue
+              : widget.items.first,
           style: const TextStyle(
               color: AppColors.linkColor, fontWeight: FontWeight.w500),
           iconEnabledColor: AppColors.linkColor,

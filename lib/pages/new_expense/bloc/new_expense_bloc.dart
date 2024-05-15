@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/utits/network_services.dart';
 import 'package:intl/intl.dart';
 
@@ -46,7 +47,7 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   }
 
   Future<bool> addExpense() async {
-    const urlString = 'https://cloudpigeon.cyclic.app/budgetpro/expense/add';
+    const urlString = '$API_END_POINT/budgetpro/expense/add';
 
     final postData = {
       'name': name,

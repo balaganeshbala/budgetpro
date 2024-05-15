@@ -1,10 +1,10 @@
 import 'package:budgetpro/pages/home/models/budget_model.dart';
+import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/utits/network_services.dart';
 
 class BudgetRepo {
   static Future<List<BudgetModel>> fetchBudgetForMonth(String month) async {
-    final urlString =
-        'https://cloudpigeon.cyclic.app/budgetpro/budget?month=$month';
+    final urlString = '$API_END_POINT/budgetpro/budget?month=$month';
     try {
       final List<dynamic> result =
           await NetworkCallService.instance.makeAPICall(urlString);
@@ -16,8 +16,7 @@ class BudgetRepo {
   }
 
   static Future<List<MonthlyBudgetModel>> fetchMonthlyBudgets() async {
-    const urlString =
-        'https://cloudpigeon.cyclic.app/budgetpro/totalbudget?limit=8';
+    const urlString = '$API_END_POINT/budgetpro/totalbudget?limit=8';
     try {
       final List<dynamic> result =
           await NetworkCallService.instance.makeAPICall(urlString);

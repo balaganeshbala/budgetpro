@@ -73,8 +73,6 @@ class _ExpensesPageState extends State<ExpensesPage>
                         return YearAndMonthSelectorWidget(
                             yearsList: state.yearsList,
                             monthsList: state.monthsList,
-                            selectedYear: state.selectedYear,
-                            selectedMonth: state.selectedMonth,
                             onYearChanged: (value) {
                               _expensesBloc
                                   .add(ExpensesYearChangedEvent(year: value));
