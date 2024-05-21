@@ -1,1 +1,1 @@
-const String API_END_POINT = 'https://cloudpigeon.onrender.com';
+const String API_END_POINT = 'https://cloudpigeon.glitch.me';
