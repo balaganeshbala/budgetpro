@@ -16,7 +16,7 @@ class BudgetRepo {
   }
 
   static Future<List<MonthlyBudgetModel>> fetchMonthlyBudgets() async {
-    const urlString = '$API_END_POINT/budgetpro/totalbudget?limit=8';
+    const urlString = '$API_END_POINT/budgetpro/totalbudget?limit=9';
     try {
       final List<dynamic> result =
           await NetworkCallService.instance.makeAPICall(urlString);

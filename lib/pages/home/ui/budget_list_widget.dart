@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
   final percentageSpent = (budget.spentAmount / budget.budgetAmount);
   final isEnabled = budget.budgetAmount > 0 || budget.spentAmount > 0;
+  final amountToShow = budget.budgetAmount >= budget.spentAmount
+      ? budget.budgetAmount.round()
+      : (-(budget.spentAmount - budget.budgetAmount)).toStringAsFixed(2);
+
   return ListTile(
     enabled: isEnabled,
     contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -39,10 +43,7 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
               const Spacer()
             ],
           ),
-          Row(children: [
-            const Spacer(),
-            Text('${budget.budgetAmount.round()}')
-          ]),
+          Row(children: [const Spacer(), Text('$amountToShow')]),
           LinearProgressIndicator(
             borderRadius: BorderRadius.circular(5),
             value: (budget.spentAmount / budget.budgetAmount).clamp(0.0, 1.0),

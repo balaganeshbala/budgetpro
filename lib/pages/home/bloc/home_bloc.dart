@@ -64,6 +64,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _startMonthlyBudgetFetching(Emitter<HomeState> emit) async {
     emit(HomeBudgetTrendLoadingState());
     monthlyBudgets = await BudgetRepo.fetchMonthlyBudgets();
+    monthlyBudgets.removeAt(0);
     emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudgets));
   }
 

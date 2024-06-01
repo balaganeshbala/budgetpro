@@ -51,7 +51,12 @@ class BudgetCategoryInfoPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       const SectionHeader(text: 'Transactions'),
                       const SizedBox(height: 10),
-                      TransactionsTable(transactions: transactions)
+                      transactions.isEmpty
+                          ? Container(
+                              padding: const EdgeInsets.only(top: 10),
+                              alignment: Alignment.center,
+                              child: const Text('No transactions yet.'))
+                          : TransactionsTable(transactions: transactions)
                     ]),
               ),
               CategoryHeader(category: budget.category),
