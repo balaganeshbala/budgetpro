@@ -34,7 +34,9 @@ class _DropdownWidgetState extends State<DropdownWidget> {
         child: DropdownButton<String>(
           value: widget.items.contains(_selectedValue)
               ? _selectedValue
-              : widget.items.first,
+              : widget.items.isNotEmpty
+                  ? widget.items.first
+                  : '',
           style: const TextStyle(
               color: AppColors.linkColor, fontWeight: FontWeight.w500),
           iconEnabledColor: AppColors.linkColor,

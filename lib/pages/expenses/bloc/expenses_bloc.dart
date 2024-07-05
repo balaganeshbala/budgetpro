@@ -17,22 +17,9 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
 
   ExpensesBloc() : super(ExpensesInitial()) {
     on<ExpensesInitialEvent>(expensesInitialEvent);
-    on<ExpensesYearChangedEvent>(expensesYearItemChangedEvent);
-    on<ExpensesMonthChangedEvent>(expensesMonthItemChangedEvent);
+    on<ExpensesMonthYearChangedEvent>(expensesMonthItemChangedEvent);
     on<ExpensesAddExpenseTappedEvent>(expensesAddExpenseTappedEvent);
     on<ExpensesRefreshEvent>(expensesRefreshEvent);
-  }
-
-  void _startYearAndMonthFetching(Emitter<ExpensesState> emit) {
-    yearsList = Utils.getYearsList();
-    selectedYear = yearsList.first;
-    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
-    selectedMonth = monthsList.first;
-    emit(ExpensesMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: yearsList.first,
-        selectedMonth: monthsList.first));
   }
 
   FutureOr<void> _startExpenseFetchingForMonth(
@@ -44,31 +31,15 @@ class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
 
   FutureOr<void> expensesInitialEvent(
       ExpensesInitialEvent event, Emitter<ExpensesState> emit) async {
-    _startYearAndMonthFetching(emit);
+    selectedMonth = Utils.getMonthAsShortText(DateTime.now());
+    selectedYear = '${DateTime.now().year}';
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
   }
 
-  FutureOr<void> expensesYearItemChangedEvent(
-      ExpensesYearChangedEvent event, Emitter<ExpensesState> emit) {
-    selectedYear = event.year;
-    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
-    emit(ExpensesMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: selectedYear,
-        selectedMonth: monthsList.first));
-  }
-
   FutureOr<void> expensesMonthItemChangedEvent(
-      ExpensesMonthChangedEvent event, Emitter<ExpensesState> emit) async {
+      ExpensesMonthYearChangedEvent event, Emitter<ExpensesState> emit) async {
     selectedMonth = event.month;
-    emit(ExpensesMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: selectedYear,
-        selectedMonth: selectedMonth));
-    emit(ExpensesMonthItemChangedState(
-        year: selectedYear, month: selectedMonth));
+    selectedYear = event.year;
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
   }
 

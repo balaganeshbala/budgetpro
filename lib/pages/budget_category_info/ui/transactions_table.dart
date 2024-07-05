@@ -3,9 +3,9 @@ import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 class TransactionsTable extends StatefulWidget {
-  TransactionsTable({super.key, required this.transactions});
+  const TransactionsTable({super.key, required this.transactions});
 
-  List<ExpenseModel> transactions;
+  final List<ExpenseModel> transactions;
 
   @override
   State<TransactionsTable> createState() => _TransactionsTableState();

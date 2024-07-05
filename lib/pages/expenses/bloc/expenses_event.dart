@@ -4,16 +4,11 @@ sealed class ExpensesEvent {}
 
 class ExpensesInitialEvent extends ExpensesEvent {}
 
-class ExpensesYearChangedEvent extends ExpensesEvent {
+class ExpensesMonthYearChangedEvent extends ExpensesEvent {
+  final String month;
   final String year;
 
-  ExpensesYearChangedEvent({required this.year});
-}
-
-class ExpensesMonthChangedEvent extends ExpensesEvent {
-  final String month;
-
-  ExpensesMonthChangedEvent({required this.month});
+  ExpensesMonthYearChangedEvent({required this.month, required this.year});
 }
 
 class ExpensesRefreshEvent extends ExpensesEvent {}

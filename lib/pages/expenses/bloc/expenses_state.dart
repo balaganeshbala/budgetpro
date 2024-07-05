@@ -8,25 +8,6 @@ sealed class ExpensesActionState extends ExpensesState {}
 
 final class ExpensesInitial extends ExpensesState {}
 
-class ExpensesMonthLoadedSuccessState extends ExpensesState {
-  final List<String> yearsList;
-  final List<String> monthsList;
-  final String selectedYear;
-  final String selectedMonth;
-
-  ExpensesMonthLoadedSuccessState(
-      {required this.yearsList,
-      required this.monthsList,
-      required this.selectedYear,
-      required this.selectedMonth});
-}
-
-class ExpensesMonthItemChangedState extends ExpensesActionState {
-  final String year;
-  final String month;
-  ExpensesMonthItemChangedState({required this.year, required this.month});
-}
-
 final class ExpensesLoadingState extends ExpensesFetchState {}
 
 class ExpensesLoadingSuccessState extends ExpensesFetchState {

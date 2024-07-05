@@ -1,7 +1,10 @@
 import 'package:budgetpro/pages/expenses/ui/expenses_page.dart';
 import 'package:budgetpro/pages/home/ui/home_page.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/utils.dart';
+import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const BudgetProApp());
@@ -17,6 +20,9 @@ class BudgetProApp extends StatefulWidget {
 class _BudgetProAppState extends State<BudgetProApp> {
   int _currentIndex = 0;
   late PageController _pageController;
+
+  String initialMonth = Utils.getMonthAsShortText(DateTime.now());
+  String initialYear = '${DateTime.now().year}';
 
   @override
   void initState() {
@@ -64,45 +70,49 @@ class _BudgetProAppState extends State<BudgetProApp> {
                   borderSide: BorderSide(color: AppColors.iconColor)),
               focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.primaryColor)))),
-      home: Scaffold(
-        body: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            children: const [
-              HomePage(key: PageStorageKey('Tab1')),
-              ExpensesPage(key: PageStorageKey('Tab2')),
-            ]),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1,
+      home: BlocProvider(
+        create: (context) =>
+            MonthSelectorBloc(initialMonth, initialYear, DateTime.now()),
+        child: Scaffold(
+          body: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              children: const [
+                HomePage(key: PageStorageKey('Tab1')),
+                ExpensesPage(key: PageStorageKey('Tab2')),
+              ]),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                ),
               ),
             ),
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calculate),
-                label: 'Budget',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.receipt),
-                label: 'Expenses',
-              ),
-            ],
-            currentIndex: _currentIndex,
-            selectedItemColor: AppColors.linkColor, // Selected tab color
-            onTap: (index) {
-              _pageController.jumpToPage(index);
-            },
+            child: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.calculate),
+                  label: 'Budget',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt),
+                  label: 'Expenses',
+                ),
+              ],
+              currentIndex: _currentIndex,
+              selectedItemColor: AppColors.linkColor, // Selected tab color
+              onTap: (index) {
+                _pageController.jumpToPage(index);
+              },
+            ),
           ),
         ),
       ),

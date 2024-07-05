@@ -1,9 +1,9 @@
 import 'package:budgetpro/pages/new_expense/ui/new_expense_page.dart';
 import 'package:budgetpro/pages/budget_category_info/ui/transactions_table.dart';
 import 'package:budgetpro/pages/expenses/bloc/expenses_bloc.dart';
-import 'package:budgetpro/pages/home/ui/section_header.dart';
 import 'package:budgetpro/utits/colors.dart';
-import 'package:budgetpro/widgets/year_and_month_selector_widget.dart';
+import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
+import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,20 +38,51 @@ class _ExpensesPageState extends State<ExpensesPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight + 10),
         child: AppBar(
-          title: const Text('Expenses',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
-          foregroundColor: AppColors.primaryColor, // Adjust the text color here
+          surfaceTintColor: Colors.white,
           bottom: PreferredSize(
             preferredSize:
-                Size.fromHeight(1), // Adjust the border thickness here
-            child: Container(
-              color: Colors.grey.shade300, // Set the color of the border here
-              height: 1, // Adjust the height of the border here
-            ),
+                const Size.fromHeight(0), // Adjust the border thickness here
+            child: BlocListener<MonthSelectorBloc, MonthSelectorState>(
+                listener: (context, state) {
+                  String month = state.selectedMonth;
+                  String year = state.selectedYear;
+                  _expensesBloc.add(
+                      ExpensesMonthYearChangedEvent(month: month, year: year));
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 14),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Expenses',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primaryColor),
+                          ),
+                          Spacer(),
+                          MonthSelectorWidget(),
+                        ],
+                      ),
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    )),
+                  ],
+                )),
           ),
         ),
       ),
@@ -61,31 +92,7 @@ class _ExpensesPageState extends State<ExpensesPage>
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(children: [
-              BlocConsumer(
-                  bloc: _expensesBloc,
-                  listenWhen: (previous, current) =>
-                      current is ExpensesMonthLoadedSuccessState,
-                  buildWhen: (previous, current) =>
-                      current is ExpensesMonthLoadedSuccessState,
-                  builder: (context, state) {
-                    switch (state) {
-                      case ExpensesMonthLoadedSuccessState state:
-                        return YearAndMonthSelectorWidget(
-                            yearsList: state.yearsList,
-                            monthsList: state.monthsList,
-                            onYearChanged: (value) {
-                              _expensesBloc
-                                  .add(ExpensesYearChangedEvent(year: value));
-                            },
-                            onMonthChanged: (value) {
-                              _expensesBloc
-                                  .add(ExpensesMonthChangedEvent(month: value));
-                            });
-                      default:
-                        return Container();
-                    }
-                  },
-                  listener: (context, state) {}),
+              const SizedBox(height: 10),
               BlocConsumer(
                   bloc: _expensesBloc,
                   listenWhen: (previous, current) =>
@@ -110,7 +117,6 @@ class _ExpensesPageState extends State<ExpensesPage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(children: [
-                                const SectionHeader(text: 'Expenses'),
                                 const Spacer(),
                                 TextButton(
                                   style: const ButtonStyle(

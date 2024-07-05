@@ -10,8 +10,6 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  List<String> yearsList = [];
-  List<String> monthsList = [];
   String selectedYear = "";
   String selectedMonth = "";
   List<ExpenseModel> expenses = [];
@@ -19,22 +17,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc() : super(HomeInitial()) {
     on<HomeInitialEvent>(homeInitialEvent);
-    on<HomeYearChangedEvent>(homeYearItemChangedEvent);
-    on<HomeMonthChangedEvent>(homeMonthItemChangedEvent);
+    on<HomeMonthYearChangedEvent>(homeMonthYearItemChangedEvent);
     on<HomeBudgetCategoryItemTappedEvent>(homeBudgetCategoryItemTappedEvent);
-  }
-
-  void _startYearAndMonthFetching(Emitter<HomeState> emit) {
-    emit(HomeLoadingState());
-    yearsList = Utils.getYearsList();
-    selectedYear = yearsList.first;
-    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
-    selectedMonth = monthsList.first;
-    emit(HomeMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: yearsList.first,
-        selectedMonth: monthsList.first));
   }
 
   FutureOr<void> _startBudgetFetchingForMonth(
@@ -52,8 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         budget: budget,
         totalBudget: totalBudget,
         totalSpent: totalSpent,
-        remaining: remaining,
-        month: '$selectedMonth-$selectedYear'));
+        remaining: remaining));
   }
 
   FutureOr<void> _startExpenseFetchingForMonth(
@@ -70,36 +53,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeInitialEvent(
       HomeInitialEvent event, Emitter<HomeState> emit) async {
-    _startYearAndMonthFetching(emit);
+    selectedMonth = Utils.getMonthAsShortText(DateTime.now());
+    selectedYear = '${DateTime.now().year}';
     await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
     await _startMonthlyBudgetFetching(emit);
-  }
-
-  FutureOr<void> homeYearItemChangedEvent(
-      HomeYearChangedEvent event, Emitter<HomeState> emit) {
-    selectedYear = event.year;
-    monthsList = Utils.getMonthsListForYear(int.parse(selectedYear));
-    emit(HomeMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: selectedYear,
-        selectedMonth: monthsList.first));
-  }
-
-  FutureOr<void> homeMonthItemChangedEvent(
-      HomeMonthChangedEvent event, Emitter<HomeState> emit) async {
-    selectedMonth = event.month;
-    emit(HomeMonthLoadedSuccessState(
-        yearsList: yearsList,
-        monthsList: monthsList,
-        selectedYear: selectedYear,
-        selectedMonth: selectedMonth));
-    emit(HomeMonthItemChangedState(year: selectedYear, month: selectedMonth));
-    emit(HomeBudgetTrendHiddenState());
-    await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
-    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
-    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudgets));
   }
 
   FutureOr<void> homeBudgetCategoryItemTappedEvent(
@@ -121,5 +79,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         budget: event.budget,
         transactions: filteredTransactions,
         month: '$selectedMonth-$selectedYear'));
+  }
+
+  FutureOr<void> homeMonthYearItemChangedEvent(
+      HomeMonthYearChangedEvent event, Emitter<HomeState> emit) async {
+    selectedMonth = event.month;
+    selectedYear = event.year;
+
+    emit(HomeBudgetTrendHiddenState());
+    await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
+    await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);
+    emit(HomeBudgetTrendSuccessState(monthlyBudget: monthlyBudgets));
   }
 }

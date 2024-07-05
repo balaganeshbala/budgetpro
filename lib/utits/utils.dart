@@ -10,6 +10,11 @@ class Utils {
     return years;
   }
 
+  static String getMonthAsShortText(DateTime date) {
+    final formatter = DateFormat('MMM');
+    return formatter.format(date);
+  }
+
   static List<String> getMonthsListForYear(int year) {
     final currentYear = DateTime.now().year;
     final currentMonth = DateTime.now().month;
@@ -20,8 +25,8 @@ class Utils {
       if (year == currentYear && month > currentMonth) {
         continue;
       }
-      final formatter = DateFormat('MMM');
-      monthNames.add(formatter.format(dateTime));
+
+      monthNames.add(getMonthAsShortText(dateTime));
     }
     return monthNames;
   }

@@ -4,16 +4,11 @@ sealed class HomeEvent {}
 
 class HomeInitialEvent extends HomeEvent {}
 
-class HomeYearChangedEvent extends HomeEvent {
+class HomeMonthYearChangedEvent extends HomeEvent {
+  final String month;
   final String year;
 
-  HomeYearChangedEvent({required this.year});
-}
-
-class HomeMonthChangedEvent extends HomeEvent {
-  final String month;
-
-  HomeMonthChangedEvent({required this.month});
+  HomeMonthYearChangedEvent({required this.month, required this.year});
 }
 
 class HomeBudgetCategoryItemTappedEvent extends HomeEvent {

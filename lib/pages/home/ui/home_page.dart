@@ -6,7 +6,8 @@ import 'package:budgetpro/pages/home/ui/budget_card_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_list_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_trend_line_chart.dart';
 import 'package:budgetpro/pages/home/ui/section_header.dart';
-import 'package:budgetpro/widgets/year_and_month_selector_widget.dart';
+import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
+import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,20 +45,49 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight + 10),
         child: AppBar(
-          title: const Text('Budget',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
-          foregroundColor: AppColors.primaryColor, // Adjust the text color here
+          surfaceTintColor: Colors.white,
           bottom: PreferredSize(
             preferredSize:
-                Size.fromHeight(1), // Adjust the border thickness here
-            child: Container(
-              color: Colors.grey.shade300, // Set the color of the border here
-              height: 1, // Adjust the height of the border here
-            ),
+                const Size.fromHeight(0), // Adjust the border thickness here
+            child: BlocListener<MonthSelectorBloc, MonthSelectorState>(
+                listener: (context, state) {
+                  _homeBloc.add(HomeMonthYearChangedEvent(
+                      month: state.selectedMonth, year: state.selectedYear));
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 14),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Budget',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primaryColor),
+                          ),
+                          Spacer(),
+                          MonthSelectorWidget(),
+                        ],
+                      ),
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    )),
+                  ],
+                )),
           ),
         ),
       ),
@@ -67,30 +97,6 @@ class _HomePageState extends State<HomePage>
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(children: [
-              BlocConsumer(
-                  bloc: _homeBloc,
-                  listenWhen: (previous, current) =>
-                      current is HomeMonthLoadedSuccessState,
-                  buildWhen: (previous, current) =>
-                      current is HomeMonthLoadedSuccessState,
-                  builder: (context, state) {
-                    switch (state) {
-                      case HomeMonthLoadedSuccessState state:
-                        return YearAndMonthSelectorWidget(
-                            yearsList: state.yearsList,
-                            monthsList: state.monthsList,
-                            onYearChanged: (value) {
-                              _homeBloc.add(HomeYearChangedEvent(year: value));
-                            },
-                            onMonthChanged: (value) {
-                              _homeBloc
-                                  .add(HomeMonthChangedEvent(month: value));
-                            });
-                      default:
-                        return Container();
-                    }
-                  },
-                  listener: (context, state) {}),
               BlocConsumer(
                   bloc: _homeBloc,
                   listenWhen: (previous, current) =>
@@ -108,15 +114,12 @@ class _HomePageState extends State<HomePage>
                         final totalBudget = state.totalBudget;
                         final totalSpent = state.totalSpent;
                         final remaining = state.remaining;
-                        final month = state.month;
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 10),
-                              SectionHeader(text: 'Bugdet for $month'),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 20, top: 10, right: 20, bottom: 20),
+                                    left: 20, top: 20, right: 20, bottom: 20),
                                 child: BudgetCardWidget(
                                     totalBudget: totalBudget,
                                     totalSpent: totalSpent,
