@@ -47,7 +47,7 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   }
 
   Future<bool> addExpense() async {
-    const urlString = '$API_END_POINT/budgetpro/expense/add';
+    const urlString = '$apiEndPoint/budgetpro/expense/add';
 
     final postData = {
       'name': name,

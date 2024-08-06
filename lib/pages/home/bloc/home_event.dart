@@ -4,6 +4,8 @@ sealed class HomeEvent {}
 
 class HomeInitialEvent extends HomeEvent {}
 
+class HomeScreenRefreshedEvent extends HomeEvent {}
+
 class HomeMonthYearChangedEvent extends HomeEvent {
   final String month;
   final String year;

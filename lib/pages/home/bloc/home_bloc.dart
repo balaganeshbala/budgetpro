@@ -19,6 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInitialEvent>(homeInitialEvent);
     on<HomeMonthYearChangedEvent>(homeMonthYearItemChangedEvent);
     on<HomeBudgetCategoryItemTappedEvent>(homeBudgetCategoryItemTappedEvent);
+    on<HomeScreenRefreshedEvent>(homeScreenRefreshedEvent);
   }
 
   FutureOr<void> _startBudgetFetchingForMonth(
@@ -85,7 +86,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeMonthYearChangedEvent event, Emitter<HomeState> emit) async {
     selectedMonth = event.month;
     selectedYear = event.year;
+    loadOrRefreshScreen(emit);
+  }
 
+  FutureOr<void> homeScreenRefreshedEvent(
+      HomeScreenRefreshedEvent event, Emitter<HomeState> emit) async {
+    loadOrRefreshScreen(emit);
+  }
+
+  FutureOr<void> loadOrRefreshScreen(Emitter<HomeState> emit) async {
     emit(HomeBudgetTrendHiddenState());
     await _startBudgetFetchingForMonth('$selectedMonth-$selectedYear', emit);
     await _startExpenseFetchingForMonth('$selectedMonth-$selectedYear', emit);

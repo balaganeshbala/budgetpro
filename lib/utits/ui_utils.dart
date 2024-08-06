@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-enum SnackbarType { INFO, SUCCESS, ERROR, WARNING }
+enum SnackbarType { info, success, error, warning }
 
 class UIUtils {
   static String formatRupees(double amount) {
@@ -81,24 +81,24 @@ class UIUtils {
   }
 
   static void showSnackbar(BuildContext context, String message,
-      {SnackbarType type = SnackbarType.INFO}) {
+      {SnackbarType type = SnackbarType.info}) {
     Color backgroundColor;
     IconData iconData;
 
     switch (type) {
-      case SnackbarType.INFO:
+      case SnackbarType.info:
         backgroundColor = Colors.blue;
         iconData = Icons.info;
         break;
-      case SnackbarType.SUCCESS:
+      case SnackbarType.success:
         backgroundColor = Colors.green;
         iconData = Icons.check_circle;
         break;
-      case SnackbarType.ERROR:
+      case SnackbarType.error:
         backgroundColor = Colors.red;
         iconData = Icons.error;
         break;
-      case SnackbarType.WARNING:
+      case SnackbarType.warning:
         backgroundColor = Colors.amber;
         iconData = Icons.warning;
         break;

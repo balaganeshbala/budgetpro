@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight + 10),
@@ -95,87 +96,94 @@ class _HomePageState extends State<HomePage>
         height: MediaQuery.of(context).size.height,
         color: Colors.grey.shade200,
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(children: [
-              BlocConsumer(
-                  bloc: _homeBloc,
-                  listenWhen: (previous, current) =>
-                      current is HomeBudgetCategoryItemTappedState,
-                  buildWhen: (previous, current) => current is HomeBudgetState,
-                  builder: (context, state) {
-                    switch (state) {
-                      case HomeBudgetLoadingState _:
-                        return const SizedBox(
-                            height: 100,
-                            child: Center(
-                                child: CircularProgressIndicator(
-                                    color: AppColors.accentColor)));
-                      case HomeBudgetLoadingSuccessState state:
-                        final totalBudget = state.totalBudget;
-                        final totalSpent = state.totalSpent;
-                        final remaining = state.remaining;
-                        return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, top: 20, right: 20, bottom: 20),
-                                child: BudgetCardWidget(
-                                    totalBudget: totalBudget,
-                                    totalSpent: totalSpent,
-                                    remaining: remaining),
-                              ),
-                              const SizedBox(height: 10),
-                              const SectionHeader(text: 'Categories'),
-                              BudgetListWidget(
-                                  budget: state.budget, homeBloc: _homeBloc),
-                              const SizedBox(height: 20),
-                            ]);
-                      default:
-                        return Container();
-                    }
-                  },
-                  listener: (context, state) {
-                    switch (state) {
-                      case HomeBudgetCategoryItemTappedState state:
-                        goToDetailsPageForBudgetCategory(state.budget,
-                            state.transactions, state.month, context);
-                        break;
-                      default:
-                    }
-                  }),
-              BlocBuilder(
-                  bloc: _homeBloc,
-                  buildWhen: (previous, current) =>
-                      current is HomeBudgetTrendState,
-                  builder: (context, state) {
-                    switch (state) {
-                      case HomeBudgetTrendLoadingState _:
-                        return const SizedBox(
-                            height: 100,
-                            child: Center(
-                                child: CircularProgressIndicator(
-                                    color: AppColors.accentColor)));
-                      case HomeBudgetTrendSuccessState state:
-                        return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: state.monthlyBudget.isNotEmpty
-                                ? [
-                                    const SizedBox(height: 10),
-                                    const SectionHeader(text: 'Bugdet Trend'),
-                                    const SizedBox(height: 10),
-                                    BudgetTrendLineChart(
-                                      data:
-                                          state.monthlyBudget.reversed.toList(),
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ]
-                                : []);
-                      default:
-                        return Container();
-                    }
-                  }),
-            ]),
+          child: RefreshIndicator(
+            backgroundColor: Colors.white,
+            onRefresh: () async {
+              _homeBloc.add(HomeScreenRefreshedEvent());
+            },
+            child: SingleChildScrollView(
+              child: Column(children: [
+                BlocConsumer(
+                    bloc: _homeBloc,
+                    listenWhen: (previous, current) =>
+                        current is HomeBudgetCategoryItemTappedState,
+                    buildWhen: (previous, current) =>
+                        current is HomeBudgetState,
+                    builder: (context, state) {
+                      switch (state) {
+                        case HomeBudgetLoadingState _:
+                          return const SizedBox(
+                              height: 100,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                      color: AppColors.accentColor)));
+                        case HomeBudgetLoadingSuccessState state:
+                          final totalBudget = state.totalBudget;
+                          final totalSpent = state.totalSpent;
+                          final remaining = state.remaining;
+                          return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, top: 20, right: 20, bottom: 20),
+                                  child: BudgetCardWidget(
+                                      totalBudget: totalBudget,
+                                      totalSpent: totalSpent,
+                                      remaining: remaining),
+                                ),
+                                const SizedBox(height: 10),
+                                const SectionHeader(text: 'Categories'),
+                                BudgetListWidget(
+                                    budget: state.budget, homeBloc: _homeBloc),
+                                const SizedBox(height: 20),
+                              ]);
+                        default:
+                          return Container();
+                      }
+                    },
+                    listener: (context, state) {
+                      switch (state) {
+                        case HomeBudgetCategoryItemTappedState state:
+                          goToDetailsPageForBudgetCategory(state.budget,
+                              state.transactions, state.month, context);
+                          break;
+                        default:
+                      }
+                    }),
+                BlocBuilder(
+                    bloc: _homeBloc,
+                    buildWhen: (previous, current) =>
+                        current is HomeBudgetTrendState,
+                    builder: (context, state) {
+                      switch (state) {
+                        case HomeBudgetTrendLoadingState _:
+                          return const SizedBox(
+                              height: 100,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                      color: AppColors.accentColor)));
+                        case HomeBudgetTrendSuccessState state:
+                          return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: state.monthlyBudget.isNotEmpty
+                                  ? [
+                                      const SizedBox(height: 10),
+                                      const SectionHeader(text: 'Bugdet Trend'),
+                                      const SizedBox(height: 10),
+                                      BudgetTrendLineChart(
+                                        data: state.monthlyBudget.reversed
+                                            .toList(),
+                                      ),
+                                      const SizedBox(height: 20),
+                                    ]
+                                  : []);
+                        default:
+                          return Container();
+                      }
+                    }),
+              ]),
+            ),
           ),
         ),
       ),

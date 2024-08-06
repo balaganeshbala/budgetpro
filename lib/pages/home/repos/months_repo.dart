@@ -3,7 +3,7 @@ import 'package:budgetpro/utits/network_services.dart';
 
 class MonthsRepo {
   static Future<List<String>> fetchMonths() async {
-    const urlString = '$API_END_POINT/budgetpro/months';
+    const urlString = '$apiEndPoint/budgetpro/months';
     try {
       final List<dynamic> result =
           await NetworkCallService.instance.makeAPICall(urlString);

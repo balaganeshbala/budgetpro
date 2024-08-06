@@ -145,12 +145,12 @@ class AddExpenseSnackbar extends StatelessWidget {
           switch (state) {
             case NewExpenseAddExpenseSuccessState _:
               UIUtils.showSnackbar(context, 'Expense added successfully!',
-                  type: SnackbarType.SUCCESS);
+                  type: SnackbarType.success);
               widget.expensesBloc.add(ExpensesRefreshEvent());
               break;
             case NewExpenseAddExpenseErrorState _:
               UIUtils.showSnackbar(context, 'Error in adding expense!',
-                  type: SnackbarType.ERROR);
+                  type: SnackbarType.error);
               break;
             default:
               break;
