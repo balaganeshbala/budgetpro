@@ -316,8 +316,16 @@ class ExpenseAmountField extends StatelessWidget {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: const InputDecoration(
         labelText: 'Amount',
-        hintText: 'Enter amount',
         border: OutlineInputBorder(),
+        prefixText: '₹ ', // Always show the rupee sign before input
+        prefixStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20, // Matches input text style
+        ),
+      ),
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
       ),
       onChanged: (value) {
         _newExpenseBloc.add(NewExpenseAmountValueChanged(value: value));
@@ -349,7 +357,6 @@ class ExpenseNameField extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       decoration: const InputDecoration(
         labelText: 'Expense Name',
-        hintText: 'Enter expense name',
         border: OutlineInputBorder(),
       ),
       onChanged: (value) {
