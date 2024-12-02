@@ -18,8 +18,14 @@ class AmountWithTitleWidget extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(UIUtils.formatRupees(amount),
             style: const TextStyle(
-                fontWeight: FontWeight.bold, color: AppColors.primaryColor)),
-        Text(title)
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor)),
+        Text(
+          title,
+          style: const TextStyle(
+              fontFamily: "Quicksand", fontWeight: FontWeight.w500),
+        )
       ]),
     );
   }

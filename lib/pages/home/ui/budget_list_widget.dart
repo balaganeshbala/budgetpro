@@ -39,11 +39,16 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
           Row(
             children: [
               Text(budget.category,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontFamily: "Quicksand")),
               const Spacer()
             ],
           ),
-          Row(children: [const Spacer(), Text('$amountToShow')]),
+          Row(children: [
+            const Spacer(),
+            Text('$amountToShow',
+                style: const TextStyle(fontFamily: "Quicksand"))
+          ]),
           LinearProgressIndicator(
             borderRadius: BorderRadius.circular(5),
             value: (budget.spentAmount / budget.budgetAmount).clamp(0.0, 1.0),

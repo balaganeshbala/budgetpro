@@ -61,7 +61,33 @@ class BudgetTrendLineChart extends StatelessWidget {
             showTitles: true,
             interval: 1,
             getTitlesWidget: (value, meta) {
-              return Text(data[value.toInt()].month.substring(0, 3));
+              return Text(
+                data[value.toInt()].month.substring(0, 3),
+                style: const TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 11,
+                    color: Colors.black),
+              );
+            },
+          )),
+          rightTitles: AxisTitles(
+              sideTitles: SideTitles(
+            showTitles: true,
+            interval: 20000,
+            getTitlesWidget: (value, meta) {
+              String formattedValue = value >= 100000
+                  ? "${(value / 100000).toStringAsFixed(1)}L"
+                  : "${(value / 1000).toStringAsFixed(0)}K";
+              return Text(
+                formattedValue, // Example: Show values in thousands
+                style: const TextStyle(
+                  fontFamily: "Quicksand", // Custom font
+                  fontSize: 11, // Adjust size
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black, // Adjust color
+                ),
+              );
             },
           )),
           leftTitles:

@@ -52,13 +52,18 @@ class _DropdownWidgetState extends State<DropdownWidget> {
             return DropdownMenuItem<String>(
               value: value,
               alignment: Alignment.center,
-              child: Text(value),
+              child: Text(value,
+                  style: const TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w600)),
             );
           }).toList(),
           hint: Text(
               _selectedValue ??
                   (widget.items.isEmpty ? '' : widget.items.first),
-              style: const TextStyle(color: AppColors.linkColor)),
+              style: const TextStyle(
+                  color: AppColors.linkColor,
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold)),
         ),
       ),
     );

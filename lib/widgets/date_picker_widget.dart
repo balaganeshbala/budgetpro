@@ -26,6 +26,15 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
+            textTheme: const TextTheme(
+                labelLarge: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500),
+                titleSmall: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w600),
+                bodyLarge: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500),
+                headlineLarge: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.bold)),
             colorScheme: const ColorScheme.light(
               primary: AppColors.primaryColor, // header background color
               onPrimary: Colors.white, // header text color
@@ -33,6 +42,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.bold),
                 foregroundColor: AppColors.accentColor, // button text color
               ),
             ),
@@ -69,9 +80,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               ),
             )),
         onPressed: () => _selectDate(context),
-        child: Text(_selectedDate == null
-            ? 'Select Date'
-            : _selectedDate!.toString().substring(0, 10)),
+        child: Text(
+          _selectedDate == null
+              ? 'Select Date'
+              : _selectedDate!.toString().substring(0, 10),
+          style: const TextStyle(
+              fontFamily: "Quicksand", fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }

@@ -22,7 +22,9 @@ class BudgetCategoryInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(month, style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(month,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontFamily: "Quicksand")),
         foregroundColor: Colors.white,
         backgroundColor: AppColors.primaryColor,
       ),
@@ -102,6 +104,7 @@ class CategoryHeader extends StatelessWidget {
           Text(
             category,
             style: const TextStyle(
+              fontFamily: "Quicksand",
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),

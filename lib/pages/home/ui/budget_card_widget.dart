@@ -38,12 +38,18 @@ class BudgetCardWidget extends StatelessWidget {
                       children: [
                         Text(_formatRupees(remaining),
                             style: TextStyle(
+                                fontFamily: "Quicksand",
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: remaining < 0
                                     ? AppColors.dangerColor
                                     : AppColors.primaryColor)),
-                        Text(remaining < 0 ? 'Overspent' : 'Remaining')
+                        Text(
+                          remaining < 0 ? 'Overspent' : 'Remaining',
+                          style: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500),
+                        )
                       ]),
                   const SizedBox(height: 30),
                   Row(

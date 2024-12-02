@@ -60,7 +60,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Expense',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontFamily: "Quicksand")),
           foregroundColor: Colors.white,
           backgroundColor: AppColors.primaryColor,
         ),
@@ -224,8 +225,10 @@ class AddExpenseButton extends StatelessWidget {
               ),
               child: const Text(
                 'Add',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: "Quicksand"),
               ),
             ),
           );
@@ -245,7 +248,7 @@ class ExpenseDateSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text('Date'),
+        const Text('Date', style: TextStyle(fontFamily: "Quicksand")),
         const Spacer(),
         Container(
           margin: const EdgeInsets.only(left: 30),
@@ -277,7 +280,7 @@ class ExpenseCategorySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text('Category'),
+        const Text('Category', style: TextStyle(fontFamily: "Quicksand")),
         const Spacer(),
         DropdownWidget(
           items: categories,
@@ -316,15 +319,17 @@ class ExpenseAmountField extends StatelessWidget {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: const InputDecoration(
         labelText: 'Amount',
+        labelStyle:
+            TextStyle(fontFamily: "Quicksand", fontWeight: FontWeight.w300),
+        floatingLabelStyle: TextStyle(fontFamily: "Quicksand"),
         border: OutlineInputBorder(),
         prefixText: '₹ ', // Always show the rupee sign before input
         prefixStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20, // Matches input text style
-        ),
+            fontWeight: FontWeight.bold, fontSize: 20, fontFamily: "Quicksand"),
       ),
       style: const TextStyle(
-        fontWeight: FontWeight.bold,
+        fontFamily: "Quicksand",
+        fontWeight: FontWeight.w600,
         fontSize: 20,
       ),
       onChanged: (value) {
@@ -351,14 +356,18 @@ class ExpenseNameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style:
+          const TextStyle(fontFamily: "Quicksand", fontWeight: FontWeight.w600),
       focusNode: _focusNode,
       controller: _nameTextEditingController,
       inputFormatters: [LengthLimitingTextInputFormatter(25)],
       textCapitalization: TextCapitalization.words,
       decoration: const InputDecoration(
-        labelText: 'Expense Name',
-        border: OutlineInputBorder(),
-      ),
+          labelText: 'Expense Name',
+          labelStyle:
+              TextStyle(fontFamily: "Quicksand", fontWeight: FontWeight.w300),
+          border: OutlineInputBorder(),
+          floatingLabelStyle: TextStyle(fontFamily: "Quicksand")),
       onChanged: (value) {
         _newExpenseBloc.add(NewExpenseNameValueChanged(value: value));
       },

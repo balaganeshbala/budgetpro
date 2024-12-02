@@ -110,7 +110,11 @@ class UIUtils {
           children: [
             Icon(iconData, color: Colors.white),
             const SizedBox(width: 8),
-            Text(message, style: const TextStyle(color: Colors.white)),
+            Text(message,
+                style: const TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
           ],
         ),
         backgroundColor: backgroundColor,

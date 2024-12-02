@@ -28,7 +28,8 @@ class _TransactionsTableState extends State<TransactionsTable> {
           DataColumn(
             label: const SizedBox(
                 child: Text('Date',
-                    style: TextStyle(fontWeight: FontWeight.bold))),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontFamily: "Quicksand"))),
             onSort: (columnIndex, ascending) {
               _sortAscending = ascending;
               _sortColumnIndex = columnIndex;
@@ -47,11 +48,14 @@ class _TransactionsTableState extends State<TransactionsTable> {
               label: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.35,
                   child: const Text('Name',
-                      style: TextStyle(fontWeight: FontWeight.bold)))),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Quicksand")))),
           DataColumn(
               numeric: true,
               label: const Text('Amount',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontFamily: "Quicksand")),
               onSort: (columnIndex, ascending) {
                 _sortAscending = ascending;
                 _sortColumnIndex = columnIndex;
@@ -68,13 +72,20 @@ class _TransactionsTableState extends State<TransactionsTable> {
         ],
         rows: widget.transactions.map((item) {
           return DataRow(cells: [
-            DataCell(Text(item.date)),
-            DataCell(Text(item.name)),
+            DataCell(Text(item.date,
+                style: const TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500))),
+            DataCell(Text(item.name,
+                style: const TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500))),
             DataCell(
               Container(
                   alignment: Alignment.centerRight,
                   child: Text(UIUtils.formatRupees(item.amount),
-                      textAlign: TextAlign.right)),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.w500))),
             ),
           ]);
         }).toList(),

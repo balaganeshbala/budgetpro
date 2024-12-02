@@ -64,6 +64,7 @@ class _ExpensesPageState extends State<ExpensesPage>
                           Text(
                             'Expenses',
                             style: TextStyle(
+                                fontFamily: "Quicksand",
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primaryColor),
@@ -130,8 +131,10 @@ class _ExpensesPageState extends State<ExpensesPage>
                                   },
                                   child: const Text(
                                     '+ Add New',
-                                    style:
-                                        TextStyle(color: AppColors.accentColor),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.accentColor,
+                                        fontFamily: "Quicksand"),
                                   ),
                                 ),
                                 const SizedBox(width: 20)
