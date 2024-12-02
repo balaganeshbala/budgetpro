@@ -64,10 +64,7 @@ class BudgetTrendLineChart extends StatelessWidget {
               return Text(
                 data[value.toInt()].month.substring(0, 3),
                 style: const TextStyle(
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11,
-                    color: Colors.black),
+                    fontFamily: "Sora", fontSize: 11, color: Colors.black),
               );
             },
           )),
@@ -82,9 +79,8 @@ class BudgetTrendLineChart extends StatelessWidget {
               return Text(
                 formattedValue, // Example: Show values in thousands
                 style: const TextStyle(
-                  fontFamily: "Quicksand", // Custom font
+                  fontFamily: "Sora", // Custom font
                   fontSize: 11, // Adjust size
-                  fontWeight: FontWeight.w500,
                   color: Colors.black, // Adjust color
                 ),
               );

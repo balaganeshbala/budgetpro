@@ -40,14 +40,13 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
             children: [
               Text(budget.category,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontFamily: "Quicksand")),
+                      fontWeight: FontWeight.w600, fontFamily: "Sora")),
               const Spacer()
             ],
           ),
           Row(children: [
             const Spacer(),
-            Text('$amountToShow',
-                style: const TextStyle(fontFamily: "Quicksand"))
+            Text('$amountToShow', style: const TextStyle(fontFamily: "Sora"))
           ]),
           LinearProgressIndicator(
             borderRadius: BorderRadius.circular(5),

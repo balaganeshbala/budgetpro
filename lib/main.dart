@@ -98,9 +98,11 @@ class _BudgetProAppState extends State<BudgetProApp> {
             child: BottomNavigationBar(
               backgroundColor: Colors.white,
               unselectedLabelStyle: const TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.w600),
+                  fontFamily: "Sora", fontWeight: FontWeight.w500),
               selectedLabelStyle: const TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.bold),
+                  fontFamily: "Sora",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12),
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.calculate),

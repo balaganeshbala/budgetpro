@@ -75,14 +75,14 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
 
   fonts:
-    - family: Quicksand
+    - family: Sora
       fonts:
-        - asset: lib/assets/fonts/Quicksand-Light.ttf
+        - asset: lib/assets/fonts/Sora-Light.ttf
           weight: 300
-        - asset: lib/assets/fonts/Quicksand-Regular.ttf
-        - asset: lib/assets/fonts/Quicksand-Medium.ttf
+        - asset: lib/assets/fonts/Sora-Regular.ttf
+        - asset: lib/assets/fonts/Sora-Medium.ttf
           weight: 500
-        - asset: lib/assets/fonts/Quicksand-SemiBold.ttf
+        - asset: lib/assets/fonts/Sora-SemiBold.ttf
           weight: 600
-        - asset: lib/assets/fonts/Quicksand-Bold.ttf
+        - asset: lib/assets/fonts/Sora-Bold.ttf
           weight: 700

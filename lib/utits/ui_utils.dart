@@ -112,7 +112,7 @@ class UIUtils {
             const SizedBox(width: 8),
             Text(message,
                 style: const TextStyle(
-                    fontFamily: "Quicksand",
+                    fontFamily: "Sora",
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
           ],

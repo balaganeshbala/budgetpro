@@ -20,7 +20,7 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
           style: ElevatedButton.styleFrom(
             textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontFamily: "Quicksand",
+              fontFamily: "Sora",
             ),
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           ),
@@ -38,13 +38,13 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
                     ),
                     primaryTextTheme: const TextTheme(
                       titleMedium: TextStyle(
-                          fontFamily: 'Quicksand', fontWeight: FontWeight.bold),
+                          fontFamily: "Sora", fontWeight: FontWeight.bold),
                       headlineSmall: TextStyle(
-                          fontFamily: 'Quicksand', fontWeight: FontWeight.w400),
+                          fontFamily: "Sora", fontWeight: FontWeight.w400),
                     ),
                     textTheme: const TextTheme(
                       labelLarge: TextStyle(
-                        fontFamily: 'Quicksand',
+                        fontFamily: "Sora",
                         fontWeight: FontWeight.w600,
                       ),
                     ), // Background color

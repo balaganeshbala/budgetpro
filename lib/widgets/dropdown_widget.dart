@@ -54,7 +54,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
               alignment: Alignment.center,
               child: Text(value,
                   style: const TextStyle(
-                      fontFamily: "Quicksand", fontWeight: FontWeight.w600)),
+                      fontFamily: "Sora", fontWeight: FontWeight.w600)),
             );
           }).toList(),
           hint: Text(
@@ -62,7 +62,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
                   (widget.items.isEmpty ? '' : widget.items.first),
               style: const TextStyle(
                   color: AppColors.linkColor,
-                  fontFamily: "Quicksand",
+                  fontFamily: "Sora",
                   fontWeight: FontWeight.bold)),
         ),
       ),

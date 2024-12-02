@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage>
                           Text(
                             'Budget',
                             style: TextStyle(
-                                fontFamily: "Quicksand",
+                                fontFamily: "Sora",
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primaryColor),

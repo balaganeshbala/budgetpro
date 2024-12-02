@@ -38,7 +38,7 @@ class BudgetCardWidget extends StatelessWidget {
                       children: [
                         Text(_formatRupees(remaining),
                             style: TextStyle(
-                                fontFamily: "Quicksand",
+                                fontFamily: "Sora",
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: remaining < 0
@@ -47,8 +47,7 @@ class BudgetCardWidget extends StatelessWidget {
                         Text(
                           remaining < 0 ? 'Overspent' : 'Remaining',
                           style: const TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500),
+                              fontFamily: "Sora", fontWeight: FontWeight.w500),
                         )
                       ]),
                   const SizedBox(height: 30),

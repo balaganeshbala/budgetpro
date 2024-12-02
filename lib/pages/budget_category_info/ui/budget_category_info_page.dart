@@ -24,7 +24,7 @@ class BudgetCategoryInfoPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(month,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, fontFamily: "Quicksand")),
+                fontWeight: FontWeight.bold, fontFamily: "Sora")),
         foregroundColor: Colors.white,
         backgroundColor: AppColors.primaryColor,
       ),
@@ -104,7 +104,7 @@ class CategoryHeader extends StatelessWidget {
           Text(
             category,
             style: const TextStyle(
-              fontFamily: "Quicksand",
+              fontFamily: "Sora",
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),

@@ -27,14 +27,12 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         return Theme(
           data: Theme.of(context).copyWith(
             textTheme: const TextTheme(
-                labelLarge: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500),
-                titleSmall: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w600),
-                bodyLarge: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500),
-                headlineLarge: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.bold)),
+                labelLarge: TextStyle(fontFamily: "Sora"),
+                titleSmall:
+                    TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w500),
+                bodyLarge: TextStyle(fontFamily: "Sora"),
+                headlineLarge:
+                    TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w600)),
             colorScheme: const ColorScheme.light(
               primary: AppColors.primaryColor, // header background color
               onPrimary: Colors.white, // header text color
@@ -43,7 +41,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.bold),
+                    fontFamily: "Sora", fontWeight: FontWeight.bold),
                 foregroundColor: AppColors.accentColor, // button text color
               ),
             ),
@@ -84,8 +82,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           _selectedDate == null
               ? 'Select Date'
               : _selectedDate!.toString().substring(0, 10),
-          style: const TextStyle(
-              fontFamily: "Quicksand", fontWeight: FontWeight.w600),
+          style:
+              const TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w600),
         ),
       ),
     );
