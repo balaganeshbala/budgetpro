@@ -20,21 +20,44 @@ class BudgetTrendLineChart extends StatelessWidget {
   }
 
   Widget _buildLineChart() {
+    // Calculate min and max values
+    num minValue = data
+        .map((budget) => budget.budgetAmount < budget.spentAmount
+            ? budget.budgetAmount
+            : budget.spentAmount)
+        .reduce((a, b) => a < b ? a : b);
+
+    num maxValue = data
+        .map((budget) => budget.budgetAmount > budget.spentAmount
+            ? budget.budgetAmount
+            : budget.spentAmount)
+        .reduce((a, b) => a > b ? a : b);
+
+    num range = maxValue - minValue;
+    double padding = range * 0.2;
+    double rawMinY = minValue - padding;
+    double rawMaxY = maxValue + padding;
+
+    // Round minY and maxY to the nearest significant step (e.g., 10000)
+    double roundTo = 10000.0;
+    double minY = (rawMinY / roundTo).floor() * roundTo;
+    double maxY = (rawMaxY / roundTo).ceil() * roundTo;
+
     return LineChart(LineChartData(
       borderData: FlBorderData(
         show: true,
         border: Border.all(color: AppColors.iconColor),
       ),
       backgroundColor: Colors.black12,
-      minY: 60000,
-      maxY: 160000,
+      minY: minY,
+      maxY: maxY,
       lineBarsData: [
         LineChartBarData(
           spots: data.map((budget) {
             return FlSpot(data.indexOf(budget).toDouble(),
                 budget.budgetAmount.toDouble());
           }).toList(),
-          isCurved: false,
+          isCurved: true,
           color: AppColors.linkColor,
           barWidth: 2,
           isStrokeCapRound: true,
@@ -46,7 +69,7 @@ class BudgetTrendLineChart extends StatelessWidget {
           spots: data.map((budget) {
             return FlSpot(data.indexOf(budget).toDouble(), budget.spentAmount);
           }).toList(),
-          isCurved: false,
+          isCurved: true,
           color: AppColors.dangerColor,
           barWidth: 2,
           isStrokeCapRound: true,
@@ -59,12 +82,18 @@ class BudgetTrendLineChart extends StatelessWidget {
           bottomTitles: AxisTitles(
               sideTitles: SideTitles(
             showTitles: true,
-            interval: 1,
+            interval: 2,
             getTitlesWidget: (value, meta) {
-              return Text(
-                data[value.toInt()].month.substring(0, 3),
-                style: const TextStyle(
-                    fontFamily: "Sora", fontSize: 11, color: Colors.black),
+              if (value.toInt() == data.length - 1) {
+                return const SizedBox(); // Hide the last title
+              }
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  data[value.toInt()].month.substring(0, 3),
+                  style: const TextStyle(
+                      fontFamily: "Sora", fontSize: 11, color: Colors.black),
+                ),
               );
             },
           )),
@@ -72,16 +101,20 @@ class BudgetTrendLineChart extends StatelessWidget {
               sideTitles: SideTitles(
             showTitles: true,
             interval: 20000,
+            reservedSize: 35,
             getTitlesWidget: (value, meta) {
               String formattedValue = value >= 100000
                   ? "${(value / 100000).toStringAsFixed(1)}L"
                   : "${(value / 1000).toStringAsFixed(0)}K";
-              return Text(
-                formattedValue, // Example: Show values in thousands
-                style: const TextStyle(
-                  fontFamily: "Sora", // Custom font
-                  fontSize: 11, // Adjust size
-                  color: Colors.black, // Adjust color
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  formattedValue, // Example: Show values in thousands
+                  style: const TextStyle(
+                    fontFamily: "Sora", // Custom font
+                    fontSize: 11, // Adjust size
+                    color: Colors.black, // Adjust color
+                  ),
                 ),
               );
             },
