@@ -1,5 +1,6 @@
 import 'package:budgetpro/pages/expenses/ui/expenses_page.dart';
 import 'package:budgetpro/pages/home/ui/home_page.dart';
+import 'package:budgetpro/pages/incomes/ui/incomes_page.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
@@ -85,6 +86,7 @@ class _BudgetProAppState extends State<BudgetProApp> {
               children: const [
                 HomePage(key: PageStorageKey('Tab1')),
                 ExpensesPage(key: PageStorageKey('Tab2')),
+                IncomesPage(key: PageStorageKey('Tab3'))
               ]),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
@@ -111,6 +113,10 @@ class _BudgetProAppState extends State<BudgetProApp> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.receipt),
                   label: 'Expenses',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.currency_rupee_rounded),
+                  label: 'Income',
                 ),
               ],
               currentIndex: _currentIndex,
