@@ -86,12 +86,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeMonthYearChangedEvent event, Emitter<HomeState> emit) async {
     selectedMonth = event.month;
     selectedYear = event.year;
-    loadOrRefreshScreen(emit);
+    await loadOrRefreshScreen(emit);
   }
 
   FutureOr<void> homeScreenRefreshedEvent(
       HomeScreenRefreshedEvent event, Emitter<HomeState> emit) async {
-    loadOrRefreshScreen(emit);
+    await loadOrRefreshScreen(emit);
   }
 
   FutureOr<void> loadOrRefreshScreen(Emitter<HomeState> emit) async {
