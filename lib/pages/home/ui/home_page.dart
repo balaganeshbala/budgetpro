@@ -1,11 +1,9 @@
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
-import 'package:budgetpro/pages/home/models/budget_model.dart';
-import 'package:budgetpro/pages/home/models/expenses_model.dart';
-import 'package:budgetpro/pages/home/ui/budget_card_widget.dart';
-import 'package:budgetpro/pages/home/ui/budget_list_widget.dart';
+import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/pages/new_home/ui/budget_card_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_trend_line_chart.dart';
-import 'package:budgetpro/pages/home/ui/section_header.dart';
+import 'package:budgetpro/pages/new_home/ui/section_header.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:budgetpro/utits/colors.dart';
@@ -26,13 +24,13 @@ class _HomePageState extends State<HomePage>
 
   final _homeBloc = HomeBloc();
 
-  void goToDetailsPageForBudgetCategory(BudgetModel budget,
-      List<ExpenseModel> transactions, String month, BuildContext context) {
+  void goToDetailsPageForBudgetCategory(
+      CategorizedBudgetModel budget, String month, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => BudgetCategoryInfoPage(
-                budget: budget, transactions: transactions, month: month)));
+                budget: budget, transactions: budget.expenses, month: month)));
   }
 
   @override
@@ -135,8 +133,8 @@ class _HomePageState extends State<HomePage>
                                 ),
                                 const SizedBox(height: 10),
                                 const SectionHeader(text: 'Categories'),
-                                BudgetListWidget(
-                                    budget: state.budget, homeBloc: _homeBloc),
+                                // BudgetListWidget(
+                                // budget: state.budget, homeBloc: _homeBloc),
                                 const SizedBox(height: 20),
                               ]);
                         default:
@@ -146,8 +144,8 @@ class _HomePageState extends State<HomePage>
                     listener: (context, state) {
                       switch (state) {
                         case HomeBudgetCategoryItemTappedState state:
-                          goToDetailsPageForBudgetCategory(state.budget,
-                              state.transactions, state.month, context);
+                          goToDetailsPageForBudgetCategory(
+                              state.budget, state.month, context);
                           break;
                         default:
                       }

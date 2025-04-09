@@ -14,7 +14,7 @@ class HomeMonthYearChangedEvent extends HomeEvent {
 }
 
 class HomeBudgetCategoryItemTappedEvent extends HomeEvent {
-  final BudgetModel budget;
+  final CategorizedBudgetModel budget;
 
   HomeBudgetCategoryItemTappedEvent({required this.budget});
 }

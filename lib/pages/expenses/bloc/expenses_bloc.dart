@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:budgetpro/pages/home/models/expenses_model.dart';
+import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
 import 'package:budgetpro/utits/utils.dart';
 

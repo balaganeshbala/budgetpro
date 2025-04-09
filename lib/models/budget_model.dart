@@ -1,24 +1,41 @@
-class BudgetModel {
-  String category;
+import 'package:budgetpro/models/expense_category_enum.dart';
+import 'package:budgetpro/models/expenses_model.dart';
+
+class CategorizedBudgetModel {
+  ExpenseCategory category;
   int budgetAmount;
   double spentAmount;
+  List<ExpenseModel> expenses = [];
 
-  BudgetModel({
+  CategorizedBudgetModel({
     required this.category,
     required this.budgetAmount,
     required this.spentAmount,
+    required this.expenses,
+  });
+}
+
+class BudgetModel {
+  int id;
+  String category;
+  double amount;
+
+  BudgetModel({
+    required this.id,
+    required this.category,
+    required this.amount,
   });
 
   factory BudgetModel.fromJson(Map<String, dynamic> json) => BudgetModel(
+        id: json["id"],
         category: json["category"],
-        budgetAmount: json["budgetAmount"],
-        spentAmount: json["spentAmount"].toDouble(),
+        amount: json["amount"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "category": category,
-        "budgetAmount": budgetAmount,
-        "spentAmount": spentAmount,
+        "amount": amount,
       };
 }
 

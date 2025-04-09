@@ -40,6 +40,8 @@ dependencies:
   flutter_bloc: ^8.1.5
   fl_chart: ^0.67.0
   mat_month_picker_dialog: ^1.1.2
+  supabase_flutter: ^2.8.4
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+ 
+  assets:
+    - .env
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,18 +1,28 @@
-import 'package:budgetpro/pages/home/models/expenses_model.dart';
-import 'package:budgetpro/utits/constants.dart';
-import 'package:budgetpro/utits/network_services.dart';
+import 'package:budgetpro/models/expenses_model.dart';
+import 'package:budgetpro/services/supabase_service.dart';
+import 'package:budgetpro/utits/utils.dart';
 
 class ExpensesRepo {
   static Future<List<ExpenseModel>> fetchExpensesForMonth(String month) async {
-    final urlString = '$apiEndPoint/budgetpro/expenses?month=$month';
     try {
-      final List<dynamic> result =
-          await NetworkCallService.instance.makeAPICall(urlString);
-      final expenses =
-          result.map((item) => ExpenseModel.fromJson(item)).toList();
-      return expenses;
+      final monthDate = Utils.getMonthStartAndEndDate(month);
+      final startDate = monthDate['startDate']!;
+      final endDate = monthDate['endDate']!;
+      final List<dynamic> result = await SupabaseService.fetchByDateRange(
+          "expenses", "date", startDate, endDate);
+      final budget = result.map((item) => ExpenseModel.fromJson(item)).toList();
+      return budget;
     } catch (e) {
       return [];
+    }
+  }
+
+  static Future<bool> addNewExpense(Map<String, dynamic> data) async {
+    try {
+      await SupabaseService.insert("expenses", data);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

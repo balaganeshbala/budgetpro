@@ -1,4 +1,4 @@
-import 'package:budgetpro/pages/home/models/expenses_model.dart';
+import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 

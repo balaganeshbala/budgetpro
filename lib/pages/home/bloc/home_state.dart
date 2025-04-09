@@ -15,7 +15,7 @@ class HomeInitial extends HomeState {}
 class HomeBudgetLoadingState extends HomeBudgetState {}
 
 class HomeBudgetLoadingSuccessState extends HomeBudgetState {
-  final List<BudgetModel> budget;
+  final List<CategorizedBudgetModel> budget;
   final double totalBudget;
   final double totalSpent;
   final double remaining;
@@ -42,9 +42,8 @@ class HomeBudgetTrendHiddenState extends HomeBudgetTrendState {}
 class HomeBudgetTrendErrosState extends HomeBudgetTrendState {}
 
 class HomeBudgetCategoryItemTappedState extends HomeActionState {
-  final BudgetModel budget;
-  final List<ExpenseModel> transactions;
+  final CategorizedBudgetModel budget;
   final String month;
   HomeBudgetCategoryItemTappedState(
-      {required this.budget, required this.transactions, required this.month});
+      {required this.budget, required this.month});
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:budgetpro/utits/constants.dart';
-import 'package:budgetpro/utits/network_services.dart';
+import 'package:budgetpro/services/network_services.dart';
 import 'package:intl/intl.dart';
 
 part 'new_expense_event.dart';

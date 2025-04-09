@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:budgetpro/pages/home/models/budget_model.dart';
-import 'package:budgetpro/pages/home/models/expenses_model.dart';
+import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/repos/budget_repo.dart';
 import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
 import 'package:budgetpro/utits/utils.dart';
@@ -63,7 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeBudgetCategoryItemTappedEvent(
       HomeBudgetCategoryItemTappedEvent event, Emitter<HomeState> emit) {
-    String selectedCategory = event.budget.category;
+    String selectedCategory = event.budget.category.name;
     List<ExpenseModel> filteredTransactions = [];
     for (var expense in expenses) {
       if (expense.category == selectedCategory) {
@@ -77,9 +77,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     }
     emit(HomeBudgetCategoryItemTappedState(
-        budget: event.budget,
-        transactions: filteredTransactions,
-        month: '$selectedMonth-$selectedYear'));
+        budget: event.budget, month: '$selectedMonth-$selectedYear'));
   }
 
   FutureOr<void> homeMonthYearItemChangedEvent(

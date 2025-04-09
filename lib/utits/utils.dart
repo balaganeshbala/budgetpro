@@ -30,4 +30,17 @@ class Utils {
     }
     return monthNames;
   }
+
+  static Map<String, DateTime> getMonthStartAndEndDate(String month) {
+    final inputFormat = DateFormat('MMM-yyyy');
+    final dateTime = inputFormat.parse(month);
+    final startDate = DateTime(dateTime.year, dateTime.month, 1);
+    final endDate = DateTime(dateTime.year, dateTime.month + 1, 0);
+
+    // Return the formatted start and end dates
+    return {
+      'startDate': startDate,
+      'endDate': endDate,
+    };
+  }
 }

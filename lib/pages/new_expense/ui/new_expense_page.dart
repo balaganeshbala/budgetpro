@@ -8,32 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ExpenseCategory {
-  final String rawValue;
-
-  const ExpenseCategory._(this.rawValue);
-
-  static const ExpenseCategory unselected = ExpenseCategory._("");
-  static const ExpenseCategory loan = ExpenseCategory._("Loan");
-  static const ExpenseCategory food = ExpenseCategory._("Food");
-  static const ExpenseCategory trip = ExpenseCategory._("Holiday/Trip");
-  static const ExpenseCategory housing = ExpenseCategory._("Housing");
-  static const ExpenseCategory shopping = ExpenseCategory._("Shopping");
-  static const ExpenseCategory travel = ExpenseCategory._("Travel");
-  static const ExpenseCategory home = ExpenseCategory._("Home");
-  static const ExpenseCategory charges = ExpenseCategory._("Charges/Fees");
-  static const ExpenseCategory groceries = ExpenseCategory._("Groceries");
-  static const ExpenseCategory life = ExpenseCategory._("Health/Beauty");
-  static const ExpenseCategory entertainment =
-      ExpenseCategory._("Entertainment");
-  static const ExpenseCategory gift = ExpenseCategory._("Charity/Gift");
-  static const ExpenseCategory education = ExpenseCategory._("Education");
-  static const ExpenseCategory vehicle = ExpenseCategory._("Vehicle");
-
-  @override
-  String toString() => rawValue;
-}
-
 class AddExpensePage extends StatefulWidget {
   final ExpensesBloc expensesBloc;
 

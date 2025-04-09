@@ -1,4 +1,4 @@
-import 'package:budgetpro/pages/home/ui/amount_with_title_widget.dart';
+import 'package:budgetpro/pages/new_home/ui/amount_with_title_widget.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

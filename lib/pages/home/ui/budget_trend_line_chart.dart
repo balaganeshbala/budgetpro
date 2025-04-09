@@ -1,4 +1,4 @@
-import 'package:budgetpro/pages/home/models/budget_model.dart';
+import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';

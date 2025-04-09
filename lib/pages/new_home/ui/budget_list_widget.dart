@@ -1,10 +1,12 @@
-import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
-import 'package:budgetpro/pages/home/models/budget_model.dart';
+import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
-import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 
-Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
+Widget _budgetListItem(
+    CategorizedBudgetModel budget, GestureTapCallback onTap) {
   final percentageSpent = (budget.spentAmount / budget.budgetAmount);
   final isEnabled = budget.budgetAmount > 0 || budget.spentAmount > 0;
   final amountToShow = budget.budgetAmount >= budget.spentAmount
@@ -21,14 +23,14 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
     leading: Container(
       decoration: BoxDecoration(
           color: isEnabled
-              ? UIUtils.colorForCategory(budget.category).withAlpha(40)
+              ? budget.category.color.withAlpha(40)
               : AppColors.iconColor.withAlpha(10),
           borderRadius: const BorderRadius.all(Radius.circular(5))),
       padding: const EdgeInsets.all(5),
       child: Icon(
-        UIUtils.iconForCategory(budget.category),
+        budget.category.icon,
         color: isEnabled
-            ? UIUtils.colorForCategory(budget.category)
+            ? budget.category.color
             : AppColors.iconColor.withAlpha(50),
       ),
     ),
@@ -38,7 +40,7 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
             children: [
-              Text(budget.category,
+              Text(budget.category.displayName,
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontFamily: "Sora")),
               const Spacer()
@@ -65,8 +67,8 @@ Widget _budgetListItem(BudgetModel budget, GestureTapCallback onTap) {
 }
 
 class BudgetListWidget extends StatelessWidget {
-  final List<BudgetModel> budget;
-  final HomeBloc homeBloc;
+  final List<CategorizedBudgetModel> budget;
+  final NewHomeBloc homeBloc;
 
   const BudgetListWidget(
       {super.key, required this.budget, required this.homeBloc});
