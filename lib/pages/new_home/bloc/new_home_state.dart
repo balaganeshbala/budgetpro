@@ -3,37 +3,34 @@ import 'package:budgetpro/models/expenses_model.dart';
 
 sealed class NewHomeState {}
 
-sealed class HomeBudgetState extends NewHomeState {}
-
-sealed class HomeExpensesState extends NewHomeState {}
-
-sealed class HomeBudgetTrendState extends NewHomeState {}
+sealed class HomeContentState extends NewHomeState {}
 
 sealed class HomeActionState extends NewHomeState {}
 
+class HomeLoadingState extends HomeContentState {}
+
 class HomeInitial extends NewHomeState {}
 
-class HomeBudgetLoadingState extends HomeBudgetState {}
-
-class HomeBudgetLoadingSuccessState extends HomeBudgetState {
+class HomeLoadingSuccessState extends HomeContentState {
   final List<BudgetModel> budget;
   final List<CategorizedBudgetModel> budgetCategories;
   final double totalBudget;
   final double totalSpent;
   final double remaining;
+  final List<ExpenseModel> expenses;
 
-  HomeBudgetLoadingSuccessState(
+  HomeLoadingSuccessState(
       {required this.budget,
       required this.budgetCategories,
       required this.totalBudget,
       required this.totalSpent,
-      required this.remaining});
+      required this.remaining,
+      required this.expenses});
 }
 
 class HomeBudgetCategoryItemTappedState extends HomeActionState {
   final CategorizedBudgetModel budget;
-  final List<ExpenseModel> transactions;
   final String month;
   HomeBudgetCategoryItemTappedState(
-      {required this.budget, required this.transactions, required this.month});
+      {required this.budget, required this.month});
 }

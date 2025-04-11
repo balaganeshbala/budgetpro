@@ -13,7 +13,6 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
   String selectedYear = "";
   String selectedMonth = "";
   List<ExpenseModel> expenses = [];
-  List<MonthlyBudgetModel> monthlyBudgets = [];
 
   NewHomeBloc() : super(HomeInitial()) {
     on<HomeInitialEvent>(homeInitialEvent);
@@ -24,53 +23,52 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
 
   FutureOr<void> _startFetchingForMonth(
       String month, Emitter<NewHomeState> emit) async {
-    emit(HomeBudgetLoadingState());
+    emit(HomeLoadingState());
     final budget = await BudgetRepo.fetchNewBudgetForMonth(month);
-    final expenses = await ExpensesRepo.fetchExpensesForMonth(month);
+    expenses = await ExpensesRepo.fetchExpensesForMonth(month);
 
     double totalSpent = 0.0;
     Map<String, List<ExpenseModel>> categorizedExpenses = {};
     Map<String, double> categorizedSpentAmount = {};
     for (var expense in expenses) {
       totalSpent += expense.amount;
-      if (categorizedSpentAmount.containsKey(expense.category)) {
-        categorizedSpentAmount[expense.category] =
-            categorizedSpentAmount[expense.category]! + expense.amount;
+      if (categorizedSpentAmount.containsKey(expense.category.name)) {
+        categorizedSpentAmount[expense.category.name] =
+            categorizedSpentAmount[expense.category.name]! + expense.amount;
       } else {
-        categorizedSpentAmount[expense.category] = expense.amount;
+        categorizedSpentAmount[expense.category.name] = expense.amount;
       }
 
-      if (categorizedExpenses.containsKey(expense.category)) {
-        categorizedExpenses[expense.category]!.add(expense);
+      if (categorizedExpenses.containsKey(expense.category.name)) {
+        categorizedExpenses[expense.category.name]!.add(expense);
       } else {
-        categorizedExpenses[expense.category] = [expense];
+        categorizedExpenses[expense.category.name] = [expense];
       }
     }
 
     double totalBudget = 0.0;
 
-    for (var category in budget) {
-      totalBudget += category.amount;
-    }
-
-    final budgetCategories = budget.map((category) {
-      double spentAmount = categorizedSpentAmount[category.category] ?? 0.0;
+    final budgetCategories = budget.map((budgetItem) {
+      totalBudget += budgetItem.amount;
+      double spentAmount =
+          categorizedSpentAmount[budgetItem.category.name] ?? 0.0;
       List<ExpenseModel> expenses =
-          categorizedExpenses[category.category] ?? [];
+          categorizedExpenses[budgetItem.category.name] ?? [];
       return CategorizedBudgetModel(
-          category: ExpenseCategoryExtension.fromString(category.category),
-          budgetAmount: category.amount.toInt(),
+          category: budgetItem.category,
+          budgetAmount: budgetItem.amount.toInt(),
           spentAmount: spentAmount,
           expenses: expenses);
     }).toList();
 
     double remaining = totalBudget - totalSpent;
-    emit(HomeBudgetLoadingSuccessState(
+    emit(HomeLoadingSuccessState(
         budget: budget,
         budgetCategories: budgetCategories,
         totalBudget: totalBudget,
         totalSpent: totalSpent,
-        remaining: remaining));
+        remaining: remaining,
+        expenses: expenses));
   }
 
   // FutureOr<void> _startExpenseFetchingForMonth(
@@ -96,23 +94,8 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
 
   FutureOr<void> homeBudgetCategoryItemTappedEvent(
       HomeBudgetCategoryItemTappedEvent event, Emitter<NewHomeState> emit) {
-    String selectedCategory = event.budget.category.name;
-    List<ExpenseModel> filteredTransactions = [];
-    for (var expense in expenses) {
-      if (expense.category == selectedCategory) {
-        var updatedExpense = ExpenseModel(
-            id: expense.id,
-            date: expense.date,
-            name: expense.name,
-            category: expense.category,
-            amount: expense.amount);
-        filteredTransactions.add(updatedExpense);
-      }
-    }
     emit(HomeBudgetCategoryItemTappedState(
-        budget: event.budget,
-        transactions: filteredTransactions,
-        month: '$selectedMonth-$selectedYear'));
+        budget: event.budget, month: '$selectedMonth-$selectedYear'));
   }
 
   FutureOr<void> homeMonthYearItemChangedEvent(

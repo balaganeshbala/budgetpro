@@ -1,7 +1,9 @@
 import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
 import 'package:budgetpro/pages/new_home/ui/budget_card_widget.dart';
 import 'package:budgetpro/pages/new_home/ui/budget_list_widget.dart';
+import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
 import 'package:budgetpro/pages/new_home/ui/section_header.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
@@ -58,8 +60,9 @@ class _NewHomePageState extends State<NewHomePage> {
                         child:
                             BlocListener<MonthSelectorBloc, MonthSelectorState>(
                                 listener: (context, state) {
-                                  // _homeBloc.add(HomeMonthYearChangedEvent(
-                                  //     month: state.selectedMonth, year: state.selectedYear));
+                                  _homeBloc.add(HomeMonthYearChangedEvent(
+                                      month: state.selectedMonth,
+                                      year: state.selectedYear));
                                 },
                                 child: Container(
                                   color: Colors.white,
@@ -90,7 +93,7 @@ class _NewHomePageState extends State<NewHomePage> {
             child: RefreshIndicator(
               backgroundColor: Colors.white,
               onRefresh: () async {
-                // _homeBloc.add(HomeScreenRefreshedEvent());
+                _homeBloc.add(HomeScreenRefreshedEvent());
               },
               child: SingleChildScrollView(
                   child: Column(
@@ -101,19 +104,20 @@ class _NewHomePageState extends State<NewHomePage> {
                         listenWhen: (previous, current) =>
                             current is HomeBudgetCategoryItemTappedState,
                         buildWhen: (previous, current) =>
-                            current is HomeBudgetState,
+                            current is HomeContentState,
                         builder: (context, state) {
                           switch (state) {
-                            case HomeBudgetLoadingState _:
+                            case HomeLoadingState _:
                               return const SizedBox(
                                   height: 100,
                                   child: Center(
                                       child: CircularProgressIndicator(
                                           color: AppColors.accentColor)));
-                            case HomeBudgetLoadingSuccessState state:
+                            case HomeLoadingSuccessState state:
                               final totalBudget = state.totalBudget;
                               final totalSpent = state.totalSpent;
                               final remaining = state.remaining;
+                              final expenses = state.expenses;
                               return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -121,7 +125,7 @@ class _NewHomePageState extends State<NewHomePage> {
                                     const SectionHeader(text: 'Budget'),
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 20,
+                                          top: 10,
                                           left: 20,
                                           right: 20,
                                           bottom: 20),
@@ -135,7 +139,10 @@ class _NewHomePageState extends State<NewHomePage> {
                                     BudgetListWidget(
                                         budget: state.budgetCategories,
                                         homeBloc: _homeBloc),
-                                    const SizedBox(height: 20),
+                                    const SizedBox(height: 30),
+                                    const SectionHeader(text: 'Expenses'),
+                                    RecentExpensesView(
+                                        expenses: expenses, homeBloc: _homeBloc)
                                   ]);
                             default:
                               return Container();

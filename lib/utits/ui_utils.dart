@@ -4,12 +4,6 @@ import 'package:intl/intl.dart';
 enum SnackbarType { info, success, error, warning }
 
 class UIUtils {
-  static String formatRupees(double amount) {
-    NumberFormat rupeeFormat =
-        NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-    return rupeeFormat.format(amount);
-  }
-
   static void showSnackbar(BuildContext context, String message,
       {SnackbarType type = SnackbarType.info}) {
     Color backgroundColor;

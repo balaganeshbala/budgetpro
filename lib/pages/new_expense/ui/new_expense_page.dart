@@ -1,5 +1,7 @@
 import 'package:budgetpro/pages/expenses/bloc/expenses_bloc.dart';
 import 'package:budgetpro/pages/new_expense/bloc/new_expense_bloc.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/widgets/date_picker_widget.dart';
@@ -9,9 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExpensePage extends StatefulWidget {
-  final ExpensesBloc expensesBloc;
+  final NewHomeBloc homeBloc;
 
-  const AddExpensePage({super.key, required this.expensesBloc});
+  const AddExpensePage({super.key, required this.homeBloc});
 
   @override
   State<AddExpensePage> createState() => _AddExpensePageState();
@@ -121,7 +123,7 @@ class AddExpenseSnackbar extends StatelessWidget {
             case NewExpenseAddExpenseSuccessState _:
               UIUtils.showSnackbar(context, 'Expense added successfully!',
                   type: SnackbarType.success);
-              widget.expensesBloc.add(ExpensesRefreshEvent());
+              widget.homeBloc.add(HomeScreenRefreshedEvent());
               break;
             case NewExpenseAddExpenseErrorState _:
               UIUtils.showSnackbar(context, 'Error in adding expense!',

@@ -1,5 +1,6 @@
 import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 
 class TransactionsTable extends StatefulWidget {
@@ -78,7 +79,7 @@ class _TransactionsTableState extends State<TransactionsTable> {
             DataCell(
               Container(
                   alignment: Alignment.centerRight,
-                  child: Text(UIUtils.formatRupees(item.amount),
+                  child: Text(Utils.formatRupees(item.amount),
                       textAlign: TextAlign.right,
                       style: const TextStyle(fontFamily: "Sora"))),
             ),

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
+import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/services/network_services.dart';
 import 'package:intl/intl.dart';
@@ -47,17 +49,16 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   }
 
   Future<bool> addExpense() async {
-    const urlString = '$apiEndPoint/budgetpro/expense/add';
+    final userId = SupabaseService.client.auth.currentUser?.id;
 
-    final postData = {
+    final data = {
       'name': name,
       'amount': amount,
-      'category': category,
-      'date': date
+      'category': category.toLowerCase(),
+      'date': date,
+      'user_id': userId
     };
-    final result =
-        await NetworkCallService.instance.makePostAPICall(urlString, postData);
-    final status = result['status'];
+    final status = await ExpensesRepo.addNewExpense(data);
     return status;
   }
 

@@ -1,5 +1,5 @@
 import 'package:budgetpro/utits/colors.dart';
-import 'package:budgetpro/utits/ui_utils.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 
 class AmountWithTitleWidget extends StatelessWidget {
@@ -16,7 +16,7 @@ class AmountWithTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(UIUtils.formatRupees(amount),
+        Text(Utils.formatRupees(amount),
             style: const TextStyle(
                 fontFamily: "Sora",
                 fontWeight: FontWeight.bold,

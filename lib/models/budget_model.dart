@@ -17,7 +17,7 @@ class CategorizedBudgetModel {
 
 class BudgetModel {
   int id;
-  String category;
+  ExpenseCategory category;
   double amount;
 
   BudgetModel({
@@ -28,7 +28,7 @@ class BudgetModel {
 
   factory BudgetModel.fromJson(Map<String, dynamic> json) => BudgetModel(
         id: json["id"],
-        category: json["category"],
+        category: ExpenseCategoryExtension.fromString(json["category"]),
         amount: json["amount"]?.toDouble(),
       );
 

@@ -10,8 +10,9 @@ class ExpensesRepo {
       final endDate = monthDate['endDate']!;
       final List<dynamic> result = await SupabaseService.fetchByDateRange(
           "expenses", "date", startDate, endDate);
-      final budget = result.map((item) => ExpenseModel.fromJson(item)).toList();
-      return budget;
+      final expenses =
+          result.map((item) => ExpenseModel.fromJson(item)).toList();
+      return expenses;
     } catch (e) {
       return [];
     }

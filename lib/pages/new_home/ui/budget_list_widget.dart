@@ -78,22 +78,33 @@ class BudgetListWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, top: 10.0, right: 20.0),
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.white),
-        child: ListView.builder(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ], borderRadius: BorderRadius.circular(16), color: Colors.white),
+        child: ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: budget.length,
+          separatorBuilder: (context, index) {
+            return const Divider(
+              height: 1,
+              thickness: 1,
+              indent: 16,
+              endIndent: 16,
+              color: Color(0xFFDDDDDD),
+            );
+          },
           itemBuilder: (context, index) {
             return Column(children: [
               _budgetListItem(budget[index], () {
                 homeBloc.add(
                     HomeBudgetCategoryItemTappedEvent(budget: budget[index]));
-              }),
-              Container(
-                height: 1,
-                color: Colors.grey.shade300,
-              )
+              })
             ]);
           },
         ),

@@ -28,10 +28,10 @@ class _ExpensesPageState extends State<ExpensesPage>
   }
 
   void _goToAddExpensePage(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddExpensePage(expensesBloc: _expensesBloc)));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => AddExpensePage(expensesBloc: _expensesBloc)));
   }
 
   @override

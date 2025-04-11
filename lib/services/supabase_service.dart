@@ -113,7 +113,8 @@ class SupabaseService {
           .from(tableName)
           .select()
           .gte(dateColumn, formattedStartDate)
-          .lte(dateColumn, formattedEndDate);
+          .lte(dateColumn, formattedEndDate)
+          .order('id', ascending: true);
       return List<Map<String, dynamic>>.from(response);
     } catch (e) {
       throw Exception('Error fetching data by date range: $e');

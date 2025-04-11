@@ -1,5 +1,6 @@
 import 'package:budgetpro/pages/new_home/ui/amount_with_title_widget.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,18 +15,20 @@ class BudgetCardWidget extends StatelessWidget {
       required this.totalSpent,
       required this.remaining});
 
-  String _formatRupees(double amount) {
-    NumberFormat rupeeFormat =
-        NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-    return rupeeFormat.format(amount);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 1),
+              )
+            ],
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20))),
+            borderRadius: BorderRadius.all(Radius.circular(16))),
         child: SizedBox(
           width: double.infinity,
           child: Padding(
@@ -36,7 +39,7 @@ class BudgetCardWidget extends StatelessWidget {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(_formatRupees(remaining),
+                        Text(Utils.formatRupees(remaining),
                             style: TextStyle(
                                 fontFamily: "Sora",
                                 fontSize: 25,

@@ -1,3 +1,7 @@
+import 'package:budgetpro/models/expense_category_enum.dart';
+import 'package:budgetpro/pages/expenses/bloc/expenses_bloc.dart';
+import 'package:budgetpro/utits/utils.dart';
+
 class DayWiseExpensesModel {
   final String id;
   final String date;
@@ -21,7 +25,7 @@ class ExpenseModel {
   final int id;
   final String date;
   final String name;
-  final String category;
+  final ExpenseCategory category;
   final double amount;
 
   ExpenseModel(
@@ -34,9 +38,9 @@ class ExpenseModel {
   factory ExpenseModel.fromJson(Map<String, dynamic> json) {
     return ExpenseModel(
         id: json['id'],
-        date: json['date'],
+        date: Utils.formatDate(json['date']),
         name: json['name'],
-        category: json['category'],
+        category: ExpenseCategoryExtension.fromString(json['category']),
         amount: json['amount'].toDouble());
   }
 }
