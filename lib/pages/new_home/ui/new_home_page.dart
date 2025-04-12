@@ -1,10 +1,11 @@
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expense_category_enum.dart';
+import 'package:budgetpro/pages/create_budget/ui/create_budget.dart';
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
-import 'package:budgetpro/pages/new_home/ui/budget_card_widget.dart';
-import 'package:budgetpro/pages/new_home/ui/budget_list_widget.dart';
+import 'package:budgetpro/components/budget_card_widget.dart';
+import 'package:budgetpro/pages/new_home/ui/budget_categories_view.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
-import 'package:budgetpro/pages/new_home/ui/section_header.dart';
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_state.dart';
@@ -28,9 +29,15 @@ class _NewHomePageState extends State<NewHomePage> {
   final String initialMonth = Utils.getMonthAsShortText(DateTime.now());
   final String initialYear = '${DateTime.now().year}';
 
+  // Track current selected month/year
+  String _selectedMonth = '';
+  String _selectedYear = '';
+
   @override
   void initState() {
     _homeBloc.add(HomeInitialEvent());
+    _selectedMonth = initialMonth;
+    _selectedYear = initialYear;
     super.initState();
   }
 
@@ -43,6 +50,17 @@ class _NewHomePageState extends State<NewHomePage> {
                 budget: budget, transactions: budget.expenses, month: month)));
   }
 
+  bool _isCurrentMonth() {
+    DateTime now = DateTime.now();
+    DateTime selectedDate =
+        Utils.parseDate("${now.day} $_selectedMonth $_selectedYear");
+    // check if two dates are in the same month and year
+    if (selectedDate.year == now.year && selectedDate.month == now.month) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,14 +70,15 @@ class _NewHomePageState extends State<NewHomePage> {
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.white,
                 bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(
-                        0), // Adjust the border thickness here
+                    preferredSize: const Size.fromHeight(0),
                     child: BlocProvider(
                         create: (context) => MonthSelectorBloc(
                             initialMonth, initialYear, DateTime.now()),
                         child:
                             BlocListener<MonthSelectorBloc, MonthSelectorState>(
                                 listener: (context, state) {
+                                  _selectedMonth = state.selectedMonth;
+                                  _selectedYear = state.selectedYear;
                                   _homeBloc.add(HomeMonthYearChangedEvent(
                                       month: state.selectedMonth,
                                       year: state.selectedYear));
@@ -72,8 +91,8 @@ class _NewHomePageState extends State<NewHomePage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          Navigator.pushNamed(context,
-                                              '/profile'); // Navigate to the profile screen
+                                          Navigator.pushNamed(
+                                              context, '/profile');
                                         },
                                         child: const Icon(
                                           Icons.account_circle,
@@ -113,10 +132,16 @@ class _NewHomePageState extends State<NewHomePage> {
                                   child: Center(
                                       child: CircularProgressIndicator(
                                           color: AppColors.accentColor)));
+                            case HomeBudgetPendingState _:
+                              if (_isCurrentMonth()) {
+                                return _buildEmptyBudgetState(
+                                    context, _selectedMonth, _selectedYear);
+                              } else {
+                                return _buildPastMonthNoBudgetState();
+                              }
                             case HomeLoadingSuccessState state:
                               final totalBudget = state.totalBudget;
                               final totalSpent = state.totalSpent;
-                              final remaining = state.remaining;
                               final expenses = state.expenses;
                               return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,18 +156,19 @@ class _NewHomePageState extends State<NewHomePage> {
                                           bottom: 20),
                                       child: BudgetCardWidget(
                                           totalBudget: totalBudget,
-                                          totalSpent: totalSpent,
-                                          remaining: remaining),
+                                          totalSpent: totalSpent),
                                     ),
                                     const SizedBox(height: 10),
                                     const SectionHeader(text: 'Categories'),
-                                    BudgetListWidget(
+                                    BudgetCategoriesView(
                                         budget: state.budgetCategories,
                                         homeBloc: _homeBloc),
                                     const SizedBox(height: 30),
                                     const SectionHeader(text: 'Expenses'),
                                     RecentExpensesView(
-                                        expenses: expenses, homeBloc: _homeBloc)
+                                        expenses: expenses,
+                                        homeBloc: _homeBloc),
+                                    const SizedBox(height: 20),
                                   ]);
                             default:
                               return Container();
@@ -160,6 +186,113 @@ class _NewHomePageState extends State<NewHomePage> {
                   ])),
             ),
           ),
+        ));
+  }
+
+  Widget _buildEmptyBudgetState(
+      BuildContext context, String month, String year) {
+    return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 20),
+            const Icon(
+              Icons.account_balance_wallet_outlined,
+              size: 64,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'No Budget Set For This Month',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Sora",
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Create a monthly budget to track your spending and save more effectively',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontFamily: "Sora",
+              ),
+            ),
+            const SizedBox(height: 24),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateBudgetScreen(
+                      month: month,
+                      year: year,
+                    ),
+                  ),
+                ).then((value) {
+                  if (value != null) {
+                    // Refresh the screen when returning from create budget
+                    _homeBloc.add(HomeScreenRefreshedEvent());
+                  }
+                });
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                child: Center(
+                  child: Text(
+                    '+ Create Budget',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: "Sora",
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accentColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+
+  // New widget for past months without budget
+  Widget _buildPastMonthNoBudgetState() {
+    return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 20),
+            Icon(
+              Icons.history,
+              size: 64,
+              color: Colors.grey,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'No Budget Data Available',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Sora",
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Budget data for past months cannot be created. Please select the current month to set a budget.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontFamily: "Sora",
+              ),
+            ),
+            SizedBox(height: 16),
+          ],
         ));
   }
 }

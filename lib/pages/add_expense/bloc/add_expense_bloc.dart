@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/services/network_services.dart';
 import 'package:intl/intl.dart';
 
-part 'new_expense_event.dart';
-part 'new_expense_state.dart';
+part 'add_expense_event.dart';
+part 'add_expense_state.dart';
 
 class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   String name = '';
@@ -16,22 +17,8 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   String category = '';
   String date = '';
 
-  final List<String> _expenseCategories = [
-    'Loan',
-    'Food',
-    'Holiday/Trip',
-    'Housing',
-    'Shopping',
-    'Travel',
-    'Home',
-    'Charges/Fees',
-    'Groceries',
-    'Health/Beauty',
-    'Entertainment',
-    'Charity/Gift',
-    'Education',
-    'Vehicle',
-  ];
+  final List<String> _expenseCategories =
+      ExpenseCategoryExtension.getAllCategoriesAsString();
 
   NewExpenseBloc() : super(NewExpenseInitial()) {
     on<NewExpenseInitialEvent>(onNewExpenseInitialEvent);
@@ -45,7 +32,8 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   bool _isInputValid() {
     return name.isNotEmpty &&
         amount.isNotEmpty &&
-        category.isNotEmpty & date.isNotEmpty;
+        category.isNotEmpty &&
+        date.isNotEmpty;
   }
 
   Future<bool> addExpense() async {

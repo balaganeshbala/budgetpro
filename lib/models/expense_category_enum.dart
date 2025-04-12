@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum ExpenseCategory {
-  loan,
+  emi,
   food,
   holidayTrip,
   housing,
@@ -21,8 +21,8 @@ enum ExpenseCategory {
 extension ExpenseCategoryExtension on ExpenseCategory {
   String get displayName {
     switch (this) {
-      case ExpenseCategory.loan:
-        return 'Loan';
+      case ExpenseCategory.emi:
+        return 'EMI';
       case ExpenseCategory.food:
         return 'Food';
       case ExpenseCategory.holidayTrip:
@@ -56,7 +56,7 @@ extension ExpenseCategoryExtension on ExpenseCategory {
 
   IconData get icon {
     switch (this) {
-      case ExpenseCategory.loan:
+      case ExpenseCategory.emi:
         return Icons.account_balance_outlined;
       case ExpenseCategory.holidayTrip:
         return Icons.beach_access;
@@ -91,7 +91,7 @@ extension ExpenseCategoryExtension on ExpenseCategory {
 
   Color get color {
     switch (this) {
-      case ExpenseCategory.loan:
+      case ExpenseCategory.emi:
         return Colors.blueAccent;
       case ExpenseCategory.holidayTrip:
         return Colors.orange;
@@ -126,11 +126,11 @@ extension ExpenseCategoryExtension on ExpenseCategory {
 
   static ExpenseCategory fromString(String category) {
     switch (category) {
-      case 'loan':
-        return ExpenseCategory.loan;
+      case 'emi':
+        return ExpenseCategory.emi;
       case 'food':
         return ExpenseCategory.food;
-      case 'holiday/trip':
+      case 'holidayTrip':
         return ExpenseCategory.holidayTrip;
       case 'housing':
         return ExpenseCategory.housing;
@@ -140,15 +140,15 @@ extension ExpenseCategoryExtension on ExpenseCategory {
         return ExpenseCategory.travel;
       case 'home':
         return ExpenseCategory.home;
-      case 'charges/fees':
+      case 'chargesFees':
         return ExpenseCategory.chargesFees;
       case 'groceries':
         return ExpenseCategory.groceries;
-      case 'health/beauty':
+      case 'healthBeauty':
         return ExpenseCategory.healthBeauty;
       case 'entertainment':
         return ExpenseCategory.entertainment;
-      case 'charity/gift':
+      case 'charityGift':
         return ExpenseCategory.charityGift;
       case 'education':
         return ExpenseCategory.education;
@@ -157,5 +157,18 @@ extension ExpenseCategoryExtension on ExpenseCategory {
       default:
         return ExpenseCategory.unknown; // Handle unknown categories
     }
+  }
+
+  static List<ExpenseCategory> getAllCategories() {
+    return ExpenseCategory.values
+        .where((category) => category != ExpenseCategory.unknown)
+        .toList();
+  }
+
+  static List<String> getAllCategoriesAsString() {
+    return ExpenseCategory.values
+        .where((category) => category != ExpenseCategory.unknown)
+        .map((category) => category.displayName)
+        .toList();
   }
 }

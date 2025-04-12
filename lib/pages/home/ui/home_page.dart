@@ -1,9 +1,9 @@
 import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
 import 'package:budgetpro/models/budget_model.dart';
-import 'package:budgetpro/pages/new_home/ui/budget_card_widget.dart';
+import 'package:budgetpro/components/budget_card_widget.dart';
 import 'package:budgetpro/pages/home/ui/budget_trend_line_chart.dart';
-import 'package:budgetpro/pages/new_home/ui/section_header.dart';
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:budgetpro/utits/colors.dart';
@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage>
                         case HomeBudgetLoadingSuccessState state:
                           final totalBudget = state.totalBudget;
                           final totalSpent = state.totalSpent;
-                          final remaining = state.remaining;
                           return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -128,8 +127,7 @@ class _HomePageState extends State<HomePage>
                                       left: 20, top: 20, right: 20, bottom: 20),
                                   child: BudgetCardWidget(
                                       totalBudget: totalBudget,
-                                      totalSpent: totalSpent,
-                                      remaining: remaining),
+                                      totalSpent: totalSpent),
                                 ),
                                 const SizedBox(height: 10),
                                 const SectionHeader(text: 'Categories'),

@@ -1,9 +1,9 @@
 import 'package:budgetpro/models/expense_category_enum.dart';
-import 'package:budgetpro/pages/budget_category_info/ui/transactions_table.dart';
+import 'package:budgetpro/components/transactions_table.dart';
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expenses_model.dart';
-import 'package:budgetpro/pages/new_home/ui/budget_card_widget.dart';
-import 'package:budgetpro/pages/new_home/ui/section_header.dart';
+import 'package:budgetpro/components/budget_card_widget.dart';
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -46,9 +46,7 @@ class BudgetCategoryInfoPage extends StatelessWidget {
                             left: 20, top: 10, right: 20, bottom: 20),
                         child: BudgetCardWidget(
                             totalBudget: budget.budgetAmount.toDouble(),
-                            totalSpent: budget.spentAmount,
-                            remaining:
-                                budget.budgetAmount - budget.spentAmount),
+                            totalSpent: budget.spentAmount),
                       ),
                       const SizedBox(height: 10),
                       const SectionHeader(text: 'Transactions'),

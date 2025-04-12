@@ -11,16 +11,16 @@ enum SortType {
   amountLowest,
 }
 
-class NewExpensesPage extends StatefulWidget {
+class AllExpensesPage extends StatefulWidget {
   final List<ExpenseModel> expenses;
 
-  const NewExpensesPage({super.key, required this.expenses});
+  const AllExpensesPage({super.key, required this.expenses});
 
   @override
-  State<NewExpensesPage> createState() => _NewExpensesPageState();
+  State<AllExpensesPage> createState() => _AllExpensesPageState();
 }
 
-class _NewExpensesPageState extends State<NewExpensesPage> {
+class _AllExpensesPageState extends State<AllExpensesPage> {
   late List<ExpenseModel> _sortedExpenses;
   SortType _currentSortType = SortType.dateNewest;
 

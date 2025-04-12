@@ -16,7 +16,8 @@ class BudgetRepo {
       final startDate = monthDate['startDate']!;
       final endDate = monthDate['endDate']!;
       final List<dynamic> result = await SupabaseService.fetchByDateRange(
-          "budget", "date", startDate, endDate);
+          "budget", "date", startDate, endDate,
+          orderBy: "amount", ascending: false);
       final budget = result.map((item) => BudgetModel.fromJson(item)).toList();
       return budget;
     } catch (e) {

@@ -3,15 +3,18 @@ import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 
 Widget _budgetListItem(
     CategorizedBudgetModel budget, GestureTapCallback onTap) {
   final percentageSpent = (budget.spentAmount / budget.budgetAmount);
   final isEnabled = budget.budgetAmount > 0 || budget.spentAmount > 0;
-  final amountToShow = budget.budgetAmount >= budget.spentAmount
-      ? budget.budgetAmount.round()
-      : (-(budget.spentAmount - budget.budgetAmount)).toStringAsFixed(2);
+  final remainingAmount =
+      Utils.formatRupees(budget.budgetAmount - budget.spentAmount);
+  // budget.budgetAmount >= budget.spentAmount
+  //   ? Utils.formatRupees(budget.budgetAmount.round().toDouble())
+  //   : (-(budget.spentAmount - budget.budgetAmount)).toStringAsFixed(2);
 
   return ListTile(
     enabled: isEnabled,
@@ -37,23 +40,19 @@ Widget _budgetListItem(
     title: Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Row(
-            children: [
-              Text(budget.category.displayName,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontFamily: "Sora")),
-              const Spacer()
-            ],
-          ),
-          Row(children: [
-            const Spacer(),
-            Text('$amountToShow', style: const TextStyle(fontFamily: "Sora"))
-          ]),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(budget.category.displayName,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w600, fontFamily: "Sora")),
+          const SizedBox(height: 10),
+          Text(
+              '${Utils.formatRupees(budget.spentAmount)} of ${Utils.formatRupees(budget.budgetAmount.toDouble())}',
+              style: const TextStyle(fontSize: 12, fontFamily: "Sora")),
+          const SizedBox(height: 5),
           LinearProgressIndicator(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(4),
             value: (budget.spentAmount / budget.budgetAmount).clamp(0.0, 1.0),
-            minHeight: 10.0,
+            minHeight: 8.0,
             backgroundColor: Colors.grey.shade300,
             valueColor: AlwaysStoppedAnimation<Color>(percentageSpent > 1
                 ? AppColors.dangerColor
@@ -66,11 +65,11 @@ Widget _budgetListItem(
   );
 }
 
-class BudgetListWidget extends StatelessWidget {
+class BudgetCategoriesView extends StatelessWidget {
   final List<CategorizedBudgetModel> budget;
   final NewHomeBloc homeBloc;
 
-  const BudgetListWidget(
+  const BudgetCategoriesView(
       {super.key, required this.budget, required this.homeBloc});
 
   @override

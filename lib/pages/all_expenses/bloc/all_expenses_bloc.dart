@@ -5,8 +5,8 @@ import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
 import 'package:budgetpro/utits/utils.dart';
 
-part 'expenses_event.dart';
-part 'expenses_state.dart';
+part 'all_expenses_event.dart';
+part 'all_expenses_state.dart';
 
 class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
   List<String> yearsList = [];

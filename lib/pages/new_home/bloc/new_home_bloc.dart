@@ -25,6 +25,11 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
       String month, Emitter<NewHomeState> emit) async {
     emit(HomeLoadingState());
     final budget = await BudgetRepo.fetchNewBudgetForMonth(month);
+    if (budget.isEmpty) {
+      emit(HomeBudgetPendingState());
+      return;
+    }
+
     expenses = await ExpensesRepo.fetchExpensesForMonth(month);
 
     double totalSpent = 0.0;

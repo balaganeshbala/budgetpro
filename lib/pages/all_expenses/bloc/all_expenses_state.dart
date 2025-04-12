@@ -1,4 +1,4 @@
-part of 'expenses_bloc.dart';
+part of 'all_expenses_bloc.dart';
 
 sealed class ExpensesState {}
 

@@ -102,8 +102,9 @@ class SupabaseService {
   }
 
   /// Fetch rows from a table within a date range
-  static Future<List<Map<String, dynamic>>> fetchByDateRange(String tableName,
-      String dateColumn, DateTime startDate, DateTime endDate) async {
+  static Future<List<Map<String, dynamic>>> fetchByDateRange(
+      String tableName, String dateColumn, DateTime startDate, DateTime endDate,
+      {String? orderBy, bool? ascending}) async {
     try {
       final dateFormatter = DateFormat('yyyy-MM-dd');
       final formattedStartDate = dateFormatter.format(startDate);
@@ -114,7 +115,7 @@ class SupabaseService {
           .select()
           .gte(dateColumn, formattedStartDate)
           .lte(dateColumn, formattedEndDate)
-          .order('id', ascending: true);
+          .order(orderBy ?? 'id', ascending: ascending ?? true);
       return List<Map<String, dynamic>>.from(response);
     } catch (e) {
       throw Exception('Error fetching data by date range: $e');
@@ -127,6 +128,15 @@ class SupabaseService {
     try {
       final response = await client.from(tableName).insert(data).select();
       return response.first;
+    } catch (e) {
+      throw Exception('Error inserting data: $e');
+    }
+  }
+
+  /// Insert a row into a table
+  static Future<void> insertRows(String tableName, List data) async {
+    try {
+      final _ = await client.from(tableName).insert(data);
     } catch (e) {
       throw Exception('Error inserting data: $e');
     }

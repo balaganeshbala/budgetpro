@@ -1,4 +1,4 @@
-part of 'new_expense_bloc.dart';
+part of 'add_expense_bloc.dart';
 
 sealed class NewExpenseState {}
 

@@ -1,10 +1,10 @@
 import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/models/expenses_model.dart';
-import 'package:budgetpro/pages/expenses/ui/new_expenses_page.dart';
+import 'package:budgetpro/pages/all_expenses/ui/all_expenses_page.dart';
 import 'package:budgetpro/pages/home/bloc/home_bloc.dart';
-import 'package:budgetpro/pages/new_expense/ui/new_expense_page.dart';
+import 'package:budgetpro/pages/add_expense/ui/add_expense_page.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
-import 'package:budgetpro/pages/new_home/ui/section_header.dart';
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,12 @@ class RecentExpensesView extends StatelessWidget {
             textColor: AppColors.accentColor,
             fontWeight: FontWeight.w600,
             onTap: () {
-              // Add New logic here
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddExpensePage(homeBloc: homeBloc),
+                ),
+              );
             },
           ),
           const SizedBox(height: 16),
@@ -126,6 +131,10 @@ class RecentExpensesView extends StatelessWidget {
         }
         // Display "View All" action with centered text
         else if (index == expenseCount) {
+          if (expenses.length <= 5) {
+            return const SizedBox
+                .shrink(); // No "View All" if less than 5 items
+          }
           return _centeredTextAction(
             context,
             text: 'View All',
@@ -136,7 +145,7 @@ class RecentExpensesView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewExpensesPage(expenses: expenses),
+                  builder: (context) => AllExpensesPage(expenses: expenses),
                 ),
               );
             },

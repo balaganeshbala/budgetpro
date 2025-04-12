@@ -11,6 +11,8 @@ class HomeLoadingState extends HomeContentState {}
 
 class HomeInitial extends NewHomeState {}
 
+class HomeBudgetPendingState extends HomeContentState {}
+
 class HomeLoadingSuccessState extends HomeContentState {
   final List<BudgetModel> budget;
   final List<CategorizedBudgetModel> budgetCategories;
