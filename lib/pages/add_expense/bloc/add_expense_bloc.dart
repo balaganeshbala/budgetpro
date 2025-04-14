@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:budgetpro/models/expense_category_enum.dart';
-import 'package:budgetpro/pages/home/repos/expenses_repo.dart';
+import 'package:budgetpro/repos/expenses_repo.dart';
 import 'package:budgetpro/services/supabase_service.dart';
-import 'package:budgetpro/utits/constants.dart';
-import 'package:budgetpro/services/network_services.dart';
 import 'package:intl/intl.dart';
 
 part 'add_expense_event.dart';

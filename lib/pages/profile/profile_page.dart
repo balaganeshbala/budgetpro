@@ -33,35 +33,42 @@ class ProfilePage extends StatelessWidget {
                     child: SizedBox(
                         width: double.infinity,
                         child: Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(16),
                             child: Row(children: [
                               Icon(Icons.person,
                                   size: 50,
                                   color: AppColors.primaryColor.withAlpha(100)),
                               const SizedBox(width: 10),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${user?.userMetadata?['full_name'] ?? 'N/A'}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: "Sora", // Apply "Sora" font
-                                        fontWeight: FontWeight
-                                            .w500, // Optional: Adjust weight
+                              Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${user?.userMetadata?['full_name'] ?? 'N/A'}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontFamily:
+                                              "Sora", // Apply "Sora" font
+                                          fontWeight: FontWeight
+                                              .w500, // Optional: Adjust weight
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${user?.email ?? 'N/A'}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: "Sora", // Apply "Sora" font
-                                        fontWeight: FontWeight
-                                            .w400, // Optional: Adjust weight
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        user?.email ?? 'N/A',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontFamily:
+                                              "Sora", // Apply "Sora" font
+                                          fontWeight: FontWeight
+                                              .w400, // Optional: Adjust weight
+                                        ),
                                       ),
-                                    ),
-                                  ])
+                                    ]),
+                              )
                             ]))),
                   ),
                   const SizedBox(height: 10),

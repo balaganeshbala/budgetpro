@@ -1,4 +1,5 @@
 import 'package:budgetpro/services/supabase_service.dart';
+import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingsListView extends StatelessWidget {
@@ -21,8 +22,10 @@ class SettingsListView extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                titleTextStyle: TextStyle(
-                    fontFamily: "Sora", fontSize: 22, color: Colors.black),
+                titleTextStyle: const TextStyle(
+                    fontFamily: "Sora",
+                    fontSize: 22,
+                    color: AppColors.primaryColor),
                 contentTextStyle: TextStyle(
                     fontFamily: "Sora",
                     fontSize: 16,
@@ -33,8 +36,9 @@ class SettingsListView extends StatelessWidget {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     child: const Text(
-                      "Cancel",
+                      "No",
                       style: TextStyle(
+                        color: AppColors.accentColor,
                         fontFamily: "Sora", // Add the "Sora" font
                         fontWeight: FontWeight.w500, // Optional: Adjust weight
                         fontSize: 16, // Optional: Adjust size
@@ -44,8 +48,9 @@ class SettingsListView extends StatelessWidget {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     child: const Text(
-                      "Sign Out",
+                      "Yes",
                       style: TextStyle(
+                        color: AppColors.accentColor,
                         fontFamily: "Sora", // Add the "Sora" font
                         fontWeight: FontWeight.w500, // Optional: Adjust weight
                         fontSize: 16, // Optional: Adjust size

@@ -1,7 +1,6 @@
 import 'package:budgetpro/models/budget_model.dart';
-import 'package:budgetpro/models/expense_category_enum.dart';
-import 'package:budgetpro/pages/create_budget/ui/create_budget.dart';
-import 'package:budgetpro/pages/budget_category_info/ui/budget_category_info_page.dart';
+import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
+import 'package:budgetpro/pages/budget_category/ui/budget_category_info_page.dart';
 import 'package:budgetpro/components/budget_card_widget.dart';
 import 'package:budgetpro/pages/new_home/ui/budget_categories_view.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
@@ -14,7 +13,6 @@ import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewHomePage extends StatefulWidget {
@@ -25,7 +23,6 @@ class NewHomePage extends StatefulWidget {
 }
 
 class _NewHomePageState extends State<NewHomePage> {
-  final _homeBloc = NewHomeBloc();
   final String initialMonth = Utils.getMonthAsShortText(DateTime.now());
   final String initialYear = '${DateTime.now().year}';
 
@@ -35,7 +32,7 @@ class _NewHomePageState extends State<NewHomePage> {
 
   @override
   void initState() {
-    _homeBloc.add(HomeInitialEvent());
+    context.read<NewHomeBloc>().add(HomeInitialEvent());
     _selectedMonth = initialMonth;
     _selectedYear = initialYear;
     super.initState();
@@ -79,9 +76,10 @@ class _NewHomePageState extends State<NewHomePage> {
                                 listener: (context, state) {
                                   _selectedMonth = state.selectedMonth;
                                   _selectedYear = state.selectedYear;
-                                  _homeBloc.add(HomeMonthYearChangedEvent(
-                                      month: state.selectedMonth,
-                                      year: state.selectedYear));
+                                  context.read<NewHomeBloc>().add(
+                                      HomeMonthYearChangedEvent(
+                                          month: state.selectedMonth,
+                                          year: state.selectedYear));
                                 },
                                 child: Container(
                                   color: Colors.white,
@@ -97,7 +95,7 @@ class _NewHomePageState extends State<NewHomePage> {
                                         child: const Icon(
                                           Icons.account_circle,
                                           size: 50,
-                                          color: AppColors.primaryColor,
+                                          color: AppColors.accentColor,
                                         ),
                                       ),
                                       const Spacer(),
@@ -111,15 +109,16 @@ class _NewHomePageState extends State<NewHomePage> {
           child: SafeArea(
             child: RefreshIndicator(
               backgroundColor: Colors.white,
+              color: AppColors.accentColor,
               onRefresh: () async {
-                _homeBloc.add(HomeScreenRefreshedEvent());
+                context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
               },
               child: SingleChildScrollView(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                     BlocConsumer(
-                        bloc: _homeBloc,
+                        bloc: context.read<NewHomeBloc>(),
                         listenWhen: (previous, current) =>
                             current is HomeBudgetCategoryItemTappedState,
                         buildWhen: (previous, current) =>
@@ -161,13 +160,10 @@ class _NewHomePageState extends State<NewHomePage> {
                                     const SizedBox(height: 10),
                                     const SectionHeader(text: 'Categories'),
                                     BudgetCategoriesView(
-                                        budget: state.budgetCategories,
-                                        homeBloc: _homeBloc),
+                                        budget: state.budgetCategories),
                                     const SizedBox(height: 30),
                                     const SectionHeader(text: 'Expenses'),
-                                    RecentExpensesView(
-                                        expenses: expenses,
-                                        homeBloc: _homeBloc),
+                                    RecentExpensesView(expenses: expenses),
                                     const SizedBox(height: 20),
                                   ]);
                             default:
@@ -227,15 +223,16 @@ class _NewHomePageState extends State<NewHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CreateBudgetScreen(
-                      month: month,
-                      year: year,
-                    ),
-                  ),
+                      builder: (context) =>
+                          CreateBudgetScreen(month: month, year: year)),
                 ).then((value) {
                   if (value != null) {
-                    // Refresh the screen when returning from create budget
-                    _homeBloc.add(HomeScreenRefreshedEvent());
+                    if (context.mounted) {
+                      // Refresh the screen when returning from create budget
+                      context
+                          .read<NewHomeBloc>()
+                          .add(HomeScreenRefreshedEvent());
+                    }
                   }
                 });
               },

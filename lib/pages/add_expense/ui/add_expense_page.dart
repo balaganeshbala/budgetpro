@@ -1,6 +1,5 @@
+import 'package:budgetpro/components/app_theme_button.dart';
 import 'package:budgetpro/pages/add_expense/bloc/add_expense_bloc.dart';
-import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
-import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/widgets/date_picker_widget.dart';
@@ -10,9 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddExpensePage extends StatefulWidget {
-  final NewHomeBloc homeBloc;
-
-  const AddExpensePage({super.key, required this.homeBloc});
+  const AddExpensePage({super.key});
 
   @override
   State<AddExpensePage> createState() => _AddExpensePageState();
@@ -33,73 +30,126 @@ class _AddExpensePageState extends State<AddExpensePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Expense',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
-          foregroundColor: Colors.white,
-          backgroundColor: AppColors.primaryColor,
+      appBar: AppBar(
+        title: const Text(
+          'Add Expense',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: "Sora",
+            color: Colors.white,
+          ),
         ),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Colors.grey.shade200,
-            child: Stack(
-              children: [
-                BlocBuilder<NewExpenseBloc, NewExpenseState>(
+        backgroundColor: AppColors.primaryColor,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        color: Colors.white,
+        child: Stack(
+          children: [
+            // Background Design Element
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 100,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+              ),
+            ),
+            BlocBuilder<NewExpenseBloc, NewExpenseState>(
+              bloc: _newExpenseBloc,
+              buildWhen: (previous, current) =>
+                  current is NewExpensePageLoadedState,
+              builder: (context, state) {
+                return SafeArea(
+                  child: BlocListener<NewExpenseBloc, NewExpenseState>(
                     bloc: _newExpenseBloc,
-                    buildWhen: (previous, current) =>
-                        current is NewExpensePageLoadedState,
-                    builder: (context, state) {
-                      return SafeArea(
-                        child: BlocListener<NewExpenseBloc, NewExpenseState>(
-                            bloc: _newExpenseBloc,
-                            listener: (context, state) {
-                              if (state.runtimeType ==
-                                  NewExpensePageLoadedState) {
-                                _nameTextEditingController.clear();
-                                _nameFocusNode.requestFocus();
-                                _amountTextEditingController.clear();
-                                _newExpenseBloc
-                                    .add(NewExpenseNameValueChanged(value: ''));
-                                _newExpenseBloc.add(
-                                    NewExpenseAmountValueChanged(value: ''));
-                              }
-                            },
-                            child: SingleChildScrollView(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(children: [
-                                  ExpenseNameField(
-                                      nameTextEditingController:
-                                          _nameTextEditingController,
-                                      focusNode: _nameFocusNode,
-                                      newExpenseBloc: _newExpenseBloc),
-                                  const SizedBox(height: 20),
-                                  ExpenseAmountField(
-                                      amountTextEditingController:
-                                          _amountTextEditingController,
-                                      newExpenseBloc: _newExpenseBloc),
-                                  const SizedBox(height: 20),
-                                  ExpenseCategorySelector(
-                                      categories:
-                                          state is NewExpensePageLoadedState
-                                              ? state.categories
-                                              : [],
-                                      newExpenseBloc: _newExpenseBloc),
-                                  const SizedBox(height: 20),
-                                  ExpenseDateSelector(
-                                      newExpenseBloc: _newExpenseBloc),
-                                  const SizedBox(height: 20),
-                                  AddExpenseButton(
-                                      newExpenseBloc: _newExpenseBloc),
-                                  const SizedBox(height: 20),
-                                ]))),
-                      );
-                    }),
-                AddExpenseSnackbar(
-                    newExpenseBloc: _newExpenseBloc, widget: widget),
-                AddExpenseLoader(newExpenseBloc: _newExpenseBloc),
-              ],
-            )));
+                    listener: (context, state) {
+                      if (state.runtimeType == NewExpensePageLoadedState) {
+                        _nameTextEditingController.clear();
+                        _nameFocusNode.requestFocus();
+                        _amountTextEditingController.clear();
+                        _newExpenseBloc
+                            .add(NewExpenseNameValueChanged(value: ''));
+                        _newExpenseBloc
+                            .add(NewExpenseAmountValueChanged(value: ''));
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Expense Details",
+                                style: TextStyle(
+                                  fontFamily: "Sora",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              ExpenseNameField(
+                                nameTextEditingController:
+                                    _nameTextEditingController,
+                                focusNode: _nameFocusNode,
+                                newExpenseBloc: _newExpenseBloc,
+                              ),
+                              const SizedBox(height: 20),
+                              ExpenseAmountField(
+                                amountTextEditingController:
+                                    _amountTextEditingController,
+                                newExpenseBloc: _newExpenseBloc,
+                              ),
+                              const SizedBox(height: 20),
+                              ExpenseCategorySelector(
+                                categories: state is NewExpensePageLoadedState
+                                    ? state.categories
+                                    : [],
+                                newExpenseBloc: _newExpenseBloc,
+                              ),
+                              const SizedBox(height: 20),
+                              ExpenseDateSelector(
+                                newExpenseBloc: _newExpenseBloc,
+                              ),
+                              const SizedBox(height: 30),
+                              AddExpenseButton(
+                                newExpenseBloc: _newExpenseBloc,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            AddExpenseSnackbar(
+              newExpenseBloc: _newExpenseBloc,
+              widget: widget,
+            ),
+            AddExpenseLoader(newExpenseBloc: _newExpenseBloc),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -116,23 +166,29 @@ class AddExpenseSnackbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: _newExpenseBloc,
-        listener: (context, state) {
-          switch (state) {
-            case NewExpenseAddExpenseSuccessState _:
-              UIUtils.showSnackbar(context, 'Expense added successfully!',
-                  type: SnackbarType.success);
-              widget.homeBloc.add(HomeScreenRefreshedEvent());
-              break;
-            case NewExpenseAddExpenseErrorState _:
-              UIUtils.showSnackbar(context, 'Error in adding expense!',
-                  type: SnackbarType.error);
-              break;
-            default:
-              break;
-          }
-        },
-        child: Container());
+      bloc: _newExpenseBloc,
+      listener: (context, state) {
+        switch (state) {
+          case NewExpenseAddExpenseSuccessState _:
+            UIUtils.showSnackbar(
+              context,
+              'Expense added successfully!',
+              type: SnackbarType.success,
+            );
+            break;
+          case NewExpenseAddExpenseErrorState _:
+            UIUtils.showSnackbar(
+              context,
+              'Error in adding expense!',
+              type: SnackbarType.error,
+            );
+            break;
+          default:
+            break;
+        }
+      },
+      child: Container(),
+    );
   }
 }
 
@@ -147,22 +203,24 @@ class AddExpenseLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NewExpenseBloc, NewExpenseState>(
-        bloc: _newExpenseBloc,
-        buildWhen: (previous, current) => current is NewExpenseActionState,
-        builder: (context, state) {
-          switch (state) {
-            case NewExpenseAddExpenseLoadingState _:
-              return Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child:
-                      CircularProgressIndicator(color: AppColors.accentColor),
+      bloc: _newExpenseBloc,
+      buildWhen: (previous, current) => current is NewExpenseActionState,
+      builder: (context, state) {
+        switch (state) {
+          case NewExpenseAddExpenseLoadingState _:
+            return Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.accentColor,
                 ),
-              );
-            default:
-              return Container();
-          }
-        });
+              ),
+            );
+          default:
+            return Container();
+        }
+      },
+    );
   }
 }
 
@@ -177,37 +235,26 @@ class AddExpenseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-        buildWhen: (previous, current) =>
-            current is NewExpenseInputValueChangedState,
-        bloc: _newExpenseBloc,
-        builder: (context, state) {
-          bool isInputValid = state is NewExpenseInputValueChangedState
-              ? state.isInputValid
-              : false;
-          return SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                if (isInputValid) {
-                  _newExpenseBloc.add(NewExpenseAddExpenseTappedEvent());
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    isInputValid ? AppColors.accentColor : Colors.grey,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-              child: const Text(
-                'Add',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: "Sora"),
-              ),
-            ),
-          );
-        });
+      buildWhen: (previous, current) =>
+          current is NewExpenseInputValueChangedState,
+      bloc: _newExpenseBloc,
+      builder: (context, state) {
+        bool isInputValid = state is NewExpenseInputValueChangedState
+            ? state.isInputValid
+            : false;
+        return SizedBox(
+          width: double.infinity,
+          height: 55,
+          child: AppThemeButton(
+              onPressed: isInputValid
+                  ? () {
+                      _newExpenseBloc.add(NewExpenseAddExpenseTappedEvent());
+                    }
+                  : null,
+              text: 'Save Expense'),
+        );
+      },
+    );
   }
 }
 
@@ -221,22 +268,42 @@ class ExpenseDateSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Text('Date', style: TextStyle(fontFamily: "Sora")),
-        const Spacer(),
-        Container(
-          margin: const EdgeInsets.only(left: 30),
-          width: 150,
-          child: DatePickerWidget(
-            defaultDate: DateTime.now(),
-            onChanged: (value) {
-              _newExpenseBloc.add(NewExpenseDateValueChanged(value: value));
-            },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.calendar_today,
+            color: Colors.black54,
+            size: 20,
           ),
-        ),
-        const Spacer(),
-      ],
+          const SizedBox(width: 12),
+          const Text(
+            'Date',
+            style: TextStyle(
+              fontFamily: "Sora",
+              fontWeight: FontWeight.w500,
+              color: Colors.black54,
+            ),
+          ),
+          const Spacer(),
+          Container(
+            width: 150,
+            margin: const EdgeInsets.only(left: 8),
+            child: DatePickerWidget(
+              defaultDate: DateTime.now(),
+              onChanged: (value) {
+                _newExpenseBloc.add(NewExpenseDateValueChanged(value: value));
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -253,20 +320,52 @@ class ExpenseCategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Text('Category', style: TextStyle(fontFamily: "Sora")),
-        const Spacer(),
-        DropdownWidget(
-          items: categories,
-          onChanged: (value) {
-            if (value != null) {
-              _newExpenseBloc.add(NewExpenseCategoryValueChanged(value: value));
-            }
-          },
-        ),
-        const Spacer()
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          // Fixed width section with icon and label
+          Container(
+            width: 100, // Adjust based on your text size
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.category_outlined,
+                  color: Colors.black54,
+                  size: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Category',
+                  style: TextStyle(
+                    fontFamily: "Sora",
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Expanded section for dropdown
+          const SizedBox(width: 12),
+          Expanded(
+            child: DropdownWidget(
+              items: categories,
+              onChanged: (value) {
+                if (value != null) {
+                  _newExpenseBloc
+                      .add(NewExpenseCategoryValueChanged(value: value));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -284,7 +383,7 @@ class ExpenseAmountField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: _amountTextEditingController,
       inputFormatters: [
         FilteringTextInputFormatter.allow(
@@ -292,19 +391,44 @@ class ExpenseAmountField extends StatelessWidget {
         ),
       ],
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Amount',
-        labelStyle: TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w300),
-        floatingLabelStyle: TextStyle(fontFamily: "Sora"),
-        border: OutlineInputBorder(),
-        prefixText: '₹ ', // Always show the rupee sign before input
-        prefixStyle: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 20, fontFamily: "Sora"),
+        hintText: '0.00',
+        prefixIcon: const Icon(Icons.currency_rupee, color: Colors.black54),
+        labelStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w400,
+          color: Colors.black54,
+        ),
+        hintStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w300,
+          color: Colors.black38,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        floatingLabelStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w500,
+          color: AppColors.primaryColor,
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       ),
       style: const TextStyle(
         fontFamily: "Sora",
         fontWeight: FontWeight.w600,
-        fontSize: 20,
+        fontSize: 18,
       ),
       onChanged: (value) {
         _newExpenseBloc.add(NewExpenseAmountValueChanged(value: value));
@@ -329,18 +453,50 @@ class ExpenseNameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: const TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w600),
+    return TextFormField(
+      style: const TextStyle(
+        fontFamily: "Sora",
+        fontWeight: FontWeight.w500,
+      ),
       focusNode: _focusNode,
       controller: _nameTextEditingController,
       inputFormatters: [LengthLimitingTextInputFormatter(25)],
       textCapitalization: TextCapitalization.words,
-      decoration: const InputDecoration(
-          labelText: 'Expense Name',
-          labelStyle:
-              TextStyle(fontFamily: "Sora", fontWeight: FontWeight.w300),
-          border: OutlineInputBorder(),
-          floatingLabelStyle: TextStyle(fontFamily: "Sora")),
+      decoration: InputDecoration(
+        labelText: 'Expense Name',
+        hintText: 'What did you spend on?',
+        prefixIcon:
+            const Icon(Icons.shopping_bag_outlined, color: Colors.black54),
+        labelStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w400,
+          color: Colors.black54,
+        ),
+        hintStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w300,
+          color: Colors.black38,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+        floatingLabelStyle: const TextStyle(
+          fontFamily: "Sora",
+          fontWeight: FontWeight.w500,
+          color: AppColors.primaryColor,
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      ),
       onChanged: (value) {
         _newExpenseBloc.add(NewExpenseNameValueChanged(value: value));
       },

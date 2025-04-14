@@ -5,16 +5,12 @@ import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget _budgetListItem(
     CategorizedBudgetModel budget, GestureTapCallback onTap) {
   final percentageSpent = (budget.spentAmount / budget.budgetAmount);
   final isEnabled = budget.budgetAmount > 0 || budget.spentAmount > 0;
-  final remainingAmount =
-      Utils.formatRupees(budget.budgetAmount - budget.spentAmount);
-  // budget.budgetAmount >= budget.spentAmount
-  //   ? Utils.formatRupees(budget.budgetAmount.round().toDouble())
-  //   : (-(budget.spentAmount - budget.budgetAmount)).toStringAsFixed(2);
 
   return ListTile(
     enabled: isEnabled,
@@ -67,10 +63,8 @@ Widget _budgetListItem(
 
 class BudgetCategoriesView extends StatelessWidget {
   final List<CategorizedBudgetModel> budget;
-  final NewHomeBloc homeBloc;
 
-  const BudgetCategoriesView(
-      {super.key, required this.budget, required this.homeBloc});
+  const BudgetCategoriesView({super.key, required this.budget});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +95,7 @@ class BudgetCategoriesView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Column(children: [
               _budgetListItem(budget[index], () {
-                homeBloc.add(
+                context.read<NewHomeBloc>().add(
                     HomeBudgetCategoryItemTappedEvent(budget: budget[index]));
               })
             ]);

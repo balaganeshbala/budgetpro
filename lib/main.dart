@@ -1,3 +1,4 @@
+import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/ui/new_home_page.dart';
 import 'package:budgetpro/pages/profile/profile_page.dart';
 import 'package:budgetpro/pages/registration/ui/registration_screen.dart';
@@ -6,6 +7,7 @@ import 'package:budgetpro/pages/navigator/splash_screen.dart';
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,17 +62,23 @@ class _BudgetProAppState extends State<BudgetProApp> {
             thickness: 1,
           ),
           inputDecorationTheme: InputDecorationTheme(
-              floatingLabelStyle:
-                  const TextStyle(color: AppColors.primaryColor),
+              floatingLabelStyle: const TextStyle(color: AppColors.accentColor),
               labelStyle: TextStyle(color: AppColors.iconColor),
               hintStyle: TextStyle(color: AppColors.iconColor),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.iconColor)),
               focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.primaryColor)))),
+                  borderSide: BorderSide(color: AppColors.accentColor)))),
       home: const SplashScreen(),
       routes: {
-        '/home': (context) => const NewHomePage(),
+        '/home': (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => NewHomeBloc(),
+                ),
+              ],
+              child: const NewHomePage(),
+            ),
         '/sign-in': (context) => SignInScreen(),
         '/register': (context) => RegistrationScreen(),
         '/profile': (context) => const ProfilePage(),

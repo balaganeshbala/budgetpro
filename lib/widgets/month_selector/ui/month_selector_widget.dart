@@ -18,10 +18,9 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
       builder: (context, state) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
+            foregroundColor: AppColors.accentColor,
             textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: "Sora",
-            ),
+                fontWeight: FontWeight.bold, fontFamily: "Sora"),
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           ),
           onPressed: () async {
@@ -47,7 +46,13 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
                         fontFamily: "Sora",
                         fontWeight: FontWeight.w600,
                       ),
-                    ), // Background color
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors
+                            .accentColor, // Set OK & Cancel button color
+                      ),
+                    ),
                   ),
                   child: child!,
                 );

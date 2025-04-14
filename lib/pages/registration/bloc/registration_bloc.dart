@@ -59,6 +59,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         email.isNotEmpty &&
         password.isNotEmpty &&
         confirmPassword.isNotEmpty &&
+        password.length >= 6 &&
         password == confirmPassword &&
         _isEmailValid(email);
   }

@@ -1,4 +1,5 @@
 import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/services/network_services.dart';
@@ -36,5 +37,35 @@ class BudgetRepo {
     } catch (e) {
       return [];
     }
+  }
+
+  Future<void> saveBudget({
+    required String month,
+    required String year,
+    required Map<String, double> categoryBudgets,
+    required List<ExpenseCategory> categories,
+  }) async {
+    final currentMonthDate = Utils.formatDate("$year-$month-01");
+    final userId = SupabaseService.client.auth.currentUser?.id;
+    final List budgetData = [];
+
+    for (var category in categories) {
+      double amount = categoryBudgets[category.name] ?? 0.0;
+
+      final categoryData = {
+        'date': currentMonthDate,
+        'category': category.name,
+        'amount': amount,
+        'user_id': userId
+      };
+
+      budgetData.add(categoryData);
+    }
+
+    await SupabaseService.insertRows('budget', budgetData);
+  }
+
+  bool hasAtLeastOneBudget(Map<String, double> categoryBudgets) {
+    return categoryBudgets.values.any((amount) => amount > 0);
   }
 }

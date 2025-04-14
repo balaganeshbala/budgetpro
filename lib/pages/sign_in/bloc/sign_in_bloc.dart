@@ -38,7 +38,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   bool _isInputValid() {
-    return email.isNotEmpty && password.isNotEmpty && _isEmailValid(email);
+    return email.isNotEmpty &&
+        password.isNotEmpty &&
+        password.length >= 6 &&
+        _isEmailValid(email);
   }
 
   bool _isEmailValid(String email) {
