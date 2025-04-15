@@ -17,7 +17,7 @@ class NewExpenseAmountValueChanged extends NewExpenseEvent {
 }
 
 class NewExpenseCategoryValueChanged extends NewExpenseEvent {
-  final String value;
+  final ExpenseCategory value;
 
   NewExpenseCategoryValueChanged({required this.value});
 }

@@ -15,8 +15,8 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   String category = '';
   String date = '';
 
-  final List<String> _expenseCategories =
-      ExpenseCategoryExtension.getAllCategoriesAsString();
+  final List<ExpenseCategory> _expenseCategories =
+      ExpenseCategoryExtension.getAllCategories();
 
   NewExpenseBloc() : super(NewExpenseInitial()) {
     on<NewExpenseInitialEvent>(onNewExpenseInitialEvent);
@@ -40,7 +40,7 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
     final data = {
       'name': name,
       'amount': amount,
-      'category': category.toLowerCase(),
+      'category': category,
       'date': date,
       'user_id': userId
     };
@@ -50,7 +50,7 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
 
   FutureOr<void> onNewExpenseInitialEvent(
       NewExpenseInitialEvent event, Emitter<NewExpenseState> emit) {
-    category = _expenseCategories.first;
+    category = _expenseCategories.first.name;
     date = DateFormat('MM/dd/yyyy').format(DateTime.now());
     emit(NewExpensePageLoadedState(categories: _expenseCategories));
   }
@@ -74,7 +74,7 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
 
   FutureOr<void> onNewExpenseCategoryValueChanged(
       NewExpenseCategoryValueChanged event, Emitter<NewExpenseState> emit) {
-    category = event.value;
+    category = event.value.name;
     emit(NewExpenseInputValueChangedState(isInputValid: _isInputValid()));
   }
 

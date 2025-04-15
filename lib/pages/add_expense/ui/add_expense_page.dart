@@ -1,4 +1,5 @@
 import 'package:budgetpro/components/app_theme_button.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/pages/add_expense/bloc/add_expense_bloc.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
@@ -315,7 +316,7 @@ class ExpenseCategorySelector extends StatelessWidget {
     required NewExpenseBloc newExpenseBloc,
   }) : _newExpenseBloc = newExpenseBloc;
 
-  final List<String> categories;
+  final List<ExpenseCategory> categories;
   final NewExpenseBloc _newExpenseBloc;
 
   @override
@@ -355,11 +356,17 @@ class ExpenseCategorySelector extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: DropdownWidget(
-              items: categories,
+              items: categories.map((item) {
+                return item.displayName;
+              }).toList(),
               onChanged: (value) {
                 if (value != null) {
-                  _newExpenseBloc
-                      .add(NewExpenseCategoryValueChanged(value: value));
+                  ExpenseCategory selectedCategory = categories.firstWhere(
+                    (category) => category.displayName == value,
+                    orElse: () => ExpenseCategory.unknown,
+                  );
+                  _newExpenseBloc.add(
+                      NewExpenseCategoryValueChanged(value: selectedCategory));
                 }
               },
             ),

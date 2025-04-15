@@ -13,7 +13,7 @@ final class NewExpenseInputValueChangedState extends NewExpenseState {
 }
 
 final class NewExpensePageLoadedState extends NewExpenseState {
-  final List<String> categories;
+  final List<ExpenseCategory> categories;
 
   NewExpensePageLoadedState({required this.categories});
 }
