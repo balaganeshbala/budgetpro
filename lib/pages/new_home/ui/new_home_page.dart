@@ -158,12 +158,12 @@ class _NewHomePageState extends State<NewHomePage> {
                                           totalSpent: totalSpent),
                                     ),
                                     const SizedBox(height: 10),
+                                    const SectionHeader(text: 'Expenses'),
+                                    RecentExpensesView(expenses: expenses),
+                                    const SizedBox(height: 30),
                                     const SectionHeader(text: 'Categories'),
                                     BudgetCategoriesView(
                                         budget: state.budgetCategories),
-                                    const SizedBox(height: 30),
-                                    const SectionHeader(text: 'Expenses'),
-                                    RecentExpensesView(expenses: expenses),
                                     const SizedBox(height: 20),
                                   ]);
                             default:
