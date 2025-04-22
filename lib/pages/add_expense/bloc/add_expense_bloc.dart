@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 part 'add_expense_event.dart';
 part 'add_expense_state.dart';
 
-class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
+class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
   String name = '';
   String amount = '';
   String category = '';
@@ -18,13 +18,13 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
   final List<ExpenseCategory> _expenseCategories =
       ExpenseCategoryExtension.getAllCategories();
 
-  NewExpenseBloc() : super(NewExpenseInitial()) {
-    on<NewExpenseInitialEvent>(onNewExpenseInitialEvent);
-    on<NewExpenseNameValueChanged>(onNewExpenseNameValueChanged);
-    on<NewExpenseAmountValueChanged>(onNewExpenseAmountValueChanged);
-    on<NewExpenseCategoryValueChanged>(onNewExpenseCategoryValueChanged);
-    on<NewExpenseDateValueChanged>(onNewExpenseDateValueChanged);
-    on<NewExpenseAddExpenseTappedEvent>(onAddExpenseTappedEvent);
+  AddExpenseBloc() : super(AddExpenseInitial()) {
+    on<AddExpenseInitialEvent>(onAddExpenseInitialEvent);
+    on<AddExpenseNameValueChanged>(onAddExpenseNameValueChanged);
+    on<AddExpenseAmountValueChanged>(onAddExpenseAmountValueChanged);
+    on<AddExpenseCategoryValueChanged>(onAddExpenseCategoryValueChanged);
+    on<AddExpenseDateValueChanged>(onAddExpenseDateValueChanged);
+    on<AddExpenseAddExpenseTappedEvent>(onAddExpenseTappedEvent);
   }
 
   bool _isInputValid() {
@@ -44,55 +44,55 @@ class NewExpenseBloc extends Bloc<NewExpenseEvent, NewExpenseState> {
       'date': date,
       'user_id': userId
     };
-    final status = await ExpensesRepo.addNewExpense(data);
+    final status = await ExpensesRepo.addExpense(data);
     return status;
   }
 
-  FutureOr<void> onNewExpenseInitialEvent(
-      NewExpenseInitialEvent event, Emitter<NewExpenseState> emit) {
+  FutureOr<void> onAddExpenseInitialEvent(
+      AddExpenseInitialEvent event, Emitter<AddExpenseState> emit) {
     category = _expenseCategories.first.name;
     date = DateFormat('MM/dd/yyyy').format(DateTime.now());
-    emit(NewExpensePageLoadedState(categories: _expenseCategories));
+    emit(AddExpensePageLoadedState(categories: _expenseCategories));
   }
 
-  FutureOr<void> onNewExpenseNameValueChanged(
-      NewExpenseNameValueChanged event, Emitter<NewExpenseState> emit) {
+  FutureOr<void> onAddExpenseNameValueChanged(
+      AddExpenseNameValueChanged event, Emitter<AddExpenseState> emit) {
     name = event.value;
-    emit(NewExpenseInputValueChangedState(isInputValid: _isInputValid()));
+    emit(AddExpenseInputValueChangedState(isInputValid: _isInputValid()));
   }
 
-  FutureOr<void> onNewExpenseAmountValueChanged(
-      NewExpenseAmountValueChanged event, Emitter<NewExpenseState> emit) {
+  FutureOr<void> onAddExpenseAmountValueChanged(
+      AddExpenseAmountValueChanged event, Emitter<AddExpenseState> emit) {
     double? parsedDouble = double.tryParse(event.value);
     if (parsedDouble != null) {
       amount = parsedDouble.toString();
     } else {
       amount = '';
     }
-    emit(NewExpenseInputValueChangedState(isInputValid: _isInputValid()));
+    emit(AddExpenseInputValueChangedState(isInputValid: _isInputValid()));
   }
 
-  FutureOr<void> onNewExpenseCategoryValueChanged(
-      NewExpenseCategoryValueChanged event, Emitter<NewExpenseState> emit) {
+  FutureOr<void> onAddExpenseCategoryValueChanged(
+      AddExpenseCategoryValueChanged event, Emitter<AddExpenseState> emit) {
     category = event.value.name;
-    emit(NewExpenseInputValueChangedState(isInputValid: _isInputValid()));
+    emit(AddExpenseInputValueChangedState(isInputValid: _isInputValid()));
   }
 
-  FutureOr<void> onNewExpenseDateValueChanged(
-      NewExpenseDateValueChanged event, Emitter<NewExpenseState> emit) {
+  FutureOr<void> onAddExpenseDateValueChanged(
+      AddExpenseDateValueChanged event, Emitter<AddExpenseState> emit) {
     date = DateFormat('MM/dd/yyyy').format(event.value);
-    emit(NewExpenseInputValueChangedState(isInputValid: _isInputValid()));
+    emit(AddExpenseInputValueChangedState(isInputValid: _isInputValid()));
   }
 
-  FutureOr<void> onAddExpenseTappedEvent(NewExpenseAddExpenseTappedEvent event,
-      Emitter<NewExpenseState> emit) async {
-    emit(NewExpenseAddExpenseLoadingState());
+  FutureOr<void> onAddExpenseTappedEvent(AddExpenseAddExpenseTappedEvent event,
+      Emitter<AddExpenseState> emit) async {
+    emit(AddExpenseAddExpenseLoadingState());
     final status = await addExpense();
     if (status == true) {
-      emit(NewExpensePageLoadedState(categories: _expenseCategories));
-      emit(NewExpenseAddExpenseSuccessState());
+      emit(AddExpensePageLoadedState(categories: _expenseCategories));
+      emit(AddExpenseAddExpenseSuccessState());
     } else {
-      emit(NewExpenseAddExpenseErrorState());
+      emit(AddExpenseAddExpenseErrorState());
     }
   }
 }

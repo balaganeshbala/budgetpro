@@ -17,167 +17,184 @@ class AddExpensePage extends StatefulWidget {
 }
 
 class _AddExpensePageState extends State<AddExpensePage> {
-  final _newExpenseBloc = NewExpenseBloc();
+  final _addExpenseBloc = AddExpenseBloc();
   final _nameTextEditingController = TextEditingController();
   final _amountTextEditingController = TextEditingController();
   final _nameFocusNode = FocusNode();
 
+  bool _shouldRefresh = false;
+
   @override
   void initState() {
-    _newExpenseBloc.add(NewExpenseInitialEvent());
+    _addExpenseBloc.add(AddExpenseInitialEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Add Expense',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: "Sora",
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: AppColors.primaryColor,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: Stack(
-          children: [
-            // Background Design Element
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
+    return PopScope(
+        // This callback will be triggered when the user tries to pop the route
+        // by pressing the back button
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            // If we've already popped, we can't return a value
+            return;
+          }
+          Navigator.of(context).pop(_shouldRefresh);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Add Expense',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: "Sora",
+                color: Colors.white,
               ),
             ),
-            BlocBuilder<NewExpenseBloc, NewExpenseState>(
-              bloc: _newExpenseBloc,
-              buildWhen: (previous, current) =>
-                  current is NewExpensePageLoadedState,
-              builder: (context, state) {
-                return SafeArea(
-                  child: BlocListener<NewExpenseBloc, NewExpenseState>(
-                    bloc: _newExpenseBloc,
-                    listener: (context, state) {
-                      if (state.runtimeType == NewExpensePageLoadedState) {
-                        _nameTextEditingController.clear();
-                        _nameFocusNode.requestFocus();
-                        _amountTextEditingController.clear();
-                        _newExpenseBloc
-                            .add(NewExpenseNameValueChanged(value: ''));
-                        _newExpenseBloc
-                            .add(NewExpenseAmountValueChanged(value: ''));
-                      }
-                    },
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(20),
-                      child: Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Expense Details",
-                                style: TextStyle(
-                                  fontFamily: "Sora",
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              ExpenseNameField(
-                                nameTextEditingController:
-                                    _nameTextEditingController,
-                                focusNode: _nameFocusNode,
-                                newExpenseBloc: _newExpenseBloc,
-                              ),
-                              const SizedBox(height: 20),
-                              ExpenseAmountField(
-                                amountTextEditingController:
-                                    _amountTextEditingController,
-                                newExpenseBloc: _newExpenseBloc,
-                              ),
-                              const SizedBox(height: 20),
-                              ExpenseCategorySelector(
-                                categories: state is NewExpensePageLoadedState
-                                    ? state.categories
-                                    : [],
-                                newExpenseBloc: _newExpenseBloc,
-                              ),
-                              const SizedBox(height: 20),
-                              ExpenseDateSelector(
-                                newExpenseBloc: _newExpenseBloc,
-                              ),
-                              const SizedBox(height: 30),
-                              AddExpenseButton(
-                                newExpenseBloc: _newExpenseBloc,
-                              ),
-                            ],
-                          ),
-                        ),
+            backgroundColor: AppColors.primaryColor,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                // Background Design Element
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
                       ),
                     ),
                   ),
-                );
-              },
+                ),
+                BlocBuilder<AddExpenseBloc, AddExpenseState>(
+                  bloc: _addExpenseBloc,
+                  buildWhen: (previous, current) =>
+                      current is AddExpensePageLoadedState,
+                  builder: (context, state) {
+                    return SafeArea(
+                      child: BlocListener<AddExpenseBloc, AddExpenseState>(
+                        bloc: _addExpenseBloc,
+                        listener: (context, state) {
+                          if (state.runtimeType == AddExpensePageLoadedState) {
+                            _nameTextEditingController.clear();
+                            _nameFocusNode.requestFocus();
+                            _amountTextEditingController.clear();
+                            _addExpenseBloc
+                                .add(AddExpenseNameValueChanged(value: ''));
+                            _addExpenseBloc
+                                .add(AddExpenseAmountValueChanged(value: ''));
+                          } else if (state
+                              is AddExpenseAddExpenseSuccessState) {
+                            _shouldRefresh = true;
+                          }
+                        },
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(20),
+                          child: Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Expense Details",
+                                    style: TextStyle(
+                                      fontFamily: "Sora",
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ExpenseNameField(
+                                    nameTextEditingController:
+                                        _nameTextEditingController,
+                                    focusNode: _nameFocusNode,
+                                    addExpenseBloc: _addExpenseBloc,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ExpenseAmountField(
+                                    amountTextEditingController:
+                                        _amountTextEditingController,
+                                    addExpenseBloc: _addExpenseBloc,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ExpenseCategorySelector(
+                                    categories:
+                                        state is AddExpensePageLoadedState
+                                            ? state.categories
+                                            : [],
+                                    addExpenseBloc: _addExpenseBloc,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ExpenseDateSelector(
+                                    addExpenseBloc: _addExpenseBloc,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  AddExpenseButton(
+                                    addExpenseBloc: _addExpenseBloc,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                AddExpenseSnackbar(
+                  addExpenseBloc: _addExpenseBloc,
+                  widget: widget,
+                ),
+                AddExpenseLoader(addExpenseBloc: _addExpenseBloc),
+              ],
             ),
-            AddExpenseSnackbar(
-              newExpenseBloc: _newExpenseBloc,
-              widget: widget,
-            ),
-            AddExpenseLoader(newExpenseBloc: _newExpenseBloc),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
 class AddExpenseSnackbar extends StatelessWidget {
   const AddExpenseSnackbar({
     super.key,
-    required NewExpenseBloc newExpenseBloc,
+    required AddExpenseBloc addExpenseBloc,
     required this.widget,
-  }) : _newExpenseBloc = newExpenseBloc;
+  }) : _addExpenseBloc = addExpenseBloc;
 
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
   final AddExpensePage widget;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: _newExpenseBloc,
+      bloc: _addExpenseBloc,
       listener: (context, state) {
         switch (state) {
-          case NewExpenseAddExpenseSuccessState _:
+          case AddExpenseAddExpenseSuccessState _:
             UIUtils.showSnackbar(
               context,
               'Expense added successfully!',
               type: SnackbarType.success,
             );
             break;
-          case NewExpenseAddExpenseErrorState _:
+          case AddExpenseAddExpenseErrorState _:
             UIUtils.showSnackbar(
               context,
               'Error in adding expense!',
@@ -196,19 +213,19 @@ class AddExpenseSnackbar extends StatelessWidget {
 class AddExpenseLoader extends StatelessWidget {
   const AddExpenseLoader({
     super.key,
-    required NewExpenseBloc newExpenseBloc,
-  }) : _newExpenseBloc = newExpenseBloc;
+    required AddExpenseBloc addExpenseBloc,
+  }) : _addExpenseBloc = addExpenseBloc;
 
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewExpenseBloc, NewExpenseState>(
-      bloc: _newExpenseBloc,
-      buildWhen: (previous, current) => current is NewExpenseActionState,
+    return BlocBuilder<AddExpenseBloc, AddExpenseState>(
+      bloc: _addExpenseBloc,
+      buildWhen: (previous, current) => current is AddExpenseActionState,
       builder: (context, state) {
         switch (state) {
-          case NewExpenseAddExpenseLoadingState _:
+          case AddExpenseAddExpenseLoadingState _:
             return Container(
               color: Colors.black.withOpacity(0.5),
               child: const Center(
@@ -228,19 +245,19 @@ class AddExpenseLoader extends StatelessWidget {
 class AddExpenseButton extends StatelessWidget {
   const AddExpenseButton({
     super.key,
-    required NewExpenseBloc newExpenseBloc,
-  }) : _newExpenseBloc = newExpenseBloc;
+    required AddExpenseBloc addExpenseBloc,
+  }) : _addExpenseBloc = addExpenseBloc;
 
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       buildWhen: (previous, current) =>
-          current is NewExpenseInputValueChangedState,
-      bloc: _newExpenseBloc,
+          current is AddExpenseInputValueChangedState,
+      bloc: _addExpenseBloc,
       builder: (context, state) {
-        bool isInputValid = state is NewExpenseInputValueChangedState
+        bool isInputValid = state is AddExpenseInputValueChangedState
             ? state.isInputValid
             : false;
         return SizedBox(
@@ -249,7 +266,7 @@ class AddExpenseButton extends StatelessWidget {
           child: AppThemeButton(
               onPressed: isInputValid
                   ? () {
-                      _newExpenseBloc.add(NewExpenseAddExpenseTappedEvent());
+                      _addExpenseBloc.add(AddExpenseAddExpenseTappedEvent());
                     }
                   : null,
               text: 'Save Expense'),
@@ -262,10 +279,10 @@ class AddExpenseButton extends StatelessWidget {
 class ExpenseDateSelector extends StatelessWidget {
   const ExpenseDateSelector({
     super.key,
-    required NewExpenseBloc newExpenseBloc,
-  }) : _newExpenseBloc = newExpenseBloc;
+    required AddExpenseBloc addExpenseBloc,
+  }) : _addExpenseBloc = addExpenseBloc;
 
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +316,7 @@ class ExpenseDateSelector extends StatelessWidget {
             child: DatePickerWidget(
               defaultDate: DateTime.now(),
               onChanged: (value) {
-                _newExpenseBloc.add(NewExpenseDateValueChanged(value: value));
+                _addExpenseBloc.add(AddExpenseDateValueChanged(value: value));
               },
             ),
           ),
@@ -313,11 +330,11 @@ class ExpenseCategorySelector extends StatelessWidget {
   const ExpenseCategorySelector({
     super.key,
     required this.categories,
-    required NewExpenseBloc newExpenseBloc,
-  }) : _newExpenseBloc = newExpenseBloc;
+    required AddExpenseBloc addExpenseBloc,
+  }) : _addExpenseBloc = addExpenseBloc;
 
   final List<ExpenseCategory> categories;
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -365,8 +382,8 @@ class ExpenseCategorySelector extends StatelessWidget {
                     (category) => category.displayName == value,
                     orElse: () => ExpenseCategory.unknown,
                   );
-                  _newExpenseBloc.add(
-                      NewExpenseCategoryValueChanged(value: selectedCategory));
+                  _addExpenseBloc.add(
+                      AddExpenseCategoryValueChanged(value: selectedCategory));
                 }
               },
             ),
@@ -381,12 +398,12 @@ class ExpenseAmountField extends StatelessWidget {
   const ExpenseAmountField({
     super.key,
     required TextEditingController amountTextEditingController,
-    required NewExpenseBloc newExpenseBloc,
+    required AddExpenseBloc addExpenseBloc,
   })  : _amountTextEditingController = amountTextEditingController,
-        _newExpenseBloc = newExpenseBloc;
+        _addExpenseBloc = addExpenseBloc;
 
   final TextEditingController _amountTextEditingController;
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -438,7 +455,7 @@ class ExpenseAmountField extends StatelessWidget {
         fontSize: 18,
       ),
       onChanged: (value) {
-        _newExpenseBloc.add(NewExpenseAmountValueChanged(value: value));
+        _addExpenseBloc.add(AddExpenseAmountValueChanged(value: value));
       },
     );
   }
@@ -449,14 +466,14 @@ class ExpenseNameField extends StatelessWidget {
     super.key,
     required TextEditingController nameTextEditingController,
     required FocusNode focusNode,
-    required NewExpenseBloc newExpenseBloc,
+    required AddExpenseBloc addExpenseBloc,
   })  : _nameTextEditingController = nameTextEditingController,
         _focusNode = focusNode,
-        _newExpenseBloc = newExpenseBloc;
+        _addExpenseBloc = addExpenseBloc;
 
   final TextEditingController _nameTextEditingController;
   final FocusNode _focusNode;
-  final NewExpenseBloc _newExpenseBloc;
+  final AddExpenseBloc _addExpenseBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -505,7 +522,7 @@ class ExpenseNameField extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       ),
       onChanged: (value) {
-        _newExpenseBloc.add(NewExpenseNameValueChanged(value: value));
+        _addExpenseBloc.add(AddExpenseNameValueChanged(value: value));
       },
     );
   }

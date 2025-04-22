@@ -1,3 +1,4 @@
+import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -44,5 +45,50 @@ class UIUtils {
         backgroundColor: backgroundColor,
       ),
     );
+  }
+
+  static Future<bool> showConfirmationDialog(
+      BuildContext context, String title, String message) async {
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titleTextStyle: const TextStyle(
+              fontFamily: "Sora", fontSize: 22, color: AppColors.primaryColor),
+          contentTextStyle: TextStyle(
+              fontFamily: "Sora", fontSize: 16, color: Colors.grey.shade700),
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text(
+                "No",
+                style: TextStyle(
+                  color: AppColors.accentColor,
+                  fontFamily: "Sora", // Add the "Sora" font
+                  fontWeight: FontWeight.w500, // Optional: Adjust weight
+                  fontSize: 16, // Optional: Adjust size
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                "Yes",
+                style: TextStyle(
+                  color: AppColors.accentColor,
+                  fontFamily: "Sora", // Add the "Sora" font
+                  fontWeight: FontWeight.w500, // Optional: Adjust weight
+                  fontSize: 16, // Optional: Adjust size
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return confirm ?? false;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 class SettingsListView extends StatelessWidget {
@@ -18,49 +19,8 @@ class SettingsListView extends StatelessWidget {
         'textColor': Colors.red.shade600,
         'onTap': () async {
           // Show confirmation dialog before signing out
-          final bool? confirm = await showDialog<bool>(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                titleTextStyle: const TextStyle(
-                    fontFamily: "Sora",
-                    fontSize: 22,
-                    color: AppColors.primaryColor),
-                contentTextStyle: TextStyle(
-                    fontFamily: "Sora",
-                    fontSize: 16,
-                    color: Colors.grey.shade700),
-                title: const Text("Sign Out"),
-                content: const Text("Are you sure you want to sign out?"),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text(
-                      "No",
-                      style: TextStyle(
-                        color: AppColors.accentColor,
-                        fontFamily: "Sora", // Add the "Sora" font
-                        fontWeight: FontWeight.w500, // Optional: Adjust weight
-                        fontSize: 16, // Optional: Adjust size
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text(
-                      "Yes",
-                      style: TextStyle(
-                        color: AppColors.accentColor,
-                        fontFamily: "Sora", // Add the "Sora" font
-                        fontWeight: FontWeight.w500, // Optional: Adjust weight
-                        fontSize: 16, // Optional: Adjust size
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
+          final confirm = await UIUtils.showConfirmationDialog(context,
+              'Confirm Sign Out', 'Are you sure you want to sign out?');
 
           if (confirm == true) {
             // Sign out logic

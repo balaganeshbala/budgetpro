@@ -82,9 +82,13 @@ class RecentExpensesView extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => const AddExpensePage(),
                 ),
-              ).then((_) {
+              ).then((value) {
                 // Refresh the page after adding a new expense
-                context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+                if (value != null && value) {
+                  if (context.mounted) {
+                    context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+                  }
+                }
               });
             },
           ),
@@ -141,7 +145,7 @@ class RecentExpensesView extends StatelessWidget {
             textColor: AppColors.accentColor,
             fontWeight: FontWeight.w600,
             onTap: () {
-              // Navigate to NewExpensesPage when "View All" is tapped
+              // Navigate to AllExpensesPage when "View All" is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -164,9 +168,13 @@ class RecentExpensesView extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => const AddExpensePage(),
                 ),
-              ).then((_) {
-                // Refresh the page after adding a new expense
-                context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+              ).then((value) {
+                if (value != null && value) {
+                  if (context.mounted) {
+                    // Refresh the page after adding a new expense
+                    context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+                  }
+                }
               });
               ;
             },

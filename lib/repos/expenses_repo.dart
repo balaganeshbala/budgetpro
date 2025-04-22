@@ -18,7 +18,7 @@ class ExpensesRepo {
     }
   }
 
-  static Future<bool> addNewExpense(Map<String, dynamic> data) async {
+  static Future<bool> addExpense(Map<String, dynamic> data) async {
     try {
       await SupabaseService.insert("expenses", data);
       return true;

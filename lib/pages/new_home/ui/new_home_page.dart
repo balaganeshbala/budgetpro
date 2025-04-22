@@ -226,7 +226,7 @@ class _NewHomePageState extends State<NewHomePage> {
                       builder: (context) =>
                           CreateBudgetScreen(month: month, year: year)),
                 ).then((value) {
-                  if (value != null) {
+                  if (value != null && value) {
                     if (context.mounted) {
                       // Refresh the screen when returning from create budget
                       context

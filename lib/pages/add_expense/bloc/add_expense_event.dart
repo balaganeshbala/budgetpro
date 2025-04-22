@@ -1,31 +1,31 @@
 part of 'add_expense_bloc.dart';
 
-sealed class NewExpenseEvent {}
+sealed class AddExpenseEvent {}
 
-class NewExpenseInitialEvent extends NewExpenseEvent {}
+class AddExpenseInitialEvent extends AddExpenseEvent {}
 
-class NewExpenseNameValueChanged extends NewExpenseEvent {
+class AddExpenseNameValueChanged extends AddExpenseEvent {
   final String value;
 
-  NewExpenseNameValueChanged({required this.value});
+  AddExpenseNameValueChanged({required this.value});
 }
 
-class NewExpenseAmountValueChanged extends NewExpenseEvent {
+class AddExpenseAmountValueChanged extends AddExpenseEvent {
   final String value;
 
-  NewExpenseAmountValueChanged({required this.value});
+  AddExpenseAmountValueChanged({required this.value});
 }
 
-class NewExpenseCategoryValueChanged extends NewExpenseEvent {
+class AddExpenseCategoryValueChanged extends AddExpenseEvent {
   final ExpenseCategory value;
 
-  NewExpenseCategoryValueChanged({required this.value});
+  AddExpenseCategoryValueChanged({required this.value});
 }
 
-class NewExpenseDateValueChanged extends NewExpenseEvent {
+class AddExpenseDateValueChanged extends AddExpenseEvent {
   final DateTime value;
 
-  NewExpenseDateValueChanged({required this.value});
+  AddExpenseDateValueChanged({required this.value});
 }
 
-class NewExpenseAddExpenseTappedEvent extends NewExpenseEvent {}
+class AddExpenseAddExpenseTappedEvent extends AddExpenseEvent {}

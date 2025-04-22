@@ -1,25 +1,25 @@
 part of 'add_expense_bloc.dart';
 
-sealed class NewExpenseState {}
+sealed class AddExpenseState {}
 
-final class NewExpenseActionState extends NewExpenseState {}
+final class AddExpenseActionState extends AddExpenseState {}
 
-final class NewExpenseInitial extends NewExpenseState {}
+final class AddExpenseInitial extends AddExpenseState {}
 
-final class NewExpenseInputValueChangedState extends NewExpenseState {
+final class AddExpenseInputValueChangedState extends AddExpenseState {
   final bool isInputValid;
 
-  NewExpenseInputValueChangedState({required this.isInputValid});
+  AddExpenseInputValueChangedState({required this.isInputValid});
 }
 
-final class NewExpensePageLoadedState extends NewExpenseState {
+final class AddExpensePageLoadedState extends AddExpenseState {
   final List<ExpenseCategory> categories;
 
-  NewExpensePageLoadedState({required this.categories});
+  AddExpensePageLoadedState({required this.categories});
 }
 
-final class NewExpenseAddExpenseLoadingState extends NewExpenseActionState {}
+final class AddExpenseAddExpenseLoadingState extends AddExpenseActionState {}
 
-final class NewExpenseAddExpenseSuccessState extends NewExpenseActionState {}
+final class AddExpenseAddExpenseSuccessState extends AddExpenseActionState {}
 
-final class NewExpenseAddExpenseErrorState extends NewExpenseActionState {}
+final class AddExpenseAddExpenseErrorState extends AddExpenseActionState {}

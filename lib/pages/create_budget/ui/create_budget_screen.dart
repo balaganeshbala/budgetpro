@@ -84,7 +84,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
         if (state.status == BudgetStatus.success) {
           UIUtils.showSnackbar(context, 'Budget created successfully!',
               type: SnackbarType.success);
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         } else if (state.status == BudgetStatus.failure &&
             state.errorMessage != null) {
           UIUtils.showSnackbar(context, state.errorMessage!,
@@ -191,7 +191,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
                     Expanded(
                       child: AppThemeButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(context, false);
                         },
                         text: 'Cancel',
                         primary: false,
@@ -207,8 +207,18 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
                                   : 'Save Budget',
                               onPressed: state.status == BudgetStatus.loading
                                   ? null
-                                  : () {
-                                      _saveBudget(context);
+                                  : () async {
+                                      final confirm =
+                                          await UIUtils.showConfirmationDialog(
+                                              context,
+                                              'Confirm Budget',
+                                              'Are you sure you want to save this budget?');
+
+                                      if (confirm == true) {
+                                        if (context.mounted) {
+                                          _saveBudget(context);
+                                        }
+                                      }
                                     });
                         },
                       ),
