@@ -7,7 +7,7 @@ enum ExpenseCategory {
   housing,
   shopping,
   travel,
-  home,
+  family,
   chargesFees,
   groceries,
   healthBeauty,
@@ -33,8 +33,8 @@ extension ExpenseCategoryExtension on ExpenseCategory {
         return 'Shopping';
       case ExpenseCategory.travel:
         return 'Travel';
-      case ExpenseCategory.home:
-        return 'Home';
+      case ExpenseCategory.family:
+        return 'Family';
       case ExpenseCategory.chargesFees:
         return 'Charges/Fees';
       case ExpenseCategory.groceries:
@@ -70,7 +70,7 @@ extension ExpenseCategoryExtension on ExpenseCategory {
         return Icons.directions_bike_outlined;
       case ExpenseCategory.food:
         return Icons.restaurant_rounded;
-      case ExpenseCategory.home:
+      case ExpenseCategory.family:
         return Icons.people_outline;
       case ExpenseCategory.chargesFees:
         return Icons.attach_money;
@@ -105,7 +105,7 @@ extension ExpenseCategoryExtension on ExpenseCategory {
         return Colors.blueGrey;
       case ExpenseCategory.food:
         return Colors.deepOrange;
-      case ExpenseCategory.home:
+      case ExpenseCategory.family:
         return Colors.indigo;
       case ExpenseCategory.chargesFees:
         return Colors.teal;
@@ -139,7 +139,9 @@ extension ExpenseCategoryExtension on ExpenseCategory {
       case 'travel':
         return ExpenseCategory.travel;
       case 'home':
-        return ExpenseCategory.home;
+        return ExpenseCategory.family;
+      case 'family':
+        return ExpenseCategory.family;
       case 'chargesFees':
         return ExpenseCategory.chargesFees;
       case 'groceries':
