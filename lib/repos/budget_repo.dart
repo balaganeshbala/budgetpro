@@ -39,33 +39,61 @@ class BudgetRepo {
     }
   }
 
-  Future<void> saveBudget({
+  static Future<void> saveBudget({
     required String month,
     required String year,
     required Map<String, double> categoryBudgets,
     required List<ExpenseCategory> categories,
   }) async {
-    final currentMonthDate = Utils.formatDate("$year-$month-01");
-    final userId = SupabaseService.client.auth.currentUser?.id;
-    final List budgetData = [];
+    try {
+      final currentMonthDate = Utils.formatDate("$year-$month-01");
+      final userId = SupabaseService.client.auth.currentUser?.id;
+      final List budgetData = [];
 
-    for (var category in categories) {
-      double amount = categoryBudgets[category.name] ?? 0.0;
+      for (var category in categories) {
+        double amount = categoryBudgets[category.name] ?? 0.0;
 
-      final categoryData = {
-        'date': currentMonthDate,
-        'category': category.name,
-        'amount': amount,
-        'user_id': userId
-      };
+        final categoryData = {
+          'date': currentMonthDate,
+          'category': category.name,
+          'amount': amount,
+          'user_id': userId
+        };
 
-      budgetData.add(categoryData);
+        budgetData.add(categoryData);
+      }
+
+      await SupabaseService.insertRows('budget', budgetData);
+    } catch (e) {
+      throw Exception('Failed to save budget: $e');
     }
-
-    await SupabaseService.insertRows('budget', budgetData);
   }
 
-  bool hasAtLeastOneBudget(Map<String, double> categoryBudgets) {
+  static Future<void> updateBudget({required List<BudgetModel> budgets}) async {
+    try {
+      for (var budget in budgets) {
+        final double amount = budget.amount;
+
+        // Update each budget record individually
+        final response = await SupabaseService.client
+            .from('budget')
+            .update({
+              'amount': amount,
+            })
+            .eq('id', budget.id)
+            .eq('user_id', budget.userId)
+            .select();
+
+        if (response.isEmpty) {
+          throw Exception('Failed to update budget with id: ${budget.id}');
+        }
+      }
+    } catch (e) {
+      throw Exception('Failed to update budget: $e');
+    }
+  }
+
+  static bool hasAtLeastOneBudget(Map<String, double> categoryBudgets) {
     return categoryBudgets.values.any((amount) => amount > 0);
   }
 }

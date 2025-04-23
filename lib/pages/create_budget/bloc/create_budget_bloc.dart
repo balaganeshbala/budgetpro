@@ -7,13 +7,10 @@ import 'create_budget_state.dart';
 
 class CreateBudgetBloc extends Bloc<CreateBudgetEvent, CreateBudgetState> {
   final List<ExpenseCategory> categories;
-  final BudgetRepo _budgetRepository;
 
   CreateBudgetBloc({
     required this.categories,
-    BudgetRepo? budgetRepository,
-  })  : _budgetRepository = budgetRepository ?? BudgetRepo(),
-        super(const CreateBudgetState()) {
+  }) : super(const CreateBudgetState()) {
     on<BudgetAmountChanged>(_onBudgetAmountChanged);
     on<SaveBudget>(_onSaveBudget);
   }
@@ -41,7 +38,7 @@ class CreateBudgetBloc extends Bloc<CreateBudgetEvent, CreateBudgetState> {
   ) async {
     emit(state.copyWith(status: BudgetStatus.loading));
 
-    if (!_budgetRepository.hasAtLeastOneBudget(state.categoryBudgets)) {
+    if (!BudgetRepo.hasAtLeastOneBudget(state.categoryBudgets)) {
       emit(state.copyWith(
         status: BudgetStatus.failure,
         errorMessage: 'Please set at least one budget category',
@@ -50,7 +47,7 @@ class CreateBudgetBloc extends Bloc<CreateBudgetEvent, CreateBudgetState> {
     }
 
     try {
-      await _budgetRepository.saveBudget(
+      await BudgetRepo.saveBudget(
         month: event.month,
         year: event.year,
         categoryBudgets: state.categoryBudgets,

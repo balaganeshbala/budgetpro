@@ -1,7 +1,5 @@
 import 'package:budgetpro/components/app_theme_button.dart';
-import 'package:budgetpro/pages/create_budget/bloc/create_budget_bloc.dart';
-import 'package:budgetpro/pages/create_budget/bloc/create_budget_event.dart';
-import 'package:budgetpro/pages/create_budget/bloc/create_budget_state.dart';
+import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,62 +8,82 @@ import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/utits/utils.dart';
 
-class CreateBudgetScreen extends StatelessWidget {
-  const CreateBudgetScreen(
-      {super.key, required this.month, required this.year});
+// Create a new bloc for edit budget functionality
+import 'package:budgetpro/pages/edit_budget/bloc/edit_budget_bloc.dart';
+import 'package:budgetpro/pages/edit_budget/bloc/edit_budget_event.dart';
+import 'package:budgetpro/pages/edit_budget/bloc/edit_budget_state.dart';
+
+class EditBudgetScreen extends StatelessWidget {
+  const EditBudgetScreen(
+      {super.key,
+      required this.month,
+      required this.year,
+      required this.currentBudget});
 
   final String month;
   final String year;
+  final List<BudgetModel> currentBudget;
 
   @override
   Widget build(BuildContext context) {
-    final List<ExpenseCategory> categories =
-        ExpenseCategoryExtension.getAllCategories();
+    Map<String, BudgetModel> currentBudgetMap = {};
+    for (var budget in currentBudget) {
+      currentBudgetMap[budget.category.name] = budget;
+    }
 
     return BlocProvider(
-      create: (context) => CreateBudgetBloc(categories: categories),
-      child: CreateBudgetView(month: month, year: year, categories: categories),
+      create: (context) => EditBudgetBloc(),
+      child: EditBudgetView(
+          month: month, year: year, currentBudget: currentBudgetMap),
     );
   }
 }
 
-class CreateBudgetView extends StatefulWidget {
-  const CreateBudgetView({
+class EditBudgetView extends StatefulWidget {
+  const EditBudgetView({
     Key? key,
     required this.month,
     required this.year,
-    required this.categories,
+    required this.currentBudget,
   }) : super(key: key);
 
   final String month;
   final String year;
-  final List<ExpenseCategory> categories;
+  final Map<String, BudgetModel> currentBudget;
 
   @override
-  State<CreateBudgetView> createState() => _CreateBudgetViewState();
+  State<EditBudgetView> createState() => _EditBudgetViewState();
 }
 
-class _CreateBudgetViewState extends State<CreateBudgetView> {
+class _EditBudgetViewState extends State<EditBudgetView> {
   final Map<String, TextEditingController> _controllers = {};
 
   @override
   void initState() {
     super.initState();
-    // Initialize controllers for each category
-    for (var category in widget.categories) {
-      final controller = TextEditingController();
-      controller.addListener(() {
-        _onAmountChanged(category.name, controller.text);
-      });
-      _controllers[category.name] = controller;
-    }
-  }
 
-  void _onAmountChanged(String category, String value) {
-    final amount = double.tryParse(value) ?? 0.0;
-    context.read<CreateBudgetBloc>().add(
-          BudgetAmountChanged(category: category, amount: amount),
+    context.read<EditBudgetBloc>().add(
+          EditBudgetInitialEvent(budgetItems: widget.currentBudget),
         );
+
+    // Initialize controllers for each category with existing values
+    widget.currentBudget.forEach((category, budget) {
+      final existingAmount = budget.amount;
+      // Initialize the controller with the existing amount
+      final controller = TextEditingController(
+          text: existingAmount > 0 ? existingAmount.toStringAsFixed(0) : '');
+
+      controller.addListener(() {
+        // Update the budget amount in the bloc when the text changes
+        context.read<EditBudgetBloc>().add(
+              EditBudgetAmountChanged(
+                category: category,
+                amount: double.tryParse(controller.text) ?? 0.0,
+              ),
+            );
+      });
+      _controllers[category] = controller;
+    });
   }
 
   @override
@@ -79,13 +97,13 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateBudgetBloc, CreateBudgetState>(
+    return BlocListener<EditBudgetBloc, EditBudgetState>(
       listener: (context, state) {
-        if (state.status == BudgetStatus.success) {
-          UIUtils.showSnackbar(context, 'Budget created successfully!',
+        if (state.status == EditBudgetStatus.success) {
+          UIUtils.showSnackbar(context, 'Budget updated successfully!',
               type: SnackbarType.success);
           Navigator.pop(context, true);
-        } else if (state.status == BudgetStatus.failure &&
+        } else if (state.status == EditBudgetStatus.failure &&
             state.errorMessage != null) {
           UIUtils.showSnackbar(context, state.errorMessage!,
               type: SnackbarType.error);
@@ -94,7 +112,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Create Monthly Budget',
+            'Edit Monthly Budget',
             style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora"),
           ),
           foregroundColor: Colors.white,
@@ -106,7 +124,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Set your budget limits for ${widget.month}-${widget.year}',
+                  'Update your budget limits for ${widget.month}-${widget.year}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -115,7 +133,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
                 ),
               ),
               // Total Budget Card
-              BlocBuilder<CreateBudgetBloc, CreateBudgetState>(
+              BlocBuilder<EditBudgetBloc, EditBudgetState>(
                 builder: (context, state) {
                   return Container(
                     margin: const EdgeInsets.symmetric(
@@ -176,10 +194,11 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16.0),
-                  itemCount: widget.categories.length,
+                  itemCount: widget.currentBudget.length,
                   itemBuilder: (context, index) {
-                    final category = widget.categories[index];
-                    return _buildBudgetInputField(category);
+                    final budget = widget.currentBudget[
+                        widget.currentBudget.keys.elementAt(index)]!;
+                    return _buildBudgetInputField(budget.category);
                   },
                 ),
               ),
@@ -199,24 +218,44 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: BlocBuilder<CreateBudgetBloc, CreateBudgetState>(
+                      child: BlocBuilder<EditBudgetBloc, EditBudgetState>(
                         builder: (context, state) {
                           return AppThemeButton(
-                              text: state.status == BudgetStatus.loading
-                                  ? 'Saving...'
-                                  : 'Save',
-                              onPressed: state.status == BudgetStatus.loading
+                              text: state.status == EditBudgetStatus.loading
+                                  ? 'Updating...'
+                                  : 'Update',
+                              onPressed: state.status ==
+                                      EditBudgetStatus.loading
                                   ? null
                                   : () async {
+                                      if (state.totalBudget == 0) {
+                                        UIUtils.showSnackbar(
+                                            context, 'Budget can\'t be zero',
+                                            type: SnackbarType.error);
+                                        return;
+                                      }
+
+                                      final updatedBudget = _getUpdatedBudget();
+                                      if (updatedBudget.isEmpty) {
+                                        UIUtils.showSnackbar(context,
+                                            'No changes made to the budget',
+                                            type: SnackbarType.error);
+                                        return;
+                                      }
+
                                       final confirm =
                                           await UIUtils.showConfirmationDialog(
                                               context,
-                                              'Confirm Budget',
-                                              'Are you sure you want to save this budget?');
+                                              'Confirm Budget Update',
+                                              'Are you sure you want to update this budget?');
 
                                       if (confirm == true) {
                                         if (context.mounted) {
-                                          _saveBudget(context);
+                                          context.read<EditBudgetBloc>().add(
+                                                UpdateBudget(
+                                                    newBudgetItems:
+                                                        updatedBudget),
+                                              );
                                         }
                                       }
                                     });
@@ -303,9 +342,22 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
     );
   }
 
-  void _saveBudget(BuildContext context) {
-    context.read<CreateBudgetBloc>().add(
-          SaveBudget(month: widget.month, year: widget.year),
+  List<BudgetModel> _getUpdatedBudget() {
+    List<BudgetModel> updatedBudget = [];
+    for (var entry in _controllers.entries) {
+      final category = entry.key;
+      final controller = entry.value;
+      final amount = double.tryParse(controller.text) ?? 0.0;
+      final budget = widget.currentBudget[category];
+      if (budget != null && budget.amount != amount) {
+        updatedBudget.add(
+          budget.copyWith(
+            amount: amount,
+          ),
         );
+      }
+    }
+
+    return updatedBudget;
   }
 }

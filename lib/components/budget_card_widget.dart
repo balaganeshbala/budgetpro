@@ -1,15 +1,25 @@
 import 'package:budgetpro/components/amount_with_title_widget.dart';
+import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
+import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class BudgetCardWidget extends StatelessWidget {
   final double totalBudget;
   final double totalSpent;
+  bool? showEditButton;
+  VoidCallback? onEditTap;
 
-  const BudgetCardWidget(
-      {super.key, required this.totalBudget, required this.totalSpent});
+  BudgetCardWidget(
+      {super.key,
+      required this.totalBudget,
+      required this.totalSpent,
+      this.showEditButton = false,
+      this.onEditTap});
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +123,38 @@ class BudgetCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (showEditButton == true)
+                    InkWell(
+                      onTap: onEditTap,
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 30),
+                        child: Center(
+                          child: Row(
+                            mainAxisSize:
+                                MainAxisSize.min, // To wrap content tightly
+                            children: [
+                              Icon(
+                                Icons.edit, // Or any other edit-related icon
+                                color: AppColors.accentColor,
+                                size: 16, // Adjust size as needed
+                              ),
+                              SizedBox(
+                                  width:
+                                      8), // Add some spacing between the icon and text
+                              Text(
+                                'Edit Budget',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Sora",
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.accentColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                 ]),
           ),
         ));

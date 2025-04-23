@@ -19,24 +19,36 @@ class BudgetModel {
   int id;
   ExpenseCategory category;
   double amount;
+  String userId;
 
   BudgetModel({
     required this.id,
     required this.category,
     required this.amount,
+    required this.userId,
   });
 
   factory BudgetModel.fromJson(Map<String, dynamic> json) => BudgetModel(
-        id: json["id"],
-        category: ExpenseCategoryExtension.fromString(json["category"]),
-        amount: json["amount"]?.toDouble(),
-      );
+      id: json["id"],
+      category: ExpenseCategoryExtension.fromString(json["category"]),
+      amount: json["amount"]?.toDouble(),
+      userId: json["user_id"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "category": category,
         "amount": amount,
+        "user_id": userId,
       };
+
+  BudgetModel copyWith({required double amount}) {
+    return BudgetModel(
+      id: id,
+      category: category,
+      amount: amount,
+      userId: userId,
+    );
+  }
 }
 
 class MonthlyBudgetModel {

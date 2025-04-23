@@ -43,7 +43,7 @@ class BudgetCategoryInfoPage extends StatelessWidget {
                       const SectionHeader(text: 'Budget'),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 20, top: 10, right: 20, bottom: 20),
+                            left: 20, top: 10, right: 20, bottom: 10),
                         child: BudgetCardWidget(
                             totalBudget: budget.budgetAmount.toDouble(),
                             totalSpent: budget.spentAmount),

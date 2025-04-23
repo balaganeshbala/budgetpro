@@ -2,6 +2,7 @@ import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
 import 'package:budgetpro/pages/budget_category/ui/budget_category_info_page.dart';
 import 'package:budgetpro/components/budget_card_widget.dart';
+import 'package:budgetpro/pages/edit_budget/ui/edit_budget_page.dart';
 import 'package:budgetpro/pages/new_home/ui/budget_categories_view.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
 import 'package:budgetpro/components/section_header.dart';
@@ -152,15 +153,45 @@ class _NewHomePageState extends State<NewHomePage> {
                                           top: 10,
                                           left: 20,
                                           right: 20,
-                                          bottom: 20),
-                                      child: BudgetCardWidget(
-                                          totalBudget: totalBudget,
-                                          totalSpent: totalSpent),
+                                          bottom: 0),
+                                      child: Column(
+                                        children: [
+                                          BudgetCardWidget(
+                                              totalBudget: totalBudget,
+                                              totalSpent: totalSpent,
+                                              showEditButton: _isCurrentMonth(),
+                                              onEditTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          EditBudgetScreen(
+                                                              month:
+                                                                  _selectedMonth,
+                                                              year:
+                                                                  _selectedYear,
+                                                              currentBudget:
+                                                                  state
+                                                                      .budget)),
+                                                ).then((value) {
+                                                  if (value != null && value) {
+                                                    if (context.mounted) {
+                                                      // Refresh the screen when returning from create budget
+                                                      context
+                                                          .read<NewHomeBloc>()
+                                                          .add(
+                                                              HomeScreenRefreshedEvent());
+                                                    }
+                                                  }
+                                                });
+                                              }),
+                                        ],
+                                      ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 20),
                                     const SectionHeader(text: 'Expenses'),
                                     RecentExpensesView(expenses: expenses),
-                                    const SizedBox(height: 30),
+                                    const SizedBox(height: 20),
                                     const SectionHeader(text: 'Categories'),
                                     BudgetCategoriesView(
                                         budget: state.budgetCategories),
