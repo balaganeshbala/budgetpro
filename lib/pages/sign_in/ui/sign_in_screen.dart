@@ -1,4 +1,5 @@
 import 'package:budgetpro/components/app_theme_button.dart';
+import 'package:budgetpro/pages/forgot_password/ui/forgot_password_screen.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_bloc.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_event.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_state.dart';
@@ -94,22 +95,28 @@ class _SignInScreenState extends State<SignInScreen> {
                           });
                         },
                       ),
-                      // Align(
-                      //   alignment: Alignment.centerRight,
-                      //   child: TextButton(
-                      //     onPressed: () {
-                      //       // Navigate to forgot password
-                      //     },
-                      //     child: const Text(
-                      //       'Forgot Password?',
-                      //       style: TextStyle(
-                      //         fontFamily: "Sora",
-                      //         color: AppColors.accentColor,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontFamily: "Sora",
+                              color: AppColors.accentColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,

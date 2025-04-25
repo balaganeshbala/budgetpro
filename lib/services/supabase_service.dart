@@ -1,3 +1,4 @@
+import 'package:budgetpro/utits/constants.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +66,8 @@ class SupabaseService {
   /// Send password reset email
   static Future<void> resetPassword(String email) async {
     try {
-      final _ = await client.auth.resetPasswordForEmail(email);
+      final _ = await client.auth
+          .resetPasswordForEmail(email, redirectTo: resetPasswordEndPoint);
     } catch (e) {
       throw Exception('Error resetting password!');
     }

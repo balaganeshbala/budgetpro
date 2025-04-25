@@ -1,3 +1,4 @@
+import 'package:budgetpro/pages/forgot_password/ui/forgot_password_screen.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/ui/new_home_page.dart';
 import 'package:budgetpro/pages/profile/profile_page.dart';
@@ -81,6 +82,7 @@ class _BudgetProAppState extends State<BudgetProApp> {
             ),
         '/sign-in': (context) => SignInScreen(),
         '/register': (context) => RegistrationScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
         '/profile': (context) => const ProfilePage(),
       },
     );

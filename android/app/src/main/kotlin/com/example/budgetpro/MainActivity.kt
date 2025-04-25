@@ -1,4 +1,4 @@
-package com.example.budgetpro
+package com.clougeon.budgetpro
 
 import io.flutter.embedding.android.FlutterActivity
 
