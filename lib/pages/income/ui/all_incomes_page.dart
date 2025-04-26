@@ -1,3 +1,4 @@
+import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/income/ui/income_details_page.dart';
 import 'package:budgetpro/utits/colors.dart';
@@ -158,9 +159,10 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
                           final item = _sortedIncomes[index];
                           return _incomeItem(
                             context,
-                            icon: Icons.payments_outlined,
-                            iconBackgroundColor: Colors.green.withOpacity(0.2),
-                            iconColor: AppColors.primaryColor,
+                            icon: item.category.icon,
+                            iconBackgroundColor:
+                                item.category.color.withOpacity(0.2),
+                            iconColor: item.category.color,
                             title: item.source,
                             subtitle: item.date,
                             trailingText: Utils.formatRupees(item.amount),

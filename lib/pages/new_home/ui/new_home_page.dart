@@ -194,7 +194,7 @@ class _NewHomePageState extends State<NewHomePage> {
                                                   }
                                                 });
                                               },
-                                              onViewCategoriesTap: () {
+                                              onMoreDetailsTap: () {
                                                 // Navigate to the Categories screen
                                                 Navigator.push(
                                                   context,

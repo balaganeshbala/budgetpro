@@ -16,6 +16,12 @@ class AddIncomeAmountValueChanged extends AddIncomeEvent {
   AddIncomeAmountValueChanged({required this.value});
 }
 
+class AddIncomeCategoryValueChanged extends AddIncomeEvent {
+  final IncomeCategory value;
+
+  AddIncomeCategoryValueChanged({required this.value});
+}
+
 class AddIncomeDateValueChanged extends AddIncomeEvent {
   final DateTime value;
 

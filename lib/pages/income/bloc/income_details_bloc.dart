@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/repos/income_repo.dart';
 import 'package:budgetpro/services/supabase_service.dart';
@@ -14,6 +15,7 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
   late int incomeId;
   String source = '';
   String amount = '';
+  IncomeCategory category = IncomeCategory.other;
   String date = '';
   DateTime? dateObject;
 
@@ -21,13 +23,17 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
     on<IncomeDetailsInitialEvent>(onIncomeDetailsInitialEvent);
     on<IncomeDetailsSourceChanged>(onIncomeDetailsSourceChanged);
     on<IncomeDetailsAmountChanged>(onIncomeDetailsAmountChanged);
+    on<IncomeDetailsCategoryChanged>(onIncomeDetailsCategoryChanged);
     on<IncomeDetailsDateChanged>(onIncomeDetailsDateChanged);
     on<IncomeDetailsUpdateEvent>(onIncomeDetailsUpdateEvent);
     on<IncomeDetailsDeleteEvent>(onIncomeDetailsDeleteEvent);
   }
 
   bool _isInputValid() {
-    return source.isNotEmpty && amount.isNotEmpty && date.isNotEmpty;
+    return source.isNotEmpty &&
+        amount.isNotEmpty &&
+        category != IncomeCategory.other &&
+        date.isNotEmpty;
   }
 
   FutureOr<void> onIncomeDetailsInitialEvent(
@@ -36,12 +42,15 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
     incomeId = income.id;
     source = income.source;
     amount = income.amount.toString();
+    category = income.category;
     date = income.date;
 
     // Parse the displayed date format to a DateTime object
     dateObject = Utils.parseDate(income.date);
 
-    emit(IncomeDetailsLoadedState());
+    emit(IncomeDetailsLoadedState(
+      categories: IncomeCategoryExtension.getAllCategories(),
+    ));
 
     // Immediately emit input state to ensure button is enabled with valid values
     emit(IncomeDetailsInputValueChangedState(isInputValid: _isInputValid()));
@@ -61,6 +70,12 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
     } else {
       amount = '';
     }
+    emit(IncomeDetailsInputValueChangedState(isInputValid: _isInputValid()));
+  }
+
+  FutureOr<void> onIncomeDetailsCategoryChanged(
+      IncomeDetailsCategoryChanged event, Emitter<IncomeDetailsState> emit) {
+    category = event.value;
     emit(IncomeDetailsInputValueChangedState(isInputValid: _isInputValid()));
   }
 
@@ -95,6 +110,7 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
       final data = {
         'source': source,
         'amount': amount,
+        'category': category.name,
         'date': formattedDateForDb,
         'user_id': userId,
       };
@@ -104,7 +120,9 @@ class IncomeDetailsBloc extends Bloc<IncomeDetailsEvent, IncomeDetailsState> {
       if (success) {
         emit(IncomeDetailsUpdatedSuccessState());
         // Return to loaded state after update
-        emit(IncomeDetailsLoadedState());
+        emit(IncomeDetailsLoadedState(
+          categories: IncomeCategoryExtension.getAllCategories(),
+        ));
         emit(
             IncomeDetailsInputValueChangedState(isInputValid: _isInputValid()));
       } else {

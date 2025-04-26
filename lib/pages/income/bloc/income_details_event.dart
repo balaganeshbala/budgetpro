@@ -21,6 +21,12 @@ class IncomeDetailsAmountChanged extends IncomeDetailsEvent {
   IncomeDetailsAmountChanged({required this.value});
 }
 
+class IncomeDetailsCategoryChanged extends IncomeDetailsEvent {
+  final IncomeCategory value;
+
+  IncomeDetailsCategoryChanged({required this.value});
+}
+
 class IncomeDetailsDateChanged extends IncomeDetailsEvent {
   final DateTime value;
 

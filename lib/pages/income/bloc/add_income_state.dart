@@ -12,7 +12,11 @@ final class AddIncomeInputValueChangedState extends AddIncomeState {
   AddIncomeInputValueChangedState({required this.isInputValid});
 }
 
-final class AddIncomePageLoadedState extends AddIncomeState {}
+final class AddIncomePageLoadedState extends AddIncomeState {
+  final List<IncomeCategory> categories;
+
+  AddIncomePageLoadedState({required this.categories});
+}
 
 final class AddIncomeAddIncomeLoadingState extends AddIncomeActionState {}
 

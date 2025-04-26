@@ -1,8 +1,10 @@
 import 'package:budgetpro/components/app_theme_button.dart';
+import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/pages/income/bloc/add_income_bloc.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/widgets/date_picker_widget.dart';
+import 'package:budgetpro/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,6 +133,14 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                     addIncomeBloc: _addIncomeBloc,
                                   ),
                                   const SizedBox(height: 20),
+                                  IncomeCategorySelector(
+                                    categories:
+                                        state is AddIncomePageLoadedState
+                                            ? state.categories
+                                            : [],
+                                    addIncomeBloc: _addIncomeBloc,
+                                  ),
+                                  const SizedBox(height: 20),
                                   IncomeDateSelector(
                                     addIncomeBloc: _addIncomeBloc,
                                   ),
@@ -156,6 +166,72 @@ class _AddIncomePageState extends State<AddIncomePage> {
             ),
           ),
         ));
+  }
+}
+
+class IncomeCategorySelector extends StatelessWidget {
+  const IncomeCategorySelector({
+    super.key,
+    required this.categories,
+    required AddIncomeBloc addIncomeBloc,
+  }) : _addIncomeBloc = addIncomeBloc;
+
+  final List<IncomeCategory> categories;
+  final AddIncomeBloc _addIncomeBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          // Fixed width section with icon and label
+          SizedBox(
+            width: 100, // Adjust based on your text size
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.category_outlined,
+                  color: Colors.black54,
+                  size: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Category',
+                  style: TextStyle(
+                    fontFamily: "Sora",
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Expanded section for dropdown
+          const SizedBox(width: 12),
+          Expanded(
+            child: DropdownWidget(
+              items: categories.map((item) => item.displayName).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  IncomeCategory selectedCategory = categories.firstWhere(
+                    (category) => category.displayName == value,
+                    orElse: () => IncomeCategory.other,
+                  );
+                  _addIncomeBloc.add(
+                      AddIncomeCategoryValueChanged(value: selectedCategory));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -331,7 +407,7 @@ class IncomeAmountField extends StatelessWidget {
       controller: _amountTextEditingController,
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-          RegExp(r'^\d*\.?\d{0,2}$'),
+          RegExp(r'^\d*\.?\d{0,2}'),
         ),
       ],
       keyboardType: const TextInputType.numberWithOptions(decimal: true),

@@ -1,10 +1,12 @@
 import 'package:budgetpro/components/app_theme_button.dart';
+import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/income/bloc/income_details_bloc.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/date_picker_widget.dart';
+import 'package:budgetpro/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,6 +153,15 @@ class _IncomeDetailsPageState extends State<IncomeDetailsPage> {
                                 IncomeAmountField(
                                   amountTextEditingController:
                                       _amountTextEditingController,
+                                  incomeDetailsBloc: _incomeDetailsBloc,
+                                ),
+                                const SizedBox(height: 20),
+                                IncomeCategorySelector(
+                                  initialCategory: widget.income.category,
+                                  categories: state is IncomeDetailsLoadedState
+                                      ? state.categories
+                                      : IncomeCategoryExtension
+                                          .getAllCategories(),
                                   incomeDetailsBloc: _incomeDetailsBloc,
                                 ),
                                 const SizedBox(height: 20),
@@ -355,6 +366,76 @@ class IncomeDateSelector extends StatelessWidget {
   }
 }
 
+class IncomeCategorySelector extends StatelessWidget {
+  final IncomeCategory initialCategory;
+
+  const IncomeCategorySelector({
+    super.key,
+    required this.initialCategory,
+    required this.categories,
+    required IncomeDetailsBloc incomeDetailsBloc,
+  }) : _incomeDetailsBloc = incomeDetailsBloc;
+
+  final List<IncomeCategory> categories;
+  final IncomeDetailsBloc _incomeDetailsBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          // Fixed width section with icon and label
+          SizedBox(
+            width: 100, // Adjust based on your text size
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.category_outlined,
+                  color: Colors.black54,
+                  size: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Category',
+                  style: TextStyle(
+                    fontFamily: "Sora",
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Expanded section for dropdown
+          const SizedBox(width: 12),
+          Expanded(
+            child: DropdownWidget(
+              items: categories.map((item) => item.displayName).toList(),
+              initialValue: initialCategory.displayName,
+              onChanged: (value) {
+                if (value != null) {
+                  IncomeCategory selectedCategory = categories.firstWhere(
+                    (category) => category.displayName == value,
+                    orElse: () => IncomeCategory.other,
+                  );
+                  _incomeDetailsBloc.add(
+                      IncomeDetailsCategoryChanged(value: selectedCategory));
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class IncomeAmountField extends StatelessWidget {
   const IncomeAmountField({
     super.key,
@@ -416,7 +497,7 @@ class IncomeAmountField extends StatelessWidget {
         fontSize: 18,
       ),
       onChanged: (value) {
-        _incomeDetailsBloc.add(IncomeDetailsSourceChanged(value: value));
+        _incomeDetailsBloc.add(IncomeDetailsAmountChanged(value: value));
       },
     );
   }

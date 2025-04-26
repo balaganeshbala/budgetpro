@@ -1,3 +1,4 @@
+import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/income/ui/all_incomes_page.dart';
 import 'package:budgetpro/pages/income/ui/add_income_page.dart';
@@ -124,44 +125,15 @@ class RecentIncomesView extends StatelessWidget {
           final item = incomes[incomes.length - index - 1];
           return _incomeItem(
             context,
-            icon: Icons.payments_outlined,
-            iconBackgroundColor: Colors.green.withOpacity(0.2),
-            iconColor: Colors.green,
+            icon: item.category.icon,
+            iconBackgroundColor: item.category.color.withOpacity(0.2),
+            iconColor: item.category.color,
             title: item.source,
             subtitle: item.date,
             trailingText: Utils.formatRupees(item.amount),
             onTap: () => _navigateToIncomeDetails(context, item),
           );
-        }
-        // Display "View All" action with centered text
-        else if (index == incomeCount) {
-          if (incomes.length <= 5) {
-            return const SizedBox
-                .shrink(); // No "View All" if less than 5 items
-          }
-          return _centeredTextAction(
-            context,
-            text: 'View All',
-            textColor: AppColors.accentColor,
-            fontWeight: FontWeight.w600,
-            onTap: () {
-              // Navigate to AllIncomesPage when "View All" is tapped
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllIncomesPage(incomes: incomes),
-                ),
-              ).then((value) {
-                // Refresh if incomes were updated
-                if (value == true && context.mounted) {
-                  context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
-                }
-              });
-            },
-          );
-        }
-        // Display "Add New" action with centered text
-        else {
+        } else if (index == incomeCount) {
           return _centeredTextAction(
             context,
             text: '+ Add New',
@@ -179,6 +151,27 @@ class RecentIncomesView extends StatelessWidget {
                     // Refresh the page after adding a new income
                     context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
                   }
+                }
+              });
+            },
+          );
+        } else {
+          return _centeredTextAction(
+            context,
+            text: 'More Details',
+            textColor: AppColors.accentColor,
+            fontWeight: FontWeight.w600,
+            onTap: () {
+              // Navigate to AllIncomesPage when "View All" is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllIncomesPage(incomes: incomes),
+                ),
+              ).then((value) {
+                // Refresh if incomes were updated
+                if (value == true && context.mounted) {
+                  context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
                 }
               });
             },

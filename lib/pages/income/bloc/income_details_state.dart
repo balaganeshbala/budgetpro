@@ -5,7 +5,11 @@ sealed class IncomeDetailsState {}
 
 class IncomeDetailsInitial extends IncomeDetailsState {}
 
-class IncomeDetailsLoadedState extends IncomeDetailsState {}
+class IncomeDetailsLoadedState extends IncomeDetailsState {
+  final List<IncomeCategory> categories;
+
+  IncomeDetailsLoadedState({required this.categories});
+}
 
 class IncomeDetailsInputValueChangedState extends IncomeDetailsState {
   final bool isInputValid;

@@ -7,10 +7,14 @@ enum IncomeCategory {
   rental,
   sideHustle,
   freelance,
+  service,
   gift,
   pension,
   interest,
   dividend,
+  royalties,
+  refund,
+  benefits,
   other,
   unknown,
 }
@@ -30,6 +34,8 @@ extension IncomeCategoryExtension on IncomeCategory {
         return 'Side Hustle';
       case IncomeCategory.freelance:
         return 'Freelance';
+      case IncomeCategory.service:
+        return 'Service';
       case IncomeCategory.gift:
         return 'Gift';
       case IncomeCategory.pension:
@@ -38,8 +44,16 @@ extension IncomeCategoryExtension on IncomeCategory {
         return 'Interest';
       case IncomeCategory.dividend:
         return 'Dividend';
-      default:
+      case IncomeCategory.royalties:
+        return 'Royalties';
+      case IncomeCategory.refund:
+        return 'Refund';
+      case IncomeCategory.benefits:
+        return 'Benefits';
+      case IncomeCategory.other:
         return 'Other';
+      default:
+        return 'Unknown';
     }
   }
 
@@ -57,14 +71,24 @@ extension IncomeCategoryExtension on IncomeCategory {
         return Icons.work_outline;
       case IncomeCategory.freelance:
         return Icons.work;
+      case IncomeCategory.service:
+        return Icons.handyman;
       case IncomeCategory.gift:
         return Icons.card_giftcard;
       case IncomeCategory.pension:
         return Icons.account_balance;
       case IncomeCategory.interest:
-        return Icons.money_off;
+        return Icons.account_balance_wallet;
       case IncomeCategory.dividend:
         return Icons.attach_money;
+      case IncomeCategory.royalties:
+        return Icons.music_note;
+      case IncomeCategory.refund:
+        return Icons.receipt_long;
+      case IncomeCategory.benefits:
+        return Icons.location_city;
+      case IncomeCategory.other:
+        return Icons.post_add_rounded;
       default:
         return Icons.note_outlined;
     }
@@ -84,6 +108,8 @@ extension IncomeCategoryExtension on IncomeCategory {
         return Colors.red;
       case IncomeCategory.freelance:
         return Colors.teal;
+      case IncomeCategory.service:
+        return Colors.lime;
       case IncomeCategory.gift:
         return Colors.amber;
       case IncomeCategory.pension:
@@ -91,6 +117,14 @@ extension IncomeCategoryExtension on IncomeCategory {
       case IncomeCategory.interest:
         return Colors.brown;
       case IncomeCategory.dividend:
+        return Colors.cyan;
+      case IncomeCategory.royalties:
+        return Colors.deepPurple;
+      case IncomeCategory.refund:
+        return Colors.lightGreen;
+      case IncomeCategory.benefits:
+        return Colors.blueGrey;
+      case IncomeCategory.other:
         return Colors.grey;
       default:
         return Colors.black;
@@ -111,6 +145,8 @@ extension IncomeCategoryExtension on IncomeCategory {
         return IncomeCategory.sideHustle;
       case 'freelance':
         return IncomeCategory.freelance;
+      case 'service':
+        return IncomeCategory.service;
       case 'gift':
         return IncomeCategory.gift;
       case 'pension':
@@ -119,8 +155,14 @@ extension IncomeCategoryExtension on IncomeCategory {
         return IncomeCategory.interest;
       case 'dividend':
         return IncomeCategory.dividend;
+      case 'royalties':
+        return IncomeCategory.royalties;
+      case 'refund':
+        return IncomeCategory.refund;
+      case 'benefits':
+        return IncomeCategory.benefits;
       default:
-        return IncomeCategory.unknown; // Handle unknown categories
+        return IncomeCategory.other; // Handle unknown categories
     }
   }
 
