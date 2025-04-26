@@ -6,10 +6,12 @@ class DropdownWidget extends StatefulWidget {
     super.key,
     required this.items,
     required this.onChanged,
+    this.initialValue,
   });
 
   final List<String> items;
   final ValueChanged<String?> onChanged;
+  final String? initialValue;
 
   @override
   State<DropdownWidget> createState() => _DropdownWidgetState();
@@ -19,11 +21,27 @@ class _DropdownWidgetState extends State<DropdownWidget> {
   String? _selectedValue;
 
   @override
+  void initState() {
+    super.initState();
+    // Set the initial value if provided
+    _selectedValue = widget.initialValue;
+  }
+
+  @override
   void didUpdateWidget(covariant DropdownWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_selectedValue != null && !widget.items.contains(_selectedValue)) {
       setState(() {
         _selectedValue = widget.items.isNotEmpty ? widget.items.first : null;
+      });
+    }
+
+    // Update selected value if initialValue changes
+    if (widget.initialValue != oldWidget.initialValue &&
+        widget.initialValue != null &&
+        widget.items.contains(widget.initialValue)) {
+      setState(() {
+        _selectedValue = widget.initialValue;
       });
     }
   }
@@ -44,7 +62,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
                 ? _selectedValue
                 : widget.items.isNotEmpty
                     ? widget.items.first
-                    : '',
+                    : null,
             style: const TextStyle(
                 color: AppColors.linkColor, fontWeight: FontWeight.w500),
             iconEnabledColor: AppColors.linkColor,

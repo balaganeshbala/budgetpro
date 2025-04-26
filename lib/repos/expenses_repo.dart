@@ -26,4 +26,23 @@ class ExpensesRepo {
       return false;
     }
   }
+
+  static Future<bool> updateExpense(
+      int expenseId, Map<String, dynamic> data) async {
+    try {
+      await SupabaseService.update("expenses", "id", expenseId, data);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> deleteExpense(int expenseId) async {
+    try {
+      await SupabaseService.delete("expenses", "id", expenseId);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

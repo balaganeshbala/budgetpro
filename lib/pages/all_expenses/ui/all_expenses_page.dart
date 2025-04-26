@@ -1,5 +1,6 @@
 import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/models/expenses_model.dart';
+import 'package:budgetpro/pages/expense_details/ui/expense_details_page.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class _AllExpensesPageState extends State<AllExpensesPage> {
                     title: item.name,
                     subtitle: item.date,
                     trailingText: Utils.formatRupees(item.amount),
-                    onTap: () {},
+                    onTap: () => _navigateToExpenseDetails(item),
                   );
                 },
               ),
@@ -151,6 +152,22 @@ class _AllExpensesPageState extends State<AllExpensesPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _navigateToExpenseDetails(ExpenseModel expense) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ExpenseDetailsPage(expense: expense),
+      ),
+    );
+
+    // If there was a change (update or delete), refresh the expenses list
+    if (result == true && mounted) {
+      // You could either pop with a result to refresh the parent screen
+      Navigator.pop(context, true);
+      // Or if you have a bloc, you could trigger a refresh event
+    }
   }
 
   String _getSortTypeText() {
@@ -232,6 +249,11 @@ class _AllExpensesPageState extends State<AllExpensesPage> {
                   color: textColor ?? Colors.black,
                 ),
               ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+              size: 20,
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/pages/all_expenses/ui/all_expenses_page.dart';
 import 'package:budgetpro/pages/add_expense/ui/add_expense_page.dart';
+import 'package:budgetpro/pages/expense_details/ui/expense_details_page.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
@@ -130,7 +131,7 @@ class RecentExpensesView extends StatelessWidget {
             title: item.name,
             subtitle: item.date,
             trailingText: Utils.formatRupees(item.amount),
-            onTap: () {},
+            onTap: () => _navigateToExpenseDetails(context, item),
           );
         }
         // Display "View All" action with centered text
@@ -151,7 +152,12 @@ class RecentExpensesView extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => AllExpensesPage(expenses: expenses),
                 ),
-              );
+              ).then((value) {
+                // Refresh if expenses were updated
+                if (value == true && context.mounted) {
+                  context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+                }
+              });
             },
           );
         }
@@ -176,12 +182,27 @@ class RecentExpensesView extends StatelessWidget {
                   }
                 }
               });
-              ;
             },
           );
         }
       },
     );
+  }
+
+  // Navigate to expense details when an expense item is tapped
+  Future<void> _navigateToExpenseDetails(
+      BuildContext context, ExpenseModel expense) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ExpenseDetailsPage(expense: expense),
+      ),
+    );
+
+    // Refresh the home screen if the expense was updated or deleted
+    if (result == true && context.mounted) {
+      context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
+    }
   }
 
   // Common method for centered text action items
@@ -276,6 +297,11 @@ class RecentExpensesView extends StatelessWidget {
                   color: textColor ?? Colors.black,
                 ),
               ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+              size: 20,
+            ),
           ],
         ),
       ),
