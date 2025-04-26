@@ -97,7 +97,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                 .add(AddExpenseAmountValueChanged(value: ''));
                           } else if (state
                               is AddExpenseAddExpenseSuccessState) {
-                            _shouldRefresh = true;
+                            setState(() {
+                              _shouldRefresh = true;
+                            });
                           }
                         },
                         child: SingleChildScrollView(

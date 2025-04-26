@@ -7,6 +7,7 @@ class BudgetCardWidget extends StatelessWidget {
   final double totalSpent;
   final bool showEditButton;
   final VoidCallback? onEditTap;
+  final VoidCallback? onViewCategoriesTap;
 
   const BudgetCardWidget({
     super.key,
@@ -14,6 +15,7 @@ class BudgetCardWidget extends StatelessWidget {
     required this.totalSpent,
     this.showEditButton = false,
     this.onEditTap,
+    this.onViewCategoriesTap,
   });
 
   @override
@@ -224,6 +226,31 @@ class BudgetCardWidget extends StatelessWidget {
                   ],
                 ),
               ),
+
+              // New View Categories button
+              if (totalBudget > 0 && onViewCategoriesTap != null)
+                Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: onViewCategoriesTap,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        child: Center(
+                          child: Text(
+                            'View Categories',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Sora",
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.accentColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

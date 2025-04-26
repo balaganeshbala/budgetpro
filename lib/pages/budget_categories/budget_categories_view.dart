@@ -1,11 +1,8 @@
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expense_category_enum.dart';
-import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
-import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget _budgetListItem(
     CategorizedBudgetModel budget, GestureTapCallback onTap) {
@@ -63,8 +60,13 @@ Widget _budgetListItem(
 
 class BudgetCategoriesView extends StatelessWidget {
   final List<CategorizedBudgetModel> budget;
+  final Function(CategorizedBudgetModel)? onCategoryTap;
 
-  const BudgetCategoriesView({super.key, required this.budget});
+  const BudgetCategoriesView({
+    super.key,
+    required this.budget,
+    this.onCategoryTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +97,9 @@ class BudgetCategoriesView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Column(children: [
               _budgetListItem(budget[index], () {
-                context.read<NewHomeBloc>().add(
-                    HomeBudgetCategoryItemTappedEvent(budget: budget[index]));
+                if (onCategoryTap != null) {
+                  onCategoryTap!(budget[index]);
+                }
               })
             ]);
           },

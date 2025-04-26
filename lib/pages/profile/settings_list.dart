@@ -1,5 +1,4 @@
 import 'package:budgetpro/services/supabase_service.dart';
-import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 

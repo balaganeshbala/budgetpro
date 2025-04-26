@@ -1,9 +1,9 @@
 import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/pages/budget_categories/budget_categories_screen.dart';
 import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
 import 'package:budgetpro/pages/budget_category/ui/budget_category_info_page.dart';
 import 'package:budgetpro/components/budget_card_widget.dart';
 import 'package:budgetpro/pages/edit_budget/ui/edit_budget_page.dart';
-import 'package:budgetpro/pages/new_home/ui/budget_categories_view.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
 import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
@@ -192,6 +192,21 @@ class _NewHomePageState extends State<NewHomePage> {
                                                     }
                                                   }
                                                 });
+                                              },
+                                              onViewCategoriesTap: () {
+                                                // Navigate to the Categories screen
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BudgetCategoriesScreen(
+                                                      budgetCategories: state
+                                                          .budgetCategories,
+                                                      month:
+                                                          '$_selectedMonth-$_selectedYear',
+                                                    ),
+                                                  ),
+                                                );
                                               }),
                                         ],
                                       ),
@@ -199,10 +214,6 @@ class _NewHomePageState extends State<NewHomePage> {
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Expenses'),
                                     RecentExpensesView(expenses: expenses),
-                                    const SizedBox(height: 20),
-                                    const SectionHeader(text: 'Categories'),
-                                    BudgetCategoriesView(
-                                        budget: state.budgetCategories),
                                     const SizedBox(height: 20),
                                   ]);
                             default:
