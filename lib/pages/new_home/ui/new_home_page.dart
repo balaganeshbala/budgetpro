@@ -82,27 +82,35 @@ class _NewHomePageState extends State<NewHomePage> {
                                           month: state.selectedMonth,
                                           year: state.selectedYear));
                                 },
-                                child: Container(
-                                  color: Colors.white,
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 14),
-                                  child: Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                              context, '/profile');
-                                        },
-                                        child: const Icon(
-                                          Icons.account_circle,
-                                          size: 50,
-                                          color: AppColors.accentColor,
-                                        ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20, bottom: 14),
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, '/profile');
+                                            },
+                                            child: const Icon(
+                                              Icons.account_circle,
+                                              size: 50,
+                                              color: AppColors.accentColor,
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          const MonthSelectorWidget(),
+                                        ],
                                       ),
-                                      const Spacer(),
-                                      const MonthSelectorWidget(),
-                                    ],
-                                  ),
+                                    ),
+                                    Divider(
+                                      height: 1,
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ],
                                 )))))),
         body: Container(
           height: MediaQuery.of(context).size.height,

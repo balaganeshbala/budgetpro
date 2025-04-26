@@ -26,6 +26,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   final _amountTextEditingController = TextEditingController();
 
   bool _shouldRefresh = false;
+  bool _isReturning = false;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: !_shouldRefresh,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
           return;
@@ -110,13 +111,23 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
                         BlocListener<ExpenseDetailsBloc, ExpenseDetailsState>(
                       bloc: _expenseDetailsBloc,
                       listener: (context, state) {
-                        if (state is ExpenseDetailsUpdatedSuccessState) {
+                        if (state is ExpenseDetailsUpdatedSuccessState &&
+                            !_isReturning) {
                           _shouldRefresh = true;
+                          _isReturning = true; // Prevent multiple actions
+
                           UIUtils.showSnackbar(
                             context,
                             'Expense updated successfully!',
                             type: SnackbarType.success,
                           );
+
+                          // Add a short delay before navigating back
+                          Future.delayed(const Duration(milliseconds: 800), () {
+                            if (context.mounted) {
+                              Navigator.pop(context, true);
+                            }
+                          });
                         } else if (state is ExpenseDetailsDeletedSuccessState) {
                           _shouldRefresh = true;
                           Navigator.pop(context, true);
@@ -134,16 +145,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Expense Details",
-                                  style: TextStyle(
-                                    fontFamily: "Sora",
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 10),
                                 ExpenseNameField(
                                   nameTextEditingController:
                                       _nameTextEditingController,
@@ -295,8 +297,15 @@ class UpdateExpenseButton extends StatelessWidget {
           height: 55,
           child: AppThemeButton(
               onPressed: isInputValid
-                  ? () {
-                      _expenseDetailsBloc.add(ExpenseDetailsUpdateEvent());
+                  ? () async {
+                      final confirm = await UIUtils.showConfirmationDialog(
+                        context,
+                        'Update Expense',
+                        'Are you sure you want to update this expense?',
+                      );
+                      if (confirm) {
+                        _expenseDetailsBloc.add(ExpenseDetailsUpdateEvent());
+                      }
                     }
                   : null,
               text: 'Update Expense'),

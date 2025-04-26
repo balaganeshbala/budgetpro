@@ -216,7 +216,7 @@ class BudgetCardWidget extends StatelessWidget {
                       child: Icon(
                         isOverBudget
                             ? Icons.warning_amber_rounded
-                            : Icons.thumb_up_sharp,
+                            : Icons.payments_outlined,
                         color: remainingTextColor,
                         size: 20,
                       ),

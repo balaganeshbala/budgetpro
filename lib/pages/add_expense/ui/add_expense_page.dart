@@ -35,7 +35,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
     return PopScope(
         // This callback will be triggered when the user tries to pop the route
         // by pressing the back button
-        canPop: false,
+        canPop: !_shouldRefresh,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) {
             // If we've already popped, we can't return a value

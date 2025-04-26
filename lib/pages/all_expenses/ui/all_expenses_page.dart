@@ -24,6 +24,7 @@ class AllExpensesPage extends StatefulWidget {
 class _AllExpensesPageState extends State<AllExpensesPage> {
   late List<ExpenseModel> _sortedExpenses;
   SortType _currentSortType = SortType.dateNewest;
+  bool _shouldRefresh = false;
 
   @override
   void initState() {
@@ -53,102 +54,112 @@ class _AllExpensesPageState extends State<AllExpensesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('All Expenses',
-            style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
-        foregroundColor: Colors.white,
-        backgroundColor: AppColors.primaryColor,
-        actions: [
-          PopupMenuButton<SortType>(
-            icon: const Icon(Icons.sort),
-            onSelected: (SortType result) {
-              setState(() {
-                _currentSortType = result;
-                _sortExpenses();
-              });
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
-              const PopupMenuItem<SortType>(
-                value: SortType.dateNewest,
-                child: Text('Date (Newest First)'),
+    return PopScope(
+      canPop: true, // Allow normal back button behavior
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        // When back button pressed, pass the refresh flag to previous screen
+        Navigator.of(context).pop(_shouldRefresh);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('All Expenses',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
+          foregroundColor: Colors.white,
+          backgroundColor: AppColors.primaryColor,
+          actions: [
+            PopupMenuButton<SortType>(
+              icon: const Icon(Icons.sort),
+              onSelected: (SortType result) {
+                setState(() {
+                  _currentSortType = result;
+                  _sortExpenses();
+                });
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<SortType>>[
+                const PopupMenuItem<SortType>(
+                  value: SortType.dateNewest,
+                  child: Text('Date (Newest First)'),
+                ),
+                const PopupMenuItem<SortType>(
+                  value: SortType.dateOldest,
+                  child: Text('Date (Oldest First)'),
+                ),
+                const PopupMenuItem<SortType>(
+                  value: SortType.amountHighest,
+                  child: Text('Amount (Highest First)'),
+                ),
+                const PopupMenuItem<SortType>(
+                  value: SortType.amountLowest,
+                  child: Text('Amount (Lowest First)'),
+                ),
+              ],
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Sort indicator
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Sorted by: ',
+                      style: TextStyle(
+                        fontFamily: "Sora",
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      _getSortTypeText(),
+                      style: const TextStyle(
+                        fontFamily: "Sora",
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const PopupMenuItem<SortType>(
-                value: SortType.dateOldest,
-                child: Text('Date (Oldest First)'),
-              ),
-              const PopupMenuItem<SortType>(
-                value: SortType.amountHighest,
-                child: Text('Amount (Highest First)'),
-              ),
-              const PopupMenuItem<SortType>(
-                value: SortType.amountLowest,
-                child: Text('Amount (Lowest First)'),
+              // Expenses list
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(8),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _sortedExpenses.length,
+                  separatorBuilder: (context, index) {
+                    return const Divider(
+                      height: 1,
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                      color: Color(0xFFEEEEEE),
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    // Display expense items
+                    final item = _sortedExpenses[index];
+                    return _expenseItem(
+                      context,
+                      icon: item.category.icon,
+                      iconBackgroundColor: item.category.color.withOpacity(0.2),
+                      iconColor: item.category.color,
+                      title: item.name,
+                      subtitle: item.date,
+                      trailingText: Utils.formatRupees(item.amount),
+                      onTap: () => _navigateToExpenseDetails(item),
+                    );
+                  },
+                ),
               ),
             ],
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Sort indicator
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  const Text(
-                    'Sorted by: ',
-                    style: TextStyle(
-                      fontFamily: "Sora",
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Text(
-                    _getSortTypeText(),
-                    style: const TextStyle(
-                      fontFamily: "Sora",
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Expenses list
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.all(8),
-                physics: const AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: _sortedExpenses.length,
-                separatorBuilder: (context, index) {
-                  return const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: 16,
-                    endIndent: 16,
-                    color: Color(0xFFEEEEEE),
-                  );
-                },
-                itemBuilder: (context, index) {
-                  // Display expense items
-                  final item = _sortedExpenses[index];
-                  return _expenseItem(
-                    context,
-                    icon: item.category.icon,
-                    iconBackgroundColor: item.category.color.withOpacity(0.2),
-                    iconColor: item.category.color,
-                    title: item.name,
-                    subtitle: item.date,
-                    trailingText: Utils.formatRupees(item.amount),
-                    onTap: () => _navigateToExpenseDetails(item),
-                  );
-                },
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -162,11 +173,13 @@ class _AllExpensesPageState extends State<AllExpensesPage> {
       ),
     );
 
-    // If there was a change (update or delete), refresh the expenses list
+    // If there was a change (update or delete), set the flag to refresh parent
     if (result == true && mounted) {
-      // You could either pop with a result to refresh the parent screen
+      setState(() {
+        _shouldRefresh = true;
+      });
+
       Navigator.pop(context, true);
-      // Or if you have a bloc, you could trigger a refresh event
     }
   }
 

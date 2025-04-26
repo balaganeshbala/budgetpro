@@ -143,7 +143,7 @@ class BudgetTotalCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
-              Icons.account_balance_wallet,
+              Icons.pie_chart,
               size: 24,
               color: AppColors.primaryColor,
             ),
