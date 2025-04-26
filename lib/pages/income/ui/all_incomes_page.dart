@@ -1,9 +1,13 @@
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/income/ui/income_details_page.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
+
+// Import the new income summary widget
+import 'income_summary_widget.dart'; // Adjust import path as needed
 
 enum IncomeSortType {
   dateNewest,
@@ -23,7 +27,7 @@ class AllIncomesPage extends StatefulWidget {
 
 class _AllIncomesPageState extends State<AllIncomesPage> {
   late List<IncomeModel> _sortedIncomes;
-  IncomeSortType _currentSortType = IncomeSortType.dateNewest;
+  IncomeSortType _currentSortType = IncomeSortType.dateOldest;
   bool _shouldRefresh = false;
 
   @override
@@ -63,115 +67,130 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('All Incomes',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
-          foregroundColor: Colors.white,
-          backgroundColor: AppColors.primaryColor,
-          actions: [
-            PopupMenuButton<IncomeSortType>(
-              icon: const Icon(Icons.sort),
-              onSelected: (IncomeSortType result) {
-                setState(() {
-                  _currentSortType = result;
-                  _sortIncomes();
-                });
-              },
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<IncomeSortType>>[
-                const PopupMenuItem<IncomeSortType>(
-                  value: IncomeSortType.dateNewest,
-                  child: Text('Date (Newest First)'),
-                ),
-                const PopupMenuItem<IncomeSortType>(
-                  value: IncomeSortType.dateOldest,
-                  child: Text('Date (Oldest First)'),
-                ),
-                const PopupMenuItem<IncomeSortType>(
-                  value: IncomeSortType.amountHighest,
-                  child: Text('Amount (Highest First)'),
-                ),
-                const PopupMenuItem<IncomeSortType>(
-                  value: IncomeSortType.amountLowest,
-                  child: Text('Amount (Lowest First)'),
-                ),
-              ],
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // Sort indicator
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Sorted by: ',
-                      style: TextStyle(
-                        fontFamily: "Sora",
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      _getSortTypeText(),
-                      style: const TextStyle(
-                        fontFamily: "Sora",
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Incomes list
-              Expanded(
-                child: _sortedIncomes.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No income records found',
-                          style: TextStyle(
-                            fontFamily: "Sora",
-                            fontSize: 16,
-                            color: Colors.grey,
+            title: const Text('Income Details',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
+            foregroundColor: Colors.white,
+            backgroundColor: AppColors.primaryColor),
+        body: Container(
+          color: Colors.grey.shade200,
+          height: MediaQuery.of(context).size.height,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  const SectionHeader(text: 'Summary'),
+                  // Income Summary Widget
+                  IncomeSummaryWidget(incomes: widget.incomes),
+
+                  const SizedBox(height: 16),
+                  const SectionHeader(text: 'All Incomes'),
+                  // Sort indicator
+                  Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 8),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Sorted by: ',
+                            style: TextStyle(
+                              fontFamily: "Sora",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.all(8),
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: _sortedIncomes.length,
-                        separatorBuilder: (context, index) {
-                          return const Divider(
-                            height: 1,
-                            thickness: 1,
-                            indent: 16,
-                            endIndent: 16,
-                            color: Color(0xFFEEEEEE),
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          // Display income items
-                          final item = _sortedIncomes[index];
-                          return _incomeItem(
-                            context,
-                            icon: item.category.icon,
-                            iconBackgroundColor:
-                                item.category.color.withOpacity(0.2),
-                            iconColor: item.category.color,
-                            title: item.source,
-                            subtitle: item.date,
-                            trailingText: Utils.formatRupees(item.amount),
-                            onTap: () => _navigateToIncomeDetails(item),
-                          );
-                        },
+                          Text(
+                            _getSortTypeText(),
+                            style: const TextStyle(
+                              fontFamily: "Sora",
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    const Spacer(),
+                    PopupMenuButton<IncomeSortType>(
+                      icon: const Icon(Icons.sort),
+                      onSelected: (IncomeSortType result) {
+                        setState(() {
+                          _currentSortType = result;
+                          _sortIncomes();
+                        });
+                      },
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<IncomeSortType>>[
+                        const PopupMenuItem<IncomeSortType>(
+                          value: IncomeSortType.dateNewest,
+                          child: Text('Date (Newest First)'),
+                        ),
+                        const PopupMenuItem<IncomeSortType>(
+                          value: IncomeSortType.dateOldest,
+                          child: Text('Date (Oldest First)'),
+                        ),
+                        const PopupMenuItem<IncomeSortType>(
+                          value: IncomeSortType.amountHighest,
+                          child: Text('Amount (Highest First)'),
+                        ),
+                        const PopupMenuItem<IncomeSortType>(
+                          value: IncomeSortType.amountLowest,
+                          child: Text('Amount (Lowest First)'),
+                        ),
+                      ],
+                    ),
+                  ]),
+                  // Incomes list
+                  Container(
+                    color: Colors.white,
+                    child: _sortedIncomes.isEmpty
+                        ? const Center(
+                            child: Text(
+                              'No income records found',
+                              style: TextStyle(
+                                fontFamily: "Sora",
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        : ListView.separated(
+                            padding: const EdgeInsets.all(8),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _sortedIncomes.length,
+                            separatorBuilder: (context, index) {
+                              return const Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent: 16,
+                                endIndent: 16,
+                                color: Color(0xFFEEEEEE),
+                              );
+                            },
+                            itemBuilder: (context, index) {
+                              // Display income items
+                              final item = _sortedIncomes[index];
+                              return _incomeItem(
+                                context,
+                                icon: item.category.icon,
+                                iconBackgroundColor:
+                                    item.category.color.withOpacity(0.2),
+                                iconColor: item.category.color,
+                                title: item.source,
+                                subtitle: item.date,
+                                trailingText: Utils.formatRupees(item.amount),
+                                onTap: () => _navigateToIncomeDetails(item),
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
