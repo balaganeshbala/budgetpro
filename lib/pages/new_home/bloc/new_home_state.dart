@@ -1,5 +1,6 @@
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expenses_model.dart';
+import 'package:budgetpro/models/income_model.dart';
 
 sealed class NewHomeState {}
 
@@ -20,6 +21,7 @@ class HomeLoadingSuccessState extends HomeContentState {
   final double totalSpent;
   final double remaining;
   final List<ExpenseModel> expenses;
+  final List<IncomeModel> incomes;
 
   HomeLoadingSuccessState(
       {required this.budget,
@@ -27,7 +29,8 @@ class HomeLoadingSuccessState extends HomeContentState {
       required this.totalBudget,
       required this.totalSpent,
       required this.remaining,
-      required this.expenses});
+      required this.expenses,
+      required this.incomes});
 }
 
 class HomeBudgetCategoryItemTappedState extends HomeActionState {

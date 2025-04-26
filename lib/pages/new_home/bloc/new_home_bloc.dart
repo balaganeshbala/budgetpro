@@ -2,16 +2,19 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expenses_model.dart';
+import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/repos/budget_repo.dart';
 import 'package:budgetpro/repos/expenses_repo.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_state.dart';
+import 'package:budgetpro/repos/income_repo.dart';
 import 'package:budgetpro/utits/utils.dart';
 
 class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
   String selectedYear = "";
   String selectedMonth = "";
   List<ExpenseModel> expenses = [];
+  List<IncomeModel> incomes = [];
 
   NewHomeBloc() : super(HomeInitial()) {
     on<HomeInitialEvent>(homeInitialEvent);
@@ -65,6 +68,8 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
           expenses: expenses);
     }).toList();
 
+    incomes = await IncomeRepo.fetchIncomesForMonth(month);
+
     double remaining = totalBudget - totalSpent;
     emit(HomeLoadingSuccessState(
         budget: budget,
@@ -72,7 +77,8 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
         totalBudget: totalBudget,
         totalSpent: totalSpent,
         remaining: remaining,
-        expenses: expenses));
+        expenses: expenses,
+        incomes: incomes));
   }
 
   FutureOr<void> homeInitialEvent(

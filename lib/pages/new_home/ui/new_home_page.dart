@@ -9,6 +9,7 @@ import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_state.dart';
+import 'package:budgetpro/pages/new_home/ui/recent_incomes.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
@@ -214,6 +215,9 @@ class _NewHomePageState extends State<NewHomePage> {
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Expenses'),
                                     RecentExpensesView(expenses: expenses),
+                                    const SizedBox(height: 20),
+                                    const SectionHeader(text: 'Incomes'),
+                                    RecentIncomesView(incomes: state.incomes),
                                     const SizedBox(height: 20),
                                   ]);
                             default:
