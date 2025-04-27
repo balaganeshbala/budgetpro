@@ -4,6 +4,7 @@ import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
 import 'package:budgetpro/pages/budget_category/ui/budget_category_info_page.dart';
 import 'package:budgetpro/components/budget_card_widget.dart';
 import 'package:budgetpro/pages/edit_budget/ui/edit_budget_page.dart';
+import 'package:budgetpro/pages/new_home/ui/options_list_view.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_expenses.dart';
 import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
@@ -50,14 +51,7 @@ class _NewHomePageState extends State<NewHomePage> {
   }
 
   bool _isCurrentMonth() {
-    DateTime now = DateTime.now();
-    DateTime selectedDate =
-        Utils.parseDate("${now.day} $_selectedMonth $_selectedYear");
-    // check if two dates are in the same month and year
-    if (selectedDate.year == now.year && selectedDate.month == now.month) {
-      return true;
-    }
-    return false;
+    return Utils.isCurrentMonth(_selectedMonth, _selectedYear);
   }
 
   @override
@@ -160,8 +154,8 @@ class _NewHomePageState extends State<NewHomePage> {
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           top: 10,
-                                          left: 20,
-                                          right: 20,
+                                          left: 16,
+                                          right: 16,
                                           bottom: 0),
                                       child: Column(
                                         children: [
@@ -222,6 +216,15 @@ class _NewHomePageState extends State<NewHomePage> {
                                         incomes: state.incomes,
                                         month:
                                             '$_selectedMonth-$_selectedYear'),
+                                    const SizedBox(height: 20),
+                                    OptionsListView(
+                                        expenses: expenses,
+                                        incomes: state.incomes,
+                                        budgetCategories:
+                                            state.budgetCategories,
+                                        totalBudget: totalBudget,
+                                        month: _selectedMonth,
+                                        year: _selectedYear),
                                     const SizedBox(height: 20),
                                   ]);
                             default:

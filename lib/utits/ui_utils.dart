@@ -91,4 +91,55 @@ class UIUtils {
 
     return confirm ?? false;
   }
+
+  static Widget buildSettingsItem(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconBackgroundColor,
+    required Color iconColor,
+    required String title,
+    Color? textColor,
+    bool showChevron = true,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: iconBackgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                size: 24,
+                color: iconColor,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Sora",
+                  fontWeight: FontWeight.w500,
+                  color: textColor ?? Colors.black87,
+                ),
+              ),
+            ),
+            if (showChevron)
+              const Icon(
+                Icons.chevron_right,
+                color: Colors.grey,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -18,7 +18,7 @@ class RecentExpensesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

@@ -31,6 +31,12 @@ class Utils {
     return monthNames;
   }
 
+  static bool isCurrentMonth(String month, String year) {
+    final now = DateTime.now();
+    return month == Utils.getMonthAsShortText(now) &&
+        year == now.year.toString();
+  }
+
   static String formatRupees(double amount) {
     NumberFormat rupeeFormat =
         NumberFormat.currency(locale: 'en_IN', symbol: '₹');
