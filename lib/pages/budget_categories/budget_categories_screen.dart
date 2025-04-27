@@ -1,17 +1,21 @@
 import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/models/budget_model.dart';
+import 'package:budgetpro/models/expense_category_enum.dart';
 import 'package:budgetpro/pages/budget_category/ui/budget_category_info_page.dart';
 import 'package:budgetpro/pages/budget_categories/budget_categories_view.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 
 class BudgetCategoriesScreen extends StatelessWidget {
   final List<CategorizedBudgetModel> budgetCategories;
+  final double totalBudget; // Replace with actual total income
   final String month;
 
   const BudgetCategoriesScreen({
     Key? key,
     required this.budgetCategories,
+    required this.totalBudget,
     required this.month,
   }) : super(key: key);
 
@@ -38,6 +42,7 @@ class BudgetCategoriesScreen extends StatelessWidget {
                 const SectionHeader(text: 'Budget by Category'),
                 BudgetCategoriesView(
                   budget: budgetCategories,
+                  totalBudget: totalBudget,
                   onCategoryTap: (budget) {
                     Navigator.push(
                       context,

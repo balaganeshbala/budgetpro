@@ -203,6 +203,7 @@ class _NewHomePageState extends State<NewHomePage> {
                                                         BudgetCategoriesScreen(
                                                       budgetCategories: state
                                                           .budgetCategories,
+                                                      totalBudget: totalBudget,
                                                       month:
                                                           '$_selectedMonth-$_selectedYear',
                                                     ),
@@ -217,7 +218,10 @@ class _NewHomePageState extends State<NewHomePage> {
                                     RecentExpensesView(expenses: expenses),
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Incomes'),
-                                    RecentIncomesView(incomes: state.incomes),
+                                    RecentIncomesView(
+                                        incomes: state.incomes,
+                                        month:
+                                            '$_selectedMonth-$_selectedYear'),
                                     const SizedBox(height: 20),
                                   ]);
                             default:

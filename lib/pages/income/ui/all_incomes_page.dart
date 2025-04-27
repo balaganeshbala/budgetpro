@@ -18,8 +18,9 @@ enum IncomeSortType {
 
 class AllIncomesPage extends StatefulWidget {
   final List<IncomeModel> incomes;
+  final String month;
 
-  const AllIncomesPage({super.key, required this.incomes});
+  const AllIncomesPage({super.key, required this.incomes, required this.month});
 
   @override
   State<AllIncomesPage> createState() => _AllIncomesPageState();
@@ -67,9 +68,9 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: const Text('Income Details',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora")),
+            title: Text(widget.month,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontFamily: "Sora")),
             foregroundColor: Colors.white,
             backgroundColor: AppColors.primaryColor),
         body: Container(
@@ -81,38 +82,14 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  const SectionHeader(text: 'Summary'),
+                  const SectionHeader(text: 'Income Summary'),
                   // Income Summary Widget
                   IncomeSummaryWidget(incomes: widget.incomes),
 
                   const SizedBox(height: 16),
-                  const SectionHeader(text: 'All Incomes'),
                   // Sort indicator
                   Row(children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Sorted by: ',
-                            style: TextStyle(
-                              fontFamily: "Sora",
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Text(
-                            _getSortTypeText(),
-                            style: const TextStyle(
-                              fontFamily: "Sora",
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SectionHeader(text: 'All Incomes'),
                     const Spacer(),
                     PopupMenuButton<IncomeSortType>(
                       icon: const Icon(Icons.sort),
@@ -142,52 +119,67 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
                         ),
                       ],
                     ),
+                    SizedBox(width: 10),
                   ]),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 8),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Sorted by: ',
+                          style: TextStyle(
+                            fontFamily: "Sora",
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          _getSortTypeText(),
+                          style: const TextStyle(
+                            fontFamily: "Sora",
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   // Incomes list
                   Container(
                     color: Colors.white,
-                    child: _sortedIncomes.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'No income records found',
-                              style: TextStyle(
-                                fontFamily: "Sora",
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          )
-                        : ListView.separated(
-                            padding: const EdgeInsets.all(8),
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: _sortedIncomes.length,
-                            separatorBuilder: (context, index) {
-                              return const Divider(
-                                height: 1,
-                                thickness: 1,
-                                indent: 16,
-                                endIndent: 16,
-                                color: Color(0xFFEEEEEE),
-                              );
-                            },
-                            itemBuilder: (context, index) {
-                              // Display income items
-                              final item = _sortedIncomes[index];
-                              return _incomeItem(
-                                context,
-                                icon: item.category.icon,
-                                iconBackgroundColor:
-                                    item.category.color.withOpacity(0.2),
-                                iconColor: item.category.color,
-                                title: item.source,
-                                subtitle: item.date,
-                                trailingText: Utils.formatRupees(item.amount),
-                                onTap: () => _navigateToIncomeDetails(item),
-                              );
-                            },
-                          ),
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(8),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _sortedIncomes.length,
+                      separatorBuilder: (context, index) {
+                        return const Divider(
+                          height: 1,
+                          thickness: 1,
+                          indent: 16,
+                          endIndent: 16,
+                          color: Color(0xFFEEEEEE),
+                        );
+                      },
+                      itemBuilder: (context, index) {
+                        // Display income items
+                        final item = _sortedIncomes[index];
+                        return _incomeItem(
+                          context,
+                          icon: item.category.icon,
+                          iconBackgroundColor:
+                              item.category.color.withOpacity(0.2),
+                          iconColor: item.category.color,
+                          title: item.source,
+                          subtitle: item.date,
+                          trailingText: Utils.formatRupees(item.amount),
+                          onTap: () => _navigateToIncomeDetails(item),
+                        );
+                      },
+                    ),
                   ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

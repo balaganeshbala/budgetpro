@@ -12,8 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentIncomesView extends StatelessWidget {
   final List<IncomeModel> incomes;
+  final String month;
 
-  const RecentIncomesView({super.key, required this.incomes});
+  const RecentIncomesView(
+      {super.key, required this.incomes, required this.month});
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +168,8 @@ class RecentIncomesView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AllIncomesPage(incomes: incomes),
+                  builder: (context) =>
+                      AllIncomesPage(incomes: incomes, month: month),
                 ),
               ).then((value) {
                 // Refresh if incomes were updated

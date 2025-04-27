@@ -32,7 +32,7 @@ class IncomeSummaryWidget extends StatelessWidget {
           ..sort((a, b) => b.value.compareTo(a.value));
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
