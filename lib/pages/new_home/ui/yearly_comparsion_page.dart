@@ -850,11 +850,11 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
     }
 
     if (type == 'income') {
-      return 'Your income has $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to last year. This is a $sentiment trend.';
+      return 'Your income has $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to past year. This is a $sentiment trend.';
     } else if (type == 'expense') {
-      return 'Your expenses have $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to last year. This is a $sentiment trend.';
+      return 'Your expenses have $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to past year. This is a $sentiment trend.';
     } else {
-      return 'Your budget has $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to last year.';
+      return 'Your budget has $direction by ${percentChange.abs().toStringAsFixed(1)}% compared to past year.';
     }
   }
 }
@@ -862,8 +862,6 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
 // Extension method to capitalize the first letter of a string
 extension StringExtension on String {
   String capitalize() {
-    return this.isNotEmpty
-        ? '${this[0].toUpperCase()}${this.substring(1)}'
-        : '';
+    return isNotEmpty ? '${this[0].toUpperCase()}${substring(1)}' : '';
   }
 }

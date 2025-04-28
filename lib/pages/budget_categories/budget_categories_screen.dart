@@ -39,7 +39,7 @@ class BudgetCategoriesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                const SectionHeader(text: 'Budget by Category'),
+                const SectionHeader(text: 'By Category'),
                 BudgetCategoriesView(
                   budget: budgetCategories,
                   totalBudget: totalBudget,

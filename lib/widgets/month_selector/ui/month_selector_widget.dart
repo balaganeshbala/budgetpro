@@ -16,12 +16,14 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<MonthSelectorBloc, MonthSelectorState>(
       builder: (context, state) {
-        return ElevatedButton(
+        return ElevatedButton.icon(
+          icon: const Icon(Icons.calendar_month, color: AppColors.accentColor),
           style: ElevatedButton.styleFrom(
+            elevation: 0,
             foregroundColor: AppColors.accentColor,
             textStyle: const TextStyle(
                 fontWeight: FontWeight.bold, fontFamily: "Sora"),
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           ),
           onPressed: () async {
             final selected = await showMonthPicker(
@@ -66,7 +68,7 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
               }
             }
           },
-          child: Text('${state.selectedMonth} - ${state.selectedYear}'),
+          label: Text('${state.selectedMonth} - ${state.selectedYear}'),
         );
       },
     );

@@ -40,10 +40,10 @@ class BudgetCategoryInfoPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 80),
-                      const SectionHeader(text: 'Budget'),
+                      const SectionHeader(text: 'Summary'),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 20, top: 10, right: 20, bottom: 10),
+                            left: 16, top: 10, right: 16, bottom: 10),
                         child: BudgetCardWidget(
                             totalBudget: budget.budgetAmount.toDouble(),
                             totalSpent: budget.spentAmount),

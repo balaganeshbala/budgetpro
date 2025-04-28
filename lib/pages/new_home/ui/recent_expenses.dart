@@ -12,8 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecentExpensesView extends StatelessWidget {
   final List<ExpenseModel> expenses;
+  final String month;
+  final String year;
 
-  const RecentExpensesView({super.key, required this.expenses});
+  const RecentExpensesView(
+      {super.key,
+      required this.expenses,
+      required this.month,
+      required this.year});
 
   @override
   Widget build(BuildContext context) {
@@ -134,35 +140,8 @@ class RecentExpensesView extends StatelessWidget {
             onTap: () => _navigateToExpenseDetails(context, item),
           );
         }
-        // Display "View All" action with centered text
-        else if (index == expenseCount) {
-          if (expenses.length <= 5) {
-            return const SizedBox
-                .shrink(); // No "View All" if less than 5 items
-          }
-          return _centeredTextAction(
-            context,
-            text: 'View All',
-            textColor: AppColors.accentColor,
-            fontWeight: FontWeight.w600,
-            onTap: () {
-              // Navigate to AllExpensesPage when "View All" is tapped
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AllExpensesPage(expenses: expenses),
-                ),
-              ).then((value) {
-                // Refresh if expenses were updated
-                if (value == true && context.mounted) {
-                  context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
-                }
-              });
-            },
-          );
-        }
         // Display "Add New" action with centered text
-        else {
+        else if (index == expenseCount) {
           return _centeredTextAction(
             context,
             text: '+ Add New',
@@ -180,6 +159,30 @@ class RecentExpensesView extends StatelessWidget {
                     // Refresh the page after adding a new expense
                     context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
                   }
+                }
+              });
+            },
+          );
+        }
+        // Display "More Details" action with centered text
+        else {
+          return _centeredTextAction(
+            context,
+            text: 'More Details',
+            textColor: AppColors.accentColor,
+            fontWeight: FontWeight.w600,
+            onTap: () {
+              // Navigate to AllExpensesPage when "View All" is tapped
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllExpensesPage(
+                      expenses: expenses, month: month, year: year),
+                ),
+              ).then((value) {
+                // Refresh if expenses were updated
+                if (value == true && context.mounted) {
+                  context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
                 }
               });
             },

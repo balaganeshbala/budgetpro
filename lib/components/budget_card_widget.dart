@@ -232,10 +232,11 @@ class BudgetCardWidget extends StatelessWidget {
                 Column(
                   children: [
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: onMoreDetailsTap,
+                    const Divider(),
+                    InkWell(
+                      onTap: onMoreDetailsTap,
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.only(top: 10),
                         child: Center(
                           child: Text(
                             'More Details',

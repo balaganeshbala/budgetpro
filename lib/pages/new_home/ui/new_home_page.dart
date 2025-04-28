@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/pages/budget_categories/budget_categories_screen.dart';
 import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
@@ -11,12 +13,14 @@ import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_state.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_incomes.dart';
+import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewHomePage extends StatefulWidget {
   const NewHomePage({super.key});
@@ -58,55 +62,105 @@ class _NewHomePageState extends State<NewHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight + 10),
-            child: AppBar(
-                backgroundColor: Colors.white,
-                surfaceTintColor: Colors.white,
-                bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(0),
-                    child: BlocProvider(
-                        create: (context) => MonthSelectorBloc(
-                            initialMonth, initialYear, DateTime.now()),
-                        child:
-                            BlocListener<MonthSelectorBloc, MonthSelectorState>(
-                                listener: (context, state) {
-                                  _selectedMonth = state.selectedMonth;
-                                  _selectedYear = state.selectedYear;
-                                  context.read<NewHomeBloc>().add(
-                                      HomeMonthYearChangedEvent(
-                                          month: state.selectedMonth,
-                                          year: state.selectedYear));
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      color: Colors.white,
-                                      padding: const EdgeInsets.only(
-                                          left: 20, right: 20, bottom: 14),
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.pushNamed(
-                                                  context, '/profile');
-                                            },
-                                            child: const Icon(
-                                              Icons.account_circle,
-                                              size: 50,
-                                              color: AppColors.accentColor,
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          const MonthSelectorWidget(),
-                                        ],
+          preferredSize: const Size.fromHeight(kToolbarHeight + 64),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            elevation: 2, // Add slight elevation for depth
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(0),
+              child: BlocProvider(
+                create: (context) => MonthSelectorBloc(
+                    initialMonth, initialYear, DateTime.now()),
+                child: BlocListener<MonthSelectorBloc, MonthSelectorState>(
+                  listener: (context, state) {
+                    _selectedMonth = state.selectedMonth;
+                    _selectedYear = state.selectedYear;
+                    context.read<NewHomeBloc>().add(HomeMonthYearChangedEvent(
+                        month: state.selectedMonth, year: state.selectedYear));
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, bottom: 14),
+                        child: Column(
+                          children: [
+                            // App name and brand header
+                            Row(
+                              children: [
+                                RichText(
+                                  text: const TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Budget',
+                                        style: TextStyle(
+                                          fontFamily: "Sora",
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primaryColor,
+                                        ),
                                       ),
+                                      TextSpan(
+                                        text: 'Pro',
+                                        style: TextStyle(
+                                          fontFamily: "Sora",
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.accentColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            // User profile and month selector
+                            Row(
+                              children: [
+                                // Replace icon with CircleAvatar for user profile
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/profile');
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor:
+                                        AppColors.accentColor.withAlpha(50),
+                                    child: const Icon(Icons.person,
+                                        size: 20, color: AppColors.accentColor),
+                                  ),
+                                ),
+                                const Spacer(),
+                                // Month selector with improved styling
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.grey.shade200,
+                                      width: 1,
                                     ),
-                                    Divider(
-                                      height: 1,
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ],
-                                )))))),
+                                  ),
+                                  child: const MonthSelectorWidget(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        height: 1,
+                        color: Colors.grey.shade300,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         body: Container(
           height: MediaQuery.of(context).size.height,
           color: Colors.grey.shade200,
@@ -150,7 +204,7 @@ class _NewHomePageState extends State<NewHomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const SizedBox(height: 20),
-                                    const SectionHeader(text: 'Budget'),
+                                    const SectionHeader(text: 'Summary'),
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           top: 10,
@@ -209,7 +263,10 @@ class _NewHomePageState extends State<NewHomePage> {
                                     ),
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Expenses'),
-                                    RecentExpensesView(expenses: expenses),
+                                    RecentExpensesView(
+                                        expenses: expenses,
+                                        month: _selectedMonth,
+                                        year: _selectedYear),
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Incomes'),
                                     RecentIncomesView(
