@@ -1,3 +1,4 @@
+import 'package:budgetpro/components/section_header.dart';
 import 'package:budgetpro/models/monthly_summary.dart';
 import 'package:budgetpro/repos/historical_data_repo.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +7,28 @@ import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:intl/intl.dart';
 
-class YearlyComparisonScreen extends StatelessWidget {
+class YearlyComparisonScreen extends StatefulWidget {
   const YearlyComparisonScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final int currentYear = DateTime.now().year;
-    final int previousYear = currentYear - 1;
+  State<StatefulWidget> createState() {
+    return _YearlyComparisonScreenState();
+  }
+}
 
+class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
+  late int currentYear;
+  late int previousYear;
+
+  @override
+  void initState() {
+    super.initState();
+    currentYear = DateTime.now().year;
+    previousYear = currentYear - 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -22,6 +37,93 @@ class YearlyComparisonScreen extends StatelessWidget {
         ),
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButton<String>(
+                      value: previousYear.toString(),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: AppColors.primaryColor),
+                      dropdownColor: Colors.white,
+                      isExpanded: true,
+                      underline: Container(),
+                      style: const TextStyle(
+                        color: AppColors.primaryColor,
+                        fontFamily: "Sora",
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            previousYear = int.parse(newValue);
+                          });
+                        }
+                      },
+                      items: Utils.getYearsList()
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.compare_arrows, color: Colors.white),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButton<String>(
+                      value: currentYear.toString(),
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: AppColors.primaryColor),
+                      dropdownColor: Colors.white,
+                      isExpanded: true,
+                      underline: Container(),
+                      style: const TextStyle(
+                        color: AppColors.primaryColor,
+                        fontFamily: "Sora",
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            currentYear = int.parse(newValue);
+                          });
+                        }
+                      },
+                      items: Utils.getYearsList()
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       body: DefaultTabController(
         length: 3,
@@ -46,6 +148,7 @@ class YearlyComparisonScreen extends StatelessWidget {
             ),
             Expanded(
               child: Container(
+                padding: const EdgeInsets.all(16),
                 color: Colors.grey.shade200,
                 child: SafeArea(
                   child: TabBarView(
@@ -138,7 +241,6 @@ class YearlyComparisonScreen extends StatelessWidget {
             : (isIncreasePositive ? Colors.red : Colors.green);
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -203,7 +305,7 @@ class YearlyComparisonScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: 'Sora',
-                        fontSize: 12,
+                        fontSize: 13,
                         color: Colors.grey,
                       ),
                     ),

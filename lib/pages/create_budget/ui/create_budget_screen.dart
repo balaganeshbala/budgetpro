@@ -92,7 +92,7 @@ class _CreateBudgetViewState extends State<CreateBudgetView> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Create Monthly Budget',
+            'Create Budget',
             style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora"),
           ),
           foregroundColor: Colors.white,

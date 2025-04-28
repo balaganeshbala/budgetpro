@@ -52,7 +52,7 @@ class OptionsListView extends StatelessWidget {
         },
       },
       {
-        'icon': Icons.compare,
+        'icon': Icons.compare_arrows,
         'iconBackgroundColor': Colors.blue.withOpacity(0.1),
         'iconColor': Colors.blue.shade600,
         'title': 'Yearly Comparison',
@@ -60,9 +60,11 @@ class OptionsListView extends StatelessWidget {
         'textColor': Colors.black87,
         'onTap': () async {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => YearlyComparisonScreen()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => YearlyComparisonScreen(),
+            ),
+          );
         },
       },
       {

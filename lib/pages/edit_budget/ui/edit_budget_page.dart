@@ -107,7 +107,7 @@ class _EditBudgetViewState extends State<EditBudgetView> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Edit Monthly Budget',
+            'Edit Budget',
             style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora"),
           ),
           foregroundColor: Colors.white,

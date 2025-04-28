@@ -14,7 +14,7 @@ class LongTermTrendScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Long-Term Trends',
+          'Long Term Trend',
           style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora"),
         ),
         backgroundColor: AppColors.primaryColor,
@@ -891,7 +891,7 @@ class LongTermTrendScreen extends StatelessWidget {
                         'Trend',
                         style: TextStyle(
                           fontFamily: 'Sora',
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Colors.grey.shade600,
                         ),
                       ),
@@ -922,7 +922,7 @@ class LongTermTrendScreen extends StatelessWidget {
                         '${trendPercentage.abs().toStringAsFixed(1)}%',
                         style: TextStyle(
                           fontFamily: 'Sora',
-                          fontSize: 12,
+                          fontSize: 13,
                           color: trendColor,
                         ),
                       ),
@@ -952,7 +952,7 @@ class LongTermTrendScreen extends StatelessWidget {
             title,
             style: TextStyle(
               fontFamily: 'Sora',
-              fontSize: 12,
+              fontSize: 13,
               color: Colors.grey.shade600,
             ),
           ),
@@ -1100,7 +1100,7 @@ class LongTermTrendScreen extends StatelessWidget {
                             : 'Your spending varies by approximately ${cv.toStringAsFixed(1)}% month to month.',
                         style: const TextStyle(
                           fontFamily: 'Sora',
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Colors.black87,
                         ),
                       ),
@@ -1396,7 +1396,7 @@ class LongTermTrendScreen extends StatelessWidget {
                       'Average',
                       style: TextStyle(
                         fontFamily: 'Sora',
-                        fontSize: 12,
+                        fontSize: 13,
                         color: Colors.grey.shade600,
                       ),
                     ),
