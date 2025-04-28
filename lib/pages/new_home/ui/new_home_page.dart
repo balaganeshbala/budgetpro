@@ -217,6 +217,8 @@ class _NewHomePageState extends State<NewHomePage> {
                                         month:
                                             '$_selectedMonth-$_selectedYear'),
                                     const SizedBox(height: 20),
+                                    const SectionHeader(text: 'Insights'),
+                                    const SizedBox(height: 10),
                                     OptionsListView(
                                         expenses: expenses,
                                         incomes: state.incomes,
