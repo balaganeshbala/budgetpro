@@ -19,8 +19,13 @@ enum IncomeSortType {
 class AllIncomesPage extends StatefulWidget {
   final List<IncomeModel> incomes;
   final String month;
+  final String year;
 
-  const AllIncomesPage({super.key, required this.incomes, required this.month});
+  const AllIncomesPage(
+      {super.key,
+      required this.incomes,
+      required this.month,
+      required this.year});
 
   @override
   State<AllIncomesPage> createState() => _AllIncomesPageState();
@@ -68,7 +73,7 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: Text(widget.month,
+            title: Text('${widget.month} ${widget.year}',
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontFamily: "Sora")),
             foregroundColor: Colors.white,

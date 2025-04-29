@@ -11,18 +11,20 @@ class BudgetCategoryInfoPage extends StatelessWidget {
   final CategorizedBudgetModel budget;
   final List<ExpenseModel> transactions;
   final String month;
+  final String year;
 
   const BudgetCategoryInfoPage(
       {super.key,
       required this.budget,
       required this.transactions,
-      required this.month});
+      required this.month,
+      required this.year});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(month,
+        title: Text('$month $year',
             style: const TextStyle(
                 fontWeight: FontWeight.bold, fontFamily: "Sora")),
         foregroundColor: Colors.white,

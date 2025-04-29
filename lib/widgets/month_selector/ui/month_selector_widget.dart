@@ -68,7 +68,7 @@ class _MonthSelectorWidgetState extends State<MonthSelectorWidget> {
               }
             }
           },
-          label: Text('${state.selectedMonth} - ${state.selectedYear}'),
+          label: Text('${state.selectedMonth}  ${state.selectedYear}'),
         );
       },
     );

@@ -1,9 +1,11 @@
+import 'package:budgetpro/components/app_name_brand.dart';
 import 'package:budgetpro/components/app_theme_button.dart';
 import 'package:budgetpro/pages/forgot_password/ui/forgot_password_screen.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_bloc.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_event.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_state.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,13 +32,8 @@ class _SignInScreenState extends State<SignInScreen> {
             if (state is SignInSuccess) {
               Navigator.pushReplacementNamed(context, '/home');
             } else if (state is SignInFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: Colors.redAccent,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              UIUtils.showSnackbar(context, state.error,
+                  type: SnackbarType.error);
             }
           },
           builder: (context, state) {
@@ -59,16 +56,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 40),
-                      const Text(
-                        "Welcome Back!",
-                        style: TextStyle(
-                            fontFamily: "Sora",
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryColor),
-                      ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 24),
+                      AppNameBrand(),
+                      const SizedBox(height: 24),
                       const Text(
                         "Sign in to continue",
                         style: TextStyle(
@@ -77,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Colors.black54,
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 30),
                       EmailField(
                         emailTextEditingController: _emailController,
                         focusNode: _emailFocusNode,
@@ -117,7 +107,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         height: 55,
@@ -131,23 +121,6 @@ class _SignInScreenState extends State<SignInScreen> {
                               : null,
                           text: 'Sign In',
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      const Row(
-                        children: [
-                          Expanded(child: Divider(thickness: 1)),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              "OR",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontFamily: "Sora",
-                              ),
-                            ),
-                          ),
-                          Expanded(child: Divider(thickness: 1)),
-                        ],
                       ),
                       const SizedBox(height: 30),
                       Row(

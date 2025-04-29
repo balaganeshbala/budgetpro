@@ -36,6 +36,7 @@ class HomeLoadingSuccessState extends HomeContentState {
 class HomeBudgetCategoryItemTappedState extends HomeActionState {
   final CategorizedBudgetModel budget;
   final String month;
+  final String year;
   HomeBudgetCategoryItemTappedState(
-      {required this.budget, required this.month});
+      {required this.budget, required this.month, required this.year});
 }

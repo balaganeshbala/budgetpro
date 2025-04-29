@@ -11,12 +11,14 @@ class BudgetCategoriesScreen extends StatelessWidget {
   final List<CategorizedBudgetModel> budgetCategories;
   final double totalBudget; // Replace with actual total income
   final String month;
+  final String year;
 
   const BudgetCategoriesScreen({
     Key? key,
     required this.budgetCategories,
     required this.totalBudget,
     required this.month,
+    required this.year,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class BudgetCategoriesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          month,
+          '$month $year',
           style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Sora"),
         ),
         foregroundColor: Colors.white,
@@ -51,6 +53,7 @@ class BudgetCategoriesScreen extends StatelessWidget {
                           budget: budget,
                           transactions: budget.expenses,
                           month: month,
+                          year: year,
                         ),
                       ),
                     );

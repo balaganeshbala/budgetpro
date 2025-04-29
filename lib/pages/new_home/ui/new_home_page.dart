@@ -45,13 +45,16 @@ class _NewHomePageState extends State<NewHomePage> {
     super.initState();
   }
 
-  void goToDetailsPageForBudgetCategory(
-      CategorizedBudgetModel budget, String month, BuildContext context) {
+  void goToDetailsPageForBudgetCategory(CategorizedBudgetModel budget,
+      String month, String year, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => BudgetCategoryInfoPage(
-                budget: budget, transactions: budget.expenses, month: month)));
+                budget: budget,
+                transactions: budget.expenses,
+                month: month,
+                year: year)));
   }
 
   bool _isCurrentMonth() {
@@ -62,7 +65,7 @@ class _NewHomePageState extends State<NewHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 64),
+          preferredSize: const Size.fromHeight(kToolbarHeight + 26),
           child: AppBar(
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.white,
@@ -84,38 +87,9 @@ class _NewHomePageState extends State<NewHomePage> {
                       Container(
                         color: Colors.white,
                         padding: const EdgeInsets.only(
-                            left: 16, right: 16, bottom: 14),
+                            left: 16, right: 16, bottom: 14, top: 5),
                         child: Column(
                           children: [
-                            // App name and brand header
-                            Row(
-                              children: [
-                                RichText(
-                                  text: const TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'Budget',
-                                        style: TextStyle(
-                                          fontFamily: "Sora",
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primaryColor,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: 'Pro',
-                                        style: TextStyle(
-                                          fontFamily: "Sora",
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.accentColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 12),
                             // User profile and month selector
                             Row(
@@ -126,11 +100,11 @@ class _NewHomePageState extends State<NewHomePage> {
                                     Navigator.pushNamed(context, '/profile');
                                   },
                                   child: CircleAvatar(
-                                    radius: 20,
+                                    radius: 23,
                                     backgroundColor:
                                         AppColors.accentColor.withAlpha(50),
                                     child: const Icon(Icons.person,
-                                        size: 20, color: AppColors.accentColor),
+                                        size: 25, color: AppColors.accentColor),
                                   ),
                                 ),
                                 const Spacer(),
@@ -249,12 +223,14 @@ class _NewHomePageState extends State<NewHomePage> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         BudgetCategoriesScreen(
-                                                      budgetCategories: state
-                                                          .budgetCategories,
-                                                      totalBudget: totalBudget,
-                                                      month:
-                                                          '$_selectedMonth-$_selectedYear',
-                                                    ),
+                                                            budgetCategories: state
+                                                                .budgetCategories,
+                                                            totalBudget:
+                                                                totalBudget,
+                                                            month:
+                                                                _selectedMonth,
+                                                            year:
+                                                                _selectedYear),
                                                   ),
                                                 );
                                               }),
@@ -271,8 +247,8 @@ class _NewHomePageState extends State<NewHomePage> {
                                     const SectionHeader(text: 'Incomes'),
                                     RecentIncomesView(
                                         incomes: state.incomes,
-                                        month:
-                                            '$_selectedMonth-$_selectedYear'),
+                                        month: _selectedMonth,
+                                        year: _selectedYear),
                                     const SizedBox(height: 20),
                                     const SectionHeader(text: 'Insights'),
                                     const SizedBox(height: 10),
@@ -293,8 +269,8 @@ class _NewHomePageState extends State<NewHomePage> {
                         listener: (context, state) {
                           switch (state) {
                             case HomeBudgetCategoryItemTappedState state:
-                              goToDetailsPageForBudgetCategory(
-                                  state.budget, state.month, context);
+                              goToDetailsPageForBudgetCategory(state.budget,
+                                  state.month, state.year, context);
                               break;
                             default:
                           }

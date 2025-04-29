@@ -3,6 +3,7 @@ import 'package:budgetpro/pages/registration/bloc/registration_bloc.dart';
 import 'package:budgetpro/pages/registration/bloc/registration_event.dart';
 import 'package:budgetpro/pages/registration/bloc/registration_state.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,28 +33,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          title: const Text("Sign Up",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Sora",
+                  color: AppColors.primaryColor)),
           elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.black87),
+          iconTheme: const IconThemeData(color: AppColors.accentColor),
         ),
         body: BlocConsumer<RegistrationBloc, RegistrationState>(
           listener: (context, state) {
             if (state is RegistrationSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              UIUtils.showSnackbar(context, state.message,
+                  type: SnackbarType.success);
               Navigator.pushReplacementNamed(context, '/sign-in');
             } else if (state is RegistrationFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: Colors.redAccent,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              UIUtils.showSnackbar(context, state.error,
+                  type: SnackbarType.error);
             }
           },
           builder: (context, state) {
@@ -78,16 +74,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 24),
-                      const Text(
-                        "Get Started",
-                        style: TextStyle(
-                          fontFamily: "Sora",
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
                       const Text(
                         "Create an account to continue",
                         style: TextStyle(

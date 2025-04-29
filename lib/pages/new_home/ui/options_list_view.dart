@@ -4,6 +4,7 @@ import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/new_home/ui/long_term_page.dart';
 import 'package:budgetpro/pages/new_home/ui/savings_analysis_page.dart';
 import 'package:budgetpro/pages/new_home/ui/yearly_comparsion_page.dart';
+import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -31,8 +32,8 @@ class OptionsListView extends StatelessWidget {
     final List<Map<String, dynamic>> settingsItems = [
       {
         'icon': Icons.pie_chart,
-        'iconBackgroundColor': Colors.blue.withOpacity(0.1),
-        'iconColor': Colors.blue.shade600,
+        'iconBackgroundColor': AppColors.primaryColor.withAlpha(30),
+        'iconColor': AppColors.primaryColor.withAlpha(200),
         'title': 'Savings Analysis',
         'showChevron': true,
         'textColor': Colors.black87,
@@ -53,8 +54,8 @@ class OptionsListView extends StatelessWidget {
       },
       {
         'icon': Icons.compare_arrows,
-        'iconBackgroundColor': Colors.blue.withOpacity(0.1),
-        'iconColor': Colors.blue.shade600,
+        'iconBackgroundColor': AppColors.primaryColor.withAlpha(30),
+        'iconColor': AppColors.primaryColor.withAlpha(200),
         'title': 'Yearly Comparison',
         'showChevron': true,
         'textColor': Colors.black87,
@@ -69,8 +70,8 @@ class OptionsListView extends StatelessWidget {
       },
       {
         'icon': Icons.bar_chart,
-        'iconBackgroundColor': Colors.blue.withOpacity(0.1),
-        'iconColor': Colors.blue.shade600,
+        'iconBackgroundColor': AppColors.primaryColor.withAlpha(30),
+        'iconColor': AppColors.primaryColor.withAlpha(200),
         'title': 'Long Term Trend',
         'showChevron': true,
         'textColor': Colors.black87,

@@ -3,6 +3,7 @@ import 'package:budgetpro/pages/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:budgetpro/pages/forgot_password/bloc/forgot_password_event.dart';
 import 'package:budgetpro/pages/forgot_password/bloc/forgot_password_state.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,25 +40,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         body: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
           listener: (context, state) {
             if (state is ForgotPasswordSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              UIUtils.showSnackbar(context, state.message,
+                  type: SnackbarType.success);
               // Navigate back to sign in screen after success
               Future.delayed(const Duration(seconds: 2), () {
                 Navigator.of(context).pop();
               });
             } else if (state is ForgotPasswordFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: Colors.redAccent,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              UIUtils.showSnackbar(context, state.error,
+                  type: SnackbarType.error);
             }
           },
           builder: (context, state) {

@@ -38,7 +38,7 @@ class UIUtils {
             Text(message,
                 style: const TextStyle(
                     fontFamily: "Sora",
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w400,
                     color: Colors.white)),
           ],
         ),
@@ -116,7 +116,7 @@ class UIUtils {
               ),
               child: Icon(
                 icon,
-                size: 24,
+                size: 23,
                 color: iconColor,
               ),
             ),

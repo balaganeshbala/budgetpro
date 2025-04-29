@@ -93,7 +93,7 @@ class NewHomeBloc extends Bloc<NewHomeEvent, NewHomeState> {
   FutureOr<void> homeBudgetCategoryItemTappedEvent(
       HomeBudgetCategoryItemTappedEvent event, Emitter<NewHomeState> emit) {
     emit(HomeBudgetCategoryItemTappedState(
-        budget: event.budget, month: '$selectedMonth-$selectedYear'));
+        budget: event.budget, month: selectedMonth, year: selectedYear));
   }
 
   FutureOr<void> homeMonthYearItemChangedEvent(
