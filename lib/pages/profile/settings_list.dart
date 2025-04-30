@@ -1,4 +1,5 @@
 import 'package:budgetpro/services/supabase_service.dart';
+import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,17 @@ class SettingsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     // List of setting items to display
     final List<Map<String, dynamic>> settingsItems = [
+      {
+        'icon': Icons.info_outline,
+        'iconBackgroundColor': Colors.transparent,
+        'iconColor': AppColors.primaryColor,
+        'title': 'About BudgetPro',
+        'showChevron': true,
+        'textColor': Colors.black87,
+        'onTap': () {
+          Navigator.pushNamed(context, '/about');
+        },
+      },
       {
         'icon': Icons.logout,
         'iconBackgroundColor': Colors.transparent,

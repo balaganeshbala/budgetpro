@@ -1,11 +1,12 @@
 import 'package:budgetpro/components/app_name_brand.dart';
 import 'package:budgetpro/components/app_theme_button.dart';
-import 'package:budgetpro/pages/forgot_password/ui/forgot_password_screen.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_bloc.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_event.dart';
 import 'package:budgetpro/pages/sign_in/bloc/sign_in_state.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/constants.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
+import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,13 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordScreen(),
-                              ),
-                            );
+                            Utils.launchURL(fogotPasswordEndPoint);
                           },
                           child: const Text(
                             'Forgot Password?',

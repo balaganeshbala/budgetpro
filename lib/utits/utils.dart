@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static List<String> getYearsList() {
@@ -81,5 +82,12 @@ class Utils {
       'startDate': startDate,
       'endDate': endDate,
     };
+  }
+
+  static Future<void> launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

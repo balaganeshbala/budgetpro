@@ -148,7 +148,6 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(16),
                 color: Colors.grey.shade200,
                 child: SafeArea(
                   child: TabBarView(
@@ -190,35 +189,38 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
         final currYearData = snapshot.data!['year2'] ?? [];
 
         if (prevYearData.isEmpty && currYearData.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.compare_arrows,
-                  size: 64,
-                  color: Colors.grey,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'No $type data available for comparison',
-                  style: const TextStyle(
-                    fontFamily: "Sora",
-                    fontSize: 16,
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.compare_arrows,
+                    size: 64,
                     color: Colors.grey,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Add $type records for multiple years to compare',
-                  style: const TextStyle(
-                    fontFamily: "Sora",
-                    fontSize: 14,
-                    color: Colors.grey,
+                  const SizedBox(height: 16),
+                  Text(
+                    'No $type data available for comparison',
+                    style: const TextStyle(
+                      fontFamily: "Sora",
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'Add $type records for multiple years to compare',
+                    style: const TextStyle(
+                      fontFamily: "Sora",
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -241,146 +243,150 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
             : (isIncreasePositive ? Colors.red : Colors.green);
 
         return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Year summary card
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Total ${type.capitalize()}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Sora',
-                        fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Year summary card
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildYearTotal(prevYear.toString(), prevYearTotal),
-                        _buildYearTotal(currYear.toString(), currYearTotal),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          percentChange >= 0
-                              ? Icons.arrow_upward
-                              : Icons.arrow_downward,
-                          color: changeColor,
-                          size: 16,
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Total ${type.capitalize()}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Sora',
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${percentChange.abs().toStringAsFixed(1)}% ${percentChange >= 0 ? 'increase' : 'decrease'}',
-                          style: TextStyle(
-                            fontFamily: 'Sora',
-                            fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildYearTotal(prevYear.toString(), prevYearTotal),
+                          _buildYearTotal(currYear.toString(), currYearTotal),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            percentChange >= 0
+                                ? Icons.arrow_upward
+                                : Icons.arrow_downward,
                             color: changeColor,
+                            size: 16,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _getYearComparisonAnalysis(
-                          type, percentChange, isIncreasePositive),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Sora',
-                        fontSize: 13,
-                        color: Colors.grey,
+                          const SizedBox(width: 8),
+                          Text(
+                            '${percentChange.abs().toStringAsFixed(1)}% ${percentChange >= 0 ? 'increase' : 'decrease'}',
+                            style: TextStyle(
+                              fontFamily: 'Sora',
+                              fontWeight: FontWeight.bold,
+                              color: changeColor,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Monthly comparison chart
-              Container(
-                height: 350,
-                padding: const EdgeInsets.only(right: 16, bottom: 16, top: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Monthly Comparison',
-                      style: TextStyle(
-                        fontFamily: 'Sora',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: _buildMonthlyComparisonChart(
-                        prevYearData,
-                        currYearData,
-                        prevYear,
-                        currYear,
-                        type,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildLegendItem(
-                          prevYear.toString(),
-                          Colors.blue,
+                      const SizedBox(height: 4),
+                      Text(
+                        _getYearComparisonAnalysis(
+                            type, percentChange, isIncreasePositive),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Sora',
+                          fontSize: 13,
+                          color: Colors.grey,
                         ),
-                        const SizedBox(width: 24),
-                        _buildLegendItem(
-                          currYear.toString(),
-                          Colors.orange,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Monthly details table
-              _buildMonthlyDetailsTable(
-                context,
-                prevYearData,
-                currYearData,
-                prevYear,
-                currYear,
-                type,
-              ),
-            ],
+                // Monthly comparison chart
+                Container(
+                  height: 350,
+                  padding:
+                      const EdgeInsets.only(right: 16, bottom: 16, top: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Monthly Comparison',
+                        style: TextStyle(
+                          fontFamily: 'Sora',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: _buildMonthlyComparisonChart(
+                          prevYearData,
+                          currYearData,
+                          prevYear,
+                          currYear,
+                          type,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildLegendItem(
+                            prevYear.toString(),
+                            Colors.blue,
+                          ),
+                          const SizedBox(width: 24),
+                          _buildLegendItem(
+                            currYear.toString(),
+                            Colors.orange,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Monthly details table
+                _buildMonthlyDetailsTable(
+                  context,
+                  prevYearData,
+                  currYearData,
+                  prevYear,
+                  currYear,
+                  type,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -505,10 +511,10 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
         ),
         titlesData: FlTitlesData(
           show: true,
-          rightTitles: AxisTitles(
+          rightTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
-          topTitles: AxisTitles(
+          topTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
           bottomTitles: AxisTitles(
@@ -583,8 +589,8 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
           show: true,
           drawVerticalLine: false,
           horizontalInterval: maxY / 5,
-          getDrawingHorizontalLine: (value) => FlLine(
-            color: const Color(0xffe7e8ec),
+          getDrawingHorizontalLine: (value) => const FlLine(
+            color: Color(0xffe7e8ec),
             strokeWidth: 1,
           ),
         ),
@@ -650,17 +656,17 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
+          const Padding(
+            padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.table_chart,
                   color: AppColors.primaryColor,
                   size: 20,
                 ),
-                const SizedBox(width: 8),
-                const Text(
+                SizedBox(width: 8),
+                Text(
                   'Monthly Details',
                   style: TextStyle(
                     fontFamily: 'Sora',
@@ -678,7 +684,7 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 2,
                   child: Text(
                     'Month',
@@ -694,7 +700,7 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
                   flex: 4,
                   child: Text(
                     prevYear.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Sora',
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -707,7 +713,7 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
                   flex: 4,
                   child: Text(
                     currYear.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Sora',
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -716,7 +722,7 @@ class _YearlyComparisonScreenState extends State<YearlyComparisonScreen> {
                     textAlign: TextAlign.left,
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   flex: 3,
                   child: Text(
                     'Change',

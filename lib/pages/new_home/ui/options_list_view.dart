@@ -1,9 +1,9 @@
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/models/expenses_model.dart';
 import 'package:budgetpro/models/income_model.dart';
-import 'package:budgetpro/pages/new_home/ui/long_term_page.dart';
-import 'package:budgetpro/pages/new_home/ui/savings_analysis_page.dart';
-import 'package:budgetpro/pages/new_home/ui/yearly_comparsion_page.dart';
+import 'package:budgetpro/pages/insights/long_term_page.dart';
+import 'package:budgetpro/pages/insights/savings_analysis_page.dart';
+import 'package:budgetpro/pages/insights/yearly_comparsion_page.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
