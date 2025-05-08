@@ -51,35 +51,7 @@ class OptionsListView extends StatelessWidget {
                 ),
               ));
         },
-      },
-      {
-        'icon': Icons.compare_arrows,
-        'iconBackgroundColor': AppColors.primaryColor.withAlpha(30),
-        'iconColor': AppColors.primaryColor.withAlpha(200),
-        'title': 'Yearly Comparison',
-        'showChevron': true,
-        'textColor': Colors.black87,
-        'onTap': () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => YearlyComparisonScreen(),
-            ),
-          );
-        },
-      },
-      {
-        'icon': Icons.bar_chart,
-        'iconBackgroundColor': AppColors.primaryColor.withAlpha(30),
-        'iconColor': AppColors.primaryColor.withAlpha(200),
-        'title': 'Long Term Trend',
-        'showChevron': true,
-        'textColor': Colors.black87,
-        'onTap': () async {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LongTermTrendScreen()));
-        },
-      },
+      }
     ];
 
     return Container(

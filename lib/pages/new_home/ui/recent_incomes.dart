@@ -6,6 +6,7 @@ import 'package:budgetpro/pages/income/ui/income_details_page.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,7 +79,7 @@ class RecentIncomesView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           // Add New centered text action in empty state
-          _centeredTextAction(
+          UIUtils.centeredTextAction(
             context,
             text: '+ Add New',
             textColor: AppColors.accentColor,
@@ -140,7 +141,7 @@ class RecentIncomesView extends StatelessWidget {
             onTap: () => _navigateToIncomeDetails(context, item),
           );
         } else if (index == incomeCount) {
-          return _centeredTextAction(
+          return UIUtils.centeredTextAction(
             context,
             text: '+ Add New',
             textColor: AppColors.accentColor,
@@ -162,7 +163,7 @@ class RecentIncomesView extends StatelessWidget {
             },
           );
         } else {
-          return _centeredTextAction(
+          return UIUtils.centeredTextAction(
             context,
             text: 'More Details',
             textColor: AppColors.accentColor,

@@ -6,6 +6,7 @@ import 'package:budgetpro/pages/expense_details/ui/expense_details_page.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,7 +79,7 @@ class RecentExpensesView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           // Add New centered text action in empty state
-          _centeredTextAction(
+          UIUtils.centeredTextAction(
             context,
             text: '+ Add New',
             textColor: AppColors.accentColor,
@@ -142,7 +143,7 @@ class RecentExpensesView extends StatelessWidget {
         }
         // Display "Add New" action with centered text
         else if (index == expenseCount) {
-          return _centeredTextAction(
+          return UIUtils.centeredTextAction(
             context,
             text: '+ Add New',
             textColor: AppColors.accentColor,
@@ -166,7 +167,7 @@ class RecentExpensesView extends StatelessWidget {
         }
         // Display "More Details" action with centered text
         else {
-          return _centeredTextAction(
+          return UIUtils.centeredTextAction(
             context,
             text: 'More Details',
             textColor: AppColors.accentColor,
@@ -206,33 +207,6 @@ class RecentExpensesView extends StatelessWidget {
     if (result == true && context.mounted) {
       context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
     }
-  }
-
-  // Common method for centered text action items
-  Widget _centeredTextAction(
-    BuildContext context, {
-    required String text,
-    required Color textColor,
-    required FontWeight fontWeight,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: "Sora",
-              fontWeight: fontWeight,
-              color: textColor,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _expenseItem(

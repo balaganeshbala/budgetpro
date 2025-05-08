@@ -142,4 +142,31 @@ class UIUtils {
       ),
     );
   }
+
+  // Common method for centered text action items
+  static Widget centeredTextAction(
+    BuildContext context, {
+    required String text,
+    required Color textColor,
+    required FontWeight fontWeight,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: "Sora",
+              fontWeight: fontWeight,
+              color: textColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

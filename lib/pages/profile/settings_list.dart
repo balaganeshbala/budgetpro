@@ -1,3 +1,6 @@
+import 'package:budgetpro/pages/insights/long_term_page.dart';
+import 'package:budgetpro/pages/insights/yearly_comparsion_page.dart';
+import 'package:budgetpro/pages/major_expenses/ui/major_expenses_page.dart';
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
@@ -10,6 +13,49 @@ class SettingsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     // List of setting items to display
     final List<Map<String, dynamic>> settingsItems = [
+      {
+        'icon': Icons.compare_arrows,
+        'iconBackgroundColor': Colors.transparent,
+        'iconColor': AppColors.primaryColor,
+        'title': 'Yearly Comparison',
+        'showChevron': true,
+        'textColor': Colors.black87,
+        'onTap': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const YearlyComparisonScreen()),
+          );
+        },
+      },
+      {
+        'icon': Icons.bar_chart,
+        'iconBackgroundColor': Colors.transparent,
+        'iconColor': AppColors.primaryColor,
+        'title': 'Long Term Trends',
+        'showChevron': true,
+        'textColor': Colors.black87,
+        'onTap': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LongTermTrendScreen()),
+          );
+        },
+      },
+      {
+        'icon': Icons.attach_money,
+        'iconBackgroundColor': Colors.transparent,
+        'iconColor': AppColors.primaryColor,
+        'title': 'Major Expenses',
+        'showChevron': true,
+        'textColor': Colors.black87,
+        'onTap': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MajorExpensesPage()),
+          );
+        },
+      },
       {
         'icon': Icons.info_outline,
         'iconBackgroundColor': Colors.transparent,
