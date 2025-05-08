@@ -96,7 +96,7 @@ class _MajorExpensesPageState extends State<MajorExpensesPage> {
               _buildSummaryCard(totalAmount),
 
               // Expenses List Section
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               const SectionHeader(text: 'All Expenses'),
               const SizedBox(height: 10),
               expenses.isEmpty
@@ -112,7 +112,7 @@ class _MajorExpensesPageState extends State<MajorExpensesPage> {
 
   Widget _buildSummaryCard(double totalAmount) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 10.0, left: 16, right: 16),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
