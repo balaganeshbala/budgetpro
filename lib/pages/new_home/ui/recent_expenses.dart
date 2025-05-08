@@ -130,7 +130,7 @@ class RecentExpensesView extends StatelessWidget {
         // Display expense items
         if (index < expenseCount) {
           final item = expenses[expenses.length - index - 1];
-          return _expenseItem(
+          return UIUtils.transactionListItem(
             context,
             icon: item.category.icon,
             iconBackgroundColor: item.category.color.withOpacity(0.2),
@@ -207,81 +207,5 @@ class RecentExpensesView extends StatelessWidget {
     if (result == true && context.mounted) {
       context.read<NewHomeBloc>().add(HomeScreenRefreshedEvent());
     }
-  }
-
-  Widget _expenseItem(
-    BuildContext context, {
-    required IconData icon,
-    required Color iconBackgroundColor,
-    required Color iconColor,
-    required String title,
-    String? subtitle,
-    String? trailingText,
-    Color? textColor,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 8, right: 8),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: iconBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: iconColor,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: "Sora",
-                    fontWeight: FontWeight.w500,
-                    color: textColor ?? Colors.black,
-                  ),
-                ),
-                if (subtitle != null)
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Sora",
-                      fontWeight: FontWeight.w400,
-                      color: textColor ?? Colors.grey,
-                    ),
-                  ),
-              ],
-            )),
-            if (trailingText != null)
-              Text(
-                trailingText,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: "Sora",
-                  fontWeight: FontWeight.w500,
-                  color: textColor ?? Colors.black,
-                ),
-              ),
-            const Icon(
-              Icons.chevron_right,
-              color: Colors.grey,
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

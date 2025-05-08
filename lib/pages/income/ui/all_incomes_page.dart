@@ -3,6 +3,7 @@ import 'package:budgetpro/models/income_category_enum.dart';
 import 'package:budgetpro/models/income_model.dart';
 import 'package:budgetpro/pages/income/ui/income_details_page.dart';
 import 'package:budgetpro/utits/colors.dart';
+import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -170,7 +171,7 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
                       itemBuilder: (context, index) {
                         // Display income items
                         final item = _sortedIncomes[index];
-                        return _incomeItem(
+                        return UIUtils.transactionListItem(
                           context,
                           icon: item.category.icon,
                           iconBackgroundColor:
@@ -223,82 +224,5 @@ class _AllIncomesPageState extends State<AllIncomesPage> {
       case IncomeSortType.amountLowest:
         return 'Amount (Lowest First)';
     }
-  }
-
-  Widget _incomeItem(
-    BuildContext context, {
-    required IconData icon,
-    required Color iconBackgroundColor,
-    required Color iconColor,
-    required String title,
-    String? subtitle,
-    String? trailingText,
-    Color? textColor,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 8, right: 8),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: iconBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: iconColor,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Sora",
-                      fontWeight: FontWeight.w500,
-                      color: textColor ?? Colors.black,
-                    ),
-                  ),
-                  if (subtitle != null)
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: "Sora",
-                        fontWeight: FontWeight.w400,
-                        color: textColor ?? Colors.grey,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            if (trailingText != null)
-              Text(
-                trailingText,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: "Sora",
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
-              ),
-            const Icon(
-              Icons.chevron_right,
-              color: Colors.grey,
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

@@ -45,7 +45,7 @@ class _AddMajorExpensePageState extends State<AddMajorExpensePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Add Major Expense',
+            'Add Expense',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontFamily: "Sora",
@@ -290,7 +290,7 @@ class AddExpenseButton extends StatelessWidget {
                         .add(AddMajorExpenseAddExpenseTappedEvent());
                   }
                 : null,
-            text: 'Save Major Expense',
+            text: 'Save',
           ),
         );
       },

@@ -1,10 +1,12 @@
 import 'package:budgetpro/pages/insights/long_term_page.dart';
 import 'package:budgetpro/pages/insights/yearly_comparsion_page.dart';
+import 'package:budgetpro/pages/major_expenses/bloc/major_expenses_bloc.dart';
 import 'package:budgetpro/pages/major_expenses/ui/major_expenses_page.dart';
 import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsListView extends StatelessWidget {
   const SettingsListView({Key? key}) : super(key: key);
@@ -51,9 +53,12 @@ class SettingsListView extends StatelessWidget {
         'textColor': Colors.black87,
         'onTap': () {
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MajorExpensesPage()),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                    create: (context) => MajorExpensesBloc(),
+                    child: const MajorExpensesPage()),
+              ));
         },
       },
       {

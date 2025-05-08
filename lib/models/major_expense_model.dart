@@ -1,9 +1,10 @@
+import 'package:budgetpro/models/major_expense_category_enum.dart';
 import 'package:budgetpro/utits/utils.dart';
 
 class MajorExpenseModel {
   final int id;
   final String name;
-  final String category;
+  final MajorExpenseCategory category;
   final String date;
   final double amount;
   final String? notes;
@@ -21,7 +22,7 @@ class MajorExpenseModel {
     return MajorExpenseModel(
       id: json['id'],
       name: json['name'],
-      category: json['category'],
+      category: MajorExpenseCategoryExtension.fromString(json['category']),
       date: Utils.formatDate(json['date']),
       amount: json['amount'].toDouble(),
       notes: json['notes'],
