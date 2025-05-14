@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:budgetpro/models/budget_model.dart';
 import 'package:budgetpro/pages/budget_categories/budget_categories_screen.dart';
 import 'package:budgetpro/pages/create_budget/ui/create_budget_screen.dart';
@@ -13,14 +11,12 @@ import 'package:budgetpro/pages/new_home/bloc/new_home_bloc.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_event.dart';
 import 'package:budgetpro/pages/new_home/bloc/new_home_state.dart';
 import 'package:budgetpro/pages/new_home/ui/recent_incomes.dart';
-import 'package:budgetpro/services/supabase_service.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/utils.dart';
 import 'package:budgetpro/widgets/month_selector/bloc/month_selector_bloc.dart';
 import 'package:budgetpro/widgets/month_selector/ui/month_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewHomePage extends StatefulWidget {
   const NewHomePage({super.key});

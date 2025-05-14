@@ -150,7 +150,7 @@ class EditMajorExpenseBloc
       Emitter<EditMajorExpenseState> emit) async {
     emit(EditMajorExpenseLoadingState());
     try {
-      final success = await MajorExpenseRepo.deleteMajorExpense(expenseId!);
+      final success = await MajorExpenseRepo.deleteMajorExpense(expenseId);
       if (success) {
         emit(EditMajorExpenseDeletedState());
       } else {

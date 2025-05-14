@@ -1,6 +1,5 @@
 import 'package:budgetpro/components/app_theme_button.dart';
 import 'package:budgetpro/models/major_expense_category_enum.dart';
-import 'package:budgetpro/models/major_expense_model.dart';
 import 'package:budgetpro/pages/major_expenses/bloc/add_major_expense_bloc.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:budgetpro/utits/ui_utils.dart';

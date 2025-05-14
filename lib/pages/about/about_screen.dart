@@ -1,12 +1,16 @@
-import 'dart:io';
-
 import 'package:budgetpro/components/app_name_brand.dart';
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
+
+  Future<String> _getAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +58,32 @@ class AboutScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       AppNameBrand(),
                       const SizedBox(height: 4),
-                      const Text(
-                        'Version 1.0.0',
-                        style: TextStyle(
-                          fontFamily: "Sora",
-                          fontSize: 14,
-                          color: Colors.black45,
-                        ),
+                      FutureBuilder<String>(
+                        future: _getAppVersion(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return const Text(
+                              '0.0.0',
+                              style: TextStyle(
+                                fontFamily: "Sora",
+                                fontSize: 14,
+                                color: Colors.black45,
+                              ),
+                            );
+                          } else {
+                            return Text(
+                              'Version ${snapshot.data}',
+                              style: const TextStyle(
+                                fontFamily: "Sora",
+                                fontSize: 14,
+                                color: Colors.black45,
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),

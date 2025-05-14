@@ -1,6 +1,5 @@
 import 'package:budgetpro/utits/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 enum SnackbarType { info, success, error, warning }
 
